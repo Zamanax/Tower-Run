@@ -1,4 +1,5 @@
 class Character () :
+    team = ""
     hp = 0
     name = ""
     speed = 0
@@ -6,9 +7,13 @@ class Character () :
     attackSpeed = 0
     state = ""
     position = 0
+    target = None
     def move(self):
-        raise NotImplementedError
+        self.position += self.speed
     def attack(self):
-        raise NotImplementedError
+        if self.target:
+            self.target.hp -= self.damage
+        else :
+            raise NameError("NoTargetError")
     def afficher(self):
         raise NotImplementedError
