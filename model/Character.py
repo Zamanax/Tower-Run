@@ -8,6 +8,7 @@ class Character () :
     state = ""
     position = 0
     target = None
+    mvtype= "ground"
     def move(self):
         self.position += self.speed
     def attack(self):
