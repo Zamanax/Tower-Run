@@ -1,13 +1,12 @@
 import tkinter as tk
-backImg = ""
 
 #-----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         # Définiton des variables
-        global backImg
-        rootWidth = backImg.width()
-        rootHeight = backImg.height()
+        self.backImg = tk.PhotoImage(file="src/Lvl1Background.png")
+        rootWidth = self.backImg.width()
+        rootHeight = self.backImg.height()
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
@@ -15,7 +14,7 @@ class Lvl1(tk.Frame):
 
         # Reste du GUI
         canvas = tk.Canvas(self, width=rootWidth,height=rootHeight,highlightthickness=0)
-        canvas.create_image(0,0,image=backImg,anchor="nw")
+        canvas.create_image(0,0,image=self.backImg,anchor="nw")
         canvas.pack(side="right",fill="both",expand="true")
 
 
@@ -34,10 +33,10 @@ class MainApplication(tk.Frame):
 
 
 def launchApp():
-    global backImg
     root = tk.Tk()
-    backImg = tk.PhotoImage(file="./src/Lvl1Background.png")
+
     MainApplication(root).pack(side="top", fill="both", expand=True)
+    
     root.title("Tower Defense")
     root.resizable(False,False)
     root.mainloop()
