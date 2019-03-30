@@ -9,4 +9,4 @@ class ChauveSouris (Character):
         self.speed=1
         self.attackSpeed=2
         self.state="move"
-        mvtype ="fly"
+        self.fly = True
