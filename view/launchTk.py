@@ -15,7 +15,12 @@ class Lvl1(tk.Frame):
         # Reste du GUI
         canvas = tk.Canvas(self, width=rootWidth,height=rootHeight,highlightthickness=0)
         canvas.create_image(0,0,image=self.backImg,anchor="nw")
+        for i in range(29):
+            canvas.create_line((i+1)*rootWidth/30, 0, (i+1)*rootWidth/30, rootHeight)
+        for i in range(18):
+            canvas.create_line(0,(i+1)*rootHeight/18, rootWidth, (i+1)*rootHeight/18)
         canvas.pack(side="right",fill="both",expand="true")
+        
 
 
 #-----------------Chargement de la vue principale--------------------
