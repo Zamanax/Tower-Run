@@ -18,8 +18,9 @@ class Lvl1(tk.Frame):
         canvas = tk.Canvas(self, width=rootWidth,
                            height=rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
-        heros = Heros(self)
-
+        heros = Heros(canvas)
+        canvas.create_window(rootWidth/2,rootHeight/2,window=heros, anchor="center")
+        
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
@@ -37,7 +38,6 @@ class Lvl1(tk.Frame):
                                (i+1)*rootHeight/squareWidth, stipple="gray50")
         
         canvas.pack(side="right", fill="both", expand="true")
-        heros.pack()
 
 
 # -----------------Chargement de la vue principale--------------------
@@ -61,6 +61,7 @@ def launchApp():
     MainApplication(root).pack(side="top", fill="both", expand=True)
 
     root.title("Tower Defense")
+    root.wm_attributes("-transparentcolor", "white")
     root.resizable(False, False)
     root.mainloop()
     return root

@@ -4,7 +4,7 @@ from model.Character import Character
 class Heros(Character):
 
     def __init__(self, master):
-        tk.Canvas.__init__(self,master)
+        tk.Canvas.__init__(self,master, bg="white", highlightthickness=0)
         self.team = "ally"
         self.hp = 30
         self.name = "Heros"
