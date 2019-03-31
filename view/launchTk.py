@@ -4,7 +4,7 @@ import tkinter as tk
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         # Définiton des variables
-        self.backImg = tk.PhotoImage(file="src/Lvl1Background.png")
+        self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         rootWidth = self.backImg.width()
         rootHeight = self.backImg.height()
 
@@ -32,6 +32,7 @@ class MainApplication(tk.Frame):
         self.lvl1.pack()
 
 
+#-----------------Fonction à executer pour lancer le jeu-------------
 def launchApp():
     root = tk.Tk()
 
@@ -40,7 +41,6 @@ def launchApp():
     root.title("Tower Defense")
     root.resizable(False,False)
     root.mainloop()
-
 
 if __name__ == "__main__":
     launchApp()
