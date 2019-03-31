@@ -1,14 +1,14 @@
 import tkinter as tk
 from model.Heros import *
+
 # -----------------Chargement de la Frame LVL 1 ----------------------
-
-
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         # Définiton des variables
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         rootWidth = self.backImg.width()
         rootHeight = self.backImg.height()
+        x = 0
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
@@ -18,9 +18,15 @@ class Lvl1(tk.Frame):
         canvas = tk.Canvas(self, width=rootWidth,
                            height=rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
-        heros = Heros(canvas)
-        canvas.create_window(rootWidth/2,rootHeight/2,window=heros, anchor="center")
+        # self.png = tk.PhotoImage(file="view/src/AdventurerF1.png")
+        # canvas.create_image(0, 0, image=self.png, anchor="nw")
         
+        heros = Heros(canvas, rootWidth/2, rootHeight/2)
+        heros.update(x,rootHeight/2)
+        
+        # heros = Heros(canvas)
+        #canvas.create_window(rootWidth/2,rootHeight/2,window=heros)
+    
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
@@ -38,6 +44,7 @@ class Lvl1(tk.Frame):
                                (i+1)*rootHeight/squareWidth, stipple="gray50")
         
         canvas.pack(side="right", fill="both", expand="true")
+
 
 
 # -----------------Chargement de la vue principale--------------------
@@ -61,7 +68,7 @@ def launchApp():
     MainApplication(root).pack(side="top", fill="both", expand=True)
 
     root.title("Tower Defense")
-    root.wm_attributes("-transparentcolor", "white")
+    # root.wm_attributes("-transparentcolor", "white")
     root.resizable(False, False)
     root.mainloop()
     return root

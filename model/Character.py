@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class Character (tk.Canvas) :
+class Character (tk.Canvas):
     team = ""
     hp = 0
     name = ""
