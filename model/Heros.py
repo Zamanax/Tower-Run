@@ -12,7 +12,6 @@ class Heros(Character):
         self.attackSpeed = 2
         self.state = "idle"
 
-        self.num_sprintes = 13
         self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
 
         self.getSprite(self)
@@ -22,8 +21,6 @@ class Heros(Character):
         self.num_sprintes = 13
         self.last_img = None
         self.images = [self.subimage(self, 32*i, 0, 32*(i+1), 32) for i in range(self.num_sprintes)]
-        # self.canvas = tk.Canvas(self, width=100, height=100)
-        self.pack()
         self.updateimage(self, 0)
 
     @staticmethod
@@ -37,7 +34,3 @@ class Heros(Character):
         self.delete(self.last_img)
         self.last_img = self.create_image(16, 8, image=self.images[sprite])
         self.after(150, self.updateimage, self,(sprite+1) % self.num_sprintes)
-        
-
-    def update(self):
-        self.updateimage(self,0)
