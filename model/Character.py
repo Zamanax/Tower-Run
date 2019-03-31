@@ -1,4 +1,6 @@
-class Character () :
+import tkinter as tk
+
+class Character (tk.Canvas) :
     team = ""
     hp = 0
     name = ""
@@ -8,13 +10,17 @@ class Character () :
     state = ""
     position = 0
     target = None
-    mvtype= "ground"
+
+    last_img = None
+    images = []
+    num_sprintes = 0
+    spritesheet = None
+
     def move(self):
         self.position += self.speed
+
     def attack(self):
         if self.target:
             self.target.hp -= self.damage
         else :
             raise NameError("NoTargetError")
-    def afficher(self):
-        raise NotImplementedError

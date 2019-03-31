@@ -1,6 +1,5 @@
 import view.launchTk as launchTk
-import os
+from model.Heros import Heros
 
 launchTk.launchApp()
 
-    
