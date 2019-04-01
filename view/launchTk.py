@@ -18,21 +18,16 @@ class Lvl1(tk.Frame):
         canvas = tk.Canvas(self, width=rootWidth,
                            height=rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
-        # self.png = tk.PhotoImage(file="view/src/AdventurerF1.png")
-        # canvas.create_image(0, 0, image=self.png, anchor="nw")
         
-        heros = Heros(canvas, rootWidth/2, rootHeight/2)
-        heros.update(x,rootHeight/2)
-        
-        # heros = Heros(canvas)
-        #canvas.create_window(rootWidth/2,rootHeight/2,window=heros)
+        heros = Heros(canvas, 100/2, 100/2)
+        heros.moveTo(700,400)
     
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
         squareHeight = int(30 * squareFactor)
         squareWidth = int(18 * squareFactor)
-        showSquare = True
+        showSquare = False
 
         # Mise en place de la grid de la map
         if showSquare:
