@@ -85,3 +85,6 @@ class Character (tk.Canvas):
             return self.canvas.after(int(100/self.speed),self.moveTo,x,y)
         else :
             self.num_sprintes = 13
+    
+    def mouseMove(self, event):
+        self.moveTo(event.x, event.y)

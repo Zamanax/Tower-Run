@@ -9,16 +9,16 @@ class Heros(Character):
         # Stats du Heros
         self.x = x
         self.y = y
-        self.canvas = master
         self.team = "ally"
         self.hp = 30
         self.name = "Heros"
         self.speed = 30
         self.attackSpeed = 2
-        self.state = "idle"       
+        self.state = "idle"
 
         # Spritesheet du Heros
         self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
         self.num_sprintes = 13
+        self.canvas = master
 
         self.getSprite(self)

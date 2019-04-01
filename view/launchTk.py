@@ -20,8 +20,9 @@ class Lvl1(tk.Frame):
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         
         heros = Heros(canvas, 100/2, 100/2)
-        heros.moveTo(700,400)
+        # heros.moveTo(700,400)
     
+        canvas.bind("<Button-3>", heros.mouseMove)
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
