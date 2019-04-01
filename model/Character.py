@@ -20,6 +20,7 @@ class Character (tk.Canvas):
     num_sprintes = 0
     spritesheet = None
     sprite = 0
+    move = None
 
     canvas = None
 
@@ -70,17 +71,31 @@ class Character (tk.Canvas):
         self.sprite = ((self.sprite+1) % self.num_sprintes)
         return self.canvas.after(250, self.updateImage)
 
-    # Méthode chargée du changement de position de l'image
+    # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
         if self.state == "run-right" or self.state == "run-left":
             self.canvas.delete(self.last_img)
 
-            if self.x>x and self.y>y:
-                self.x-=0.5
-                self.y-=0.5
+            if self.state == "run-right":
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
+            else :
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
+
+            
+            if self.x==x and self.y==y:
+                self.state = "idle"
+            elif self.x>x and self.y>y:
+                self.x-=1
+                self.y-=1
             elif self.x<x and self.y<y:
-                self.x+=0.5
-                self.y+=0.5
+                self.x+=1
+                self.y+=1
+            elif self.x>x and self.y<y:
+                self.x-=1
+                self.y+=1
+            elif self.x<x and self.y>y:
+                self.x+=1
+                self.y-=1
             elif self.x>x:
                 self.x-=1
             elif self.x<x:
@@ -89,16 +104,9 @@ class Character (tk.Canvas):
                 self.y-=1
             elif self.y<y:
                 self.y+=1
-
-            if self.state == "run-right":
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
-            else :
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
-
-            if self.x==x or self.y==y:
-                self.state = "idle"
             
-            return self.canvas.after(int(100/self.speed),self.moveTo,x,y)
+            self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
+            return self.move
 
         elif self.x!=x or self.y!=y:
 
@@ -116,8 +124,13 @@ class Character (tk.Canvas):
             else :
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
 
-            return self.canvas.after(int(100/self.speed),self.moveTo,x,y)
+            self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
+            return self.move    
+
         else :
             self.num_sprintes = 13
             self.state = "idle"
+            self.move = None
+
+            return self.move
     

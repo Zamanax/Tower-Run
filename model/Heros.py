@@ -24,4 +24,12 @@ class Heros(Character):
         self.getSprite(self)
 
     def mouseMove(self, event):
-        self.moveTo(event.x, event.y)
+        if self.move :
+            self.canvas.after_cancel(self.move)
+            if self.x>event.x:
+                self.state = "run-left"
+            else:
+                self.state = "run-right"
+            self.moveTo(event.x, event.y)
+        else :
+            self.moveTo(event.x, event.y)
