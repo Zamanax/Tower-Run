@@ -15,7 +15,8 @@ class Character (tk.Canvas):
 
     last_img = None
     idle = []
-    run = []
+    runRight = []
+    runLeft = []
     num_sprintes = 0
     spritesheet = None
     sprite = 0
@@ -31,10 +32,13 @@ class Character (tk.Canvas):
     @staticmethod # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
-        self.idle = [self.subimage(self, 32*i, 0, 32*(i+1), 32).zoom(2)
+        self.idle = [self.subimage(self, 32*i, 0, 32*(i+1), 0+32).zoom(2)
                        for i in range(self.num_sprintes)]
 
-        self.run = [self.subimage(self, 32*i, 32, 32*(i+1), 65).zoom(2)
+        self.runRight = [self.subimage(self, 32*i, 32, 32*(i+1), 32+32).zoom(2)
+                       for i in range(self.num_sprintes)]
+
+        self.runLeft = [self.subimage(self, 32*i, 288, 32*(i+1), 288+32).zoom(2)
                        for i in range(self.num_sprintes)]
         # Lancement de l'animation
         self.updateImage()
@@ -72,16 +76,21 @@ class Character (tk.Canvas):
 
             if self.x>x:
                 self.x-=0.25
+                goRight = False
             else:
                 self.x+=0.25
+                goRight = True
             if self.y>y:
                 self.y-=0.25
             else:
                 self.y+=0.25
 
             self.canvas.delete(self.last_img)
-            self.last_img = self.canvas.create_image(self.x, self.y, image=self.run[self.sprite])
-
+            if goRight:
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite])
+            else :
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite])
+                
             return self.canvas.after(int(100/self.speed),self.moveTo,x,y)
         else :
             self.num_sprintes = 13
