@@ -43,6 +43,7 @@ class Character (tk.Canvas):
                        for i in range(self.num_sprintes)]
         # Lancement de l'animation
         self.updateImage()
+        self.incrementSprite()
 
     @staticmethod # Méthode chargée du découpage du spritesheet
     # l = abscisse du point en haut à gauche
@@ -61,24 +62,33 @@ class Character (tk.Canvas):
     # Méthode chargée du placement de l'image
     def updateImage(self):
         # On efface l'image précédemment affichée
-        self.canvas.delete(self.last_img)
 
         # On place l'image d'après
         if self.state == "idle" :
+            self.canvas.delete(self.last_img)
             self.last_img = self.canvas.create_image(self.x, self.y, image=self.idle[self.sprite], anchor="s")
 
-        # On incrémente le sprite et/ou on reset puis on rappelle la fonction
-        self.sprite = ((self.sprite+1) % self.num_sprintes)
         return self.canvas.after(250, self.updateImage)
+
+    # On incrémente le sprite et/ou on reset puis on rappelle la fonction
+    def incrementSprite(self):
+        self.sprite = ((self.sprite+1) % self.num_sprintes)
+        if self.state == "idle":
+            time = 250
+        elif self.state == "run-right" or self.state == "run-left":
+            time = 100
+        self.canvas.after(time, self.incrementSprite)
+
 
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
         if self.state == "run-right" or self.state == "run-left":
-            self.canvas.delete(self.last_img)
 
             if self.state == "run-right":
+                self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
             else :
+                self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
 
             
@@ -105,6 +115,8 @@ class Character (tk.Canvas):
             elif self.y<y:
                 self.y+=1
             
+            # self.sprite = ((self.sprite+1) % self.num_sprintes)
+
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
             return self.move
 
@@ -117,12 +129,14 @@ class Character (tk.Canvas):
             else:
                 self.state = "run-right"
 
-            self.canvas.delete(self.last_img)
-
             if self.state == "run-right":
+                self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
             else :
+                self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
+            
+            # self.sprite = ((self.sprite+1) % self.num_sprintes)
 
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
             return self.move    

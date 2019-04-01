@@ -1,5 +1,5 @@
 import tkinter as tk
-from model.Heros import *
+from model.Heros import Heros
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
@@ -8,7 +8,6 @@ class Lvl1(tk.Frame):
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         rootWidth = self.backImg.width()
         rootHeight = self.backImg.height()
-        x = 0
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
