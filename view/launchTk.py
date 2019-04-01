@@ -19,8 +19,7 @@ class Lvl1(tk.Frame):
                            height=rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         
-        heros = Heros(canvas, 100/2, 100/2)
-        # heros.moveTo(700,400)
+        heros = Heros(canvas, 900,250)
     
         canvas.bind("<Button-3>", heros.mouseMove)
         #---------------Définition des lignes---------------

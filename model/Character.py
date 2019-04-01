@@ -63,7 +63,8 @@ class Character (tk.Canvas):
         self.canvas.delete(self.last_img)
 
         # On place l'image d'après
-        self.last_img = self.canvas.create_image(self.x, self.y, image=self.idle[self.sprite])
+        if self.state == "idle" :
+            self.last_img = self.canvas.create_image(self.x, self.y, image=self.idle[self.sprite], anchor="s")
 
         # On incrémente le sprite et/ou on reset puis on rappelle la fonction
         self.sprite = ((self.sprite+1) % self.num_sprintes)
@@ -71,29 +72,52 @@ class Character (tk.Canvas):
 
     # Méthode chargée du changement de position de l'image
     def moveTo(self, x, y):
-        if self.x!=x or self.y!=y:
+        if self.state == "run-right" or self.state == "run-left":
+            self.canvas.delete(self.last_img)
+
+            if self.x>x and self.y>y:
+                self.x-=0.5
+                self.y-=0.5
+            elif self.x<x and self.y<y:
+                self.x+=0.5
+                self.y+=0.5
+            elif self.x>x:
+                self.x-=1
+            elif self.x<x:
+                self.x+=1
+            elif self.y>y:
+                self.y-=1
+            elif self.y<y:
+                self.y+=1
+
+            if self.state == "run-right":
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
+            else :
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
+
+            if self.x==x or self.y==y:
+                self.state = "idle"
+            
+            return self.canvas.after(int(100/self.speed),self.moveTo,x,y)
+
+        elif self.x!=x or self.y!=y:
+
             self.num_sprintes = 8
 
             if self.x>x:
-                self.x-=0.25
-                goRight = False
+                self.state = "run-left"
             else:
-                self.x+=0.25
-                goRight = True
-            if self.y>y:
-                self.y-=0.25
-            else:
-                self.y+=0.25
+                self.state = "run-right"
 
             self.canvas.delete(self.last_img)
-            if goRight:
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite])
+
+            if self.state == "run-right":
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
             else :
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite])
-                
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
+
             return self.canvas.after(int(100/self.speed),self.moveTo,x,y)
         else :
             self.num_sprintes = 13
+            self.state = "idle"
     
-    def mouseMove(self, event):
-        self.moveTo(event.x, event.y)

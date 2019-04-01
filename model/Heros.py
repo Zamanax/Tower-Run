@@ -12,7 +12,7 @@ class Heros(Character):
         self.team = "ally"
         self.hp = 30
         self.name = "Heros"
-        self.speed = 30
+        self.speed = 15
         self.attackSpeed = 2
         self.state = "idle"
 
@@ -22,3 +22,6 @@ class Heros(Character):
         self.canvas = master
 
         self.getSprite(self)
+
+    def mouseMove(self, event):
+        self.moveTo(event.x, event.y)
