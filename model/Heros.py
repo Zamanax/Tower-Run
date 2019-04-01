@@ -16,7 +16,6 @@ class Heros(Character):
         self.speed = 30
         self.attackSpeed = 2
         self.state = "idle"       
-        self.last_img = None
 
         # Spritesheet du Heros
         self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
