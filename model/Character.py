@@ -121,7 +121,7 @@ class Character (tk.Canvas):
             return self.move
 
         elif self.x!=x or self.y!=y:
-
+            self.sprite = 0
             self.num_sprintes = 8
 
             if self.x>x:
