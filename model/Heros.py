@@ -12,7 +12,7 @@ class Heros(Character):
         self.team = "ally"
         self.hp = 30
         self.name = "Heros"
-        self.speed = 20
+        self.speed = 15
         self.attackSpeed = 2
         self.state = "idle"
 
