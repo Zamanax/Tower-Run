@@ -29,6 +29,7 @@ class Heros(Character):
 
         if self.move :
             self.canvas.after_cancel(self.move)
+            
             if event.y > self.max_y:
                 self.moveTo(event.x, self.max_y)
             elif event.y < self.min_y:

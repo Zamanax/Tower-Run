@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class Character (tk.Canvas):
+class Character ():
     team = ""
     hp = 0
     name = ""
@@ -33,19 +33,19 @@ class Character (tk.Canvas):
     @staticmethod # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
-        self.idle = [self.subimage(self, 32*i, 0, 32*(i+1), 0+32).zoom(2)
+        self.idle = [self.subimage(32*i, 0, 32*(i+1), 0+32).zoom(2)
                        for i in range(self.num_sprintes)]
 
-        self.runRight = [self.subimage(self, 32*i, 32, 32*(i+1), 32+32).zoom(2)
+        self.runRight = [self.subimage(32*i, 32, 32*(i+1), 32+32).zoom(2)
                        for i in range(self.num_sprintes)]
 
-        self.runLeft = [self.subimage(self, 32*i, 288, 32*(i+1), 288+32).zoom(2)
+        self.runLeft = [self.subimage(32*i, 288, 32*(i+1), 288+32).zoom(2)
                        for i in range(self.num_sprintes)]
         # Lancement de l'animation
         self.updateImage()
         self.incrementSprite()
 
-    @staticmethod # Méthode chargée du découpage du spritesheet
+    # Méthode chargée du découpage du spritesheet
     # l = abscisse du point en haut à gauche
     # t = ordonnée du point en haut à gauche
     # r = abscisse du point en bas à droite
@@ -146,5 +146,5 @@ class Character (tk.Canvas):
             self.state = "idle"
             self.move = None
 
-            return self.move
+            return
     

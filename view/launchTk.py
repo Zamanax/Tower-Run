@@ -1,5 +1,6 @@
 import tkinter as tk
 from model.Heros import Heros
+from model.Mortier import Mortier
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
@@ -18,6 +19,7 @@ class Lvl1(tk.Frame):
                            height=rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         
+        mortier = Mortier(canvas, 950, 195)
         heros = Heros(canvas, 900,250, 285, 180)
     
         canvas.bind("<Button-3>", heros.mouseMove)
@@ -61,7 +63,7 @@ def launchApp():
 
     MainApplication(root).pack(side="top", fill="both", expand=True)
 
-    root.title("Tower Defense")
+    root.title("Tower Run")
     # root.wm_attributes("-transparentcolor", "white")
     root.resizable(False, False)
     root.mainloop()
