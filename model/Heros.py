@@ -4,7 +4,7 @@ from model.Character import Character
 
 class Heros(Character):
 
-    def __init__(self, master, x, y):
+    def __init__(self, master, x, y, max_y, min_y):
         
         # Stats du Heros
         self.x = x
@@ -20,16 +20,23 @@ class Heros(Character):
         self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
         self.num_sprintes = 13
         self.canvas = master
+        self.max_y = max_y
+        self.min_y = min_y
 
         self.getSprite(self)
 
     def mouseMove(self, event):
-        if self.move :
-            self.canvas.after_cancel(self.move)
-            if self.x>event.x:
-                self.state = "run-left"
-            else:
-                self.state = "run-right"
-            self.moveTo(event.x, event.y)
+        if event.y > self.max_y:
+            self.moveTo(event.x, self.max_y)
+        elif event.y < self.min_y:
+            self.moveTo(event.x, self.min_y)
         else :
-            self.moveTo(event.x, event.y)
+            if self.move :
+                self.canvas.after_cancel(self.move)
+                if self.x>event.x:
+                    self.state = "run-left"
+                else:
+                    self.state = "run-right"
+                self.moveTo(event.x, event.y)
+            else :
+                self.moveTo(event.x, event.y)
