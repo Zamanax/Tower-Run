@@ -115,7 +115,7 @@ class Character (tk.Canvas):
             elif self.y<y:
                 self.y+=1
             
-            # self.sprite = ((self.sprite+1) % self.num_sprintes)
+            
 
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
             return self.move
@@ -136,7 +136,7 @@ class Character (tk.Canvas):
                 self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
             
-            # self.sprite = ((self.sprite+1) % self.num_sprintes)
+           
 
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
             return self.move    
