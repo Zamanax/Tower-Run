@@ -27,9 +27,25 @@ class Heros(Character):
 
     def mouseMove(self, event):
         if event.y > self.max_y:
-            self.moveTo(event.x, self.max_y)
+            if self.move :
+                self.canvas.after_cancel(self.move)
+                if self.x>event.x:
+                    self.state = "run-left"
+                else:
+                    self.state = "run-right"
+                self.moveTo(event.x, self.max_y)
+            else :
+                self.moveTo(event.x, self.max_y)        
         elif event.y < self.min_y:
-            self.moveTo(event.x, self.min_y)
+            if self.move :
+                self.canvas.after_cancel(self.move)
+                if self.x>event.x:
+                    self.state = "run-left"
+                else:
+                    self.state = "run-right"
+                self.moveTo(event.x, self.min_y)
+            else :
+                self.moveTo(event.x, self.min_y)        
         else :
             if self.move :
                 self.canvas.after_cancel(self.move)
