@@ -46,9 +46,9 @@ class Mortier(Tower):
         self.zone=3
         self.damagetype="fire"      
         #self.spritesheet=tk.PhotoImage(file="towers.png")
-        self.lv1=self.subimage("mortier.png",3,50,85,142)#,self.root)
-        self.lv2=self.subimage("mortier.png", 91,30,191,142)#,self.root)
-        self.lv3=self.subimage("mortier.png", 203,3,313,142)#,self.root)
+        self.lv1=self.subimage("view/src/mortier.png",3,50,85,142)#,self.root)
+        self.lv2=self.subimage("view/src/mortier.png", 91,30,191,142)#,self.root)
+        self.lv3=self.subimage("view/src/mortier.png", 203,3,313,142)#,self.root)
         #self.root.mainloop()
 
 
