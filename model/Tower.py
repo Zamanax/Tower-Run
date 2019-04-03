@@ -46,9 +46,9 @@ class Mortier(Tower):
         self.zone=3
         self.damagetype="fire"      
         #self.spritesheet=tk.PhotoImage(file="towers.png")
-        self.lv1=self.subimage("towers.png",380, 287, 418, 338).zoom(2)#,self.root)
-        self.lv2=self.subimage("towers.png", 420, 290, 465, 338).zoom(2)#,self.root)
-        self.lv3=self.subimage("towers.png", 480, 280, 530, 338).zoom(2)#,self.root)
+        self.lv1=self.subimage("mortier.png",3,50,85,142)#,self.root)
+        self.lv2=self.subimage("mortier.png", 91,30,191,142)#,self.root)
+        self.lv3=self.subimage("mortier.png", 203,3,313,142)#,self.root)
         #self.root.mainloop()
 
 
@@ -66,10 +66,31 @@ class FireM(Mage):
         Mage.__init__(self, canvas, x, y)
         self.damagetype="fire"
         #self.spritesheet=tk.PhotoImage(file="Mage2.png")
-        self.lv1=self.subimage("Mage2.png",3,72,69,129)#, self.root)
-        self.lv2=self.subimage("Mage2.png",91,49,191,139)#, self.root)
-        self.lv3=self.subimage("Mage2.png",203,3,313,141)#, self.root)
-        self.root.mainloop()
+        self.lv1=self.subimage("view/src/Mage2.png",3,72,69,129)#, self.root)
+        self.lv2=self.subimage("view/src/Mage2.png",91,49,191,139)#, self.root)
+        self.lv3=self.subimage("view/src/Mage2.png",203,3,313,141)#, self.root)
+        #self.root.mainloop()
+
+class WaterM(Mage):
+    def __init__(self, canvas, x, y):
+        #self.root=tk.Tk()
+        Mage.__init__(self, canvas,x,y)
+        self.damagetype="water"
+        self.lv1=self.subimage("view/src/Mage3.png",3,72,82,139)#, self.root)
+        self.lv2=self.subimage("view/src/Mage3.png",91,47,195,139)#,self.root)
+        self.lv3=self.subimage("view/src/Mage3.png",203,0,323,139)#,self.root)
+        #self.root.mainloop()
+
+class EarthM(Mage):
+    def __init__(self, canvas, x, y):
+        #self.root=tk.Tk()
+        Mage.__init__(self, canvas, x, y)
+        self.damagetype="earth"
+        self.lv1=self.subimage("Mage1.view/src/png",3,62,82,132)#,self.root)
+        self.lv2=self.subimage("view/src/Mage1.png",91,47,195,132)#,self.root)
+        self.lv3=self.subimage("view/src/Mage1.png",203,0,323,132)#,self.root)
+        #self.root.mainloop()
+
 
 
     
