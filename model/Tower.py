@@ -2,20 +2,14 @@ import tkinter as tk
 class Tower(): 
     x = 0
     y = 0
-    #inutile
     def __init__(self,canvas, x, y ):
-        self.damage=0
-        self.damagetype="shot"
-        self.zone=0
-        self.speed=1
         self.canvas=canvas
-        # self.x=x
-        # self.y=y
+        self.x=x
+        self.y=y
         self.construction()
-        self.lv1= tk.PhotoImage()
         
     def construction(self):
-        self.canvas.create_image(self.x,self.y,image=self.lv1, anchor="s")
+        self.last_img = self.canvas.create_image(self.x,self.y,image=self.lv2, anchor="s")
         
     @staticmethod
     def subimage(spritesheet, l, t, r, b):
