@@ -17,7 +17,7 @@ class Character ():
     idle = []
     runRight = []
     runLeft = []
-    num_sprintes = 0
+    num_sprintes = []
     spritesheet = None
     sprite = 0
     move = None
@@ -34,13 +34,13 @@ class Character ():
     def getSprite(self):
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
         self.idle = [self.subimage(32*i, 0, 32*(i+1), 0+32).zoom(2)
-                       for i in range(self.num_sprintes)]
+                       for i in range(self.num_sprintes["idle"])]
 
         self.runRight = [self.subimage(32*i, 32, 32*(i+1), 32+32).zoom(2)
-                       for i in range(self.num_sprintes)]
+                       for i in range(self.num_sprintes["run-right"])]
 
         self.runLeft = [self.subimage(32*i, 288, 32*(i+1), 288+32).zoom(2)
-                       for i in range(self.num_sprintes)]
+                       for i in range(self.num_sprintes["run-left"])]
         # Lancement de l'animation
         self.updateImage()
         self.incrementSprite()
@@ -70,7 +70,7 @@ class Character ():
 
     # On incrémente le sprite et/ou on reset puis on rappelle la fonction
     def incrementSprite(self):
-        self.sprite = ((self.sprite+1) % self.num_sprintes)
+        self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
         if self.state == "idle":
             time = 250
         elif self.state == "run-right" or self.state == "run-left":
@@ -92,6 +92,10 @@ class Character ():
             
             if self.x==x and self.y==y:
                 self.state = "idle"
+                self.state = "idle"
+                self.move = None
+
+                return
             elif self.x>x and self.y>y:
                 self.x-=1
                 self.y-=1
@@ -119,9 +123,7 @@ class Character ():
             return self.move
 
         elif self.x!=x or self.y!=y:
-            if self.sprite > 8 :
-                self.sprite = 0
-            self.num_sprintes = 8
+            self.sprite = 0
 
             if self.x>x:
                 self.state = "run-left"
@@ -139,11 +141,5 @@ class Character ():
 
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
             return self.move    
-
-        else :
-            self.num_sprintes = 13
-            self.state = "idle"
-            self.move = None
-
-            return
+            
     

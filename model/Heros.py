@@ -18,7 +18,7 @@ class Heros(Character):
 
         # Spritesheet du Heros
         self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
-        self.num_sprintes = 13
+        self.num_sprintes = {"idle" : 13, "run-right" : 8, "run-left" : 8}
         self.canvas = master
         self.max_y = max_y
         self.min_y = min_y
