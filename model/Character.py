@@ -61,8 +61,6 @@ class Character ():
 
     # Méthode chargée du placement de l'image
     def updateImage(self):
-        # On efface l'image précédemment affichée
-
         # On place l'image d'après
         if self.state == "idle" :
             self.canvas.delete(self.last_img)
@@ -121,7 +119,8 @@ class Character ():
             return self.move
 
         elif self.x!=x or self.y!=y:
-            self.sprite = 0
+            if self.sprite > 8 :
+                self.sprite = 0
             self.num_sprintes = 8
 
             if self.x>x:
