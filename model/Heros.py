@@ -28,6 +28,7 @@ class Heros(Character):
     def mouseMove(self, event):
 
         if self.move :
+            self.state = "idle"
             self.canvas.after_cancel(self.move)
             
             if event.y > self.max_y:

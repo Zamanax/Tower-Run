@@ -14,8 +14,8 @@ class Tower():
         self.construction()
         self.lv1= tk.PhotoImage()
         
-    # def construction(self):
-    #     self.canvas.create_image(self.x,self.y,image=self.lv1, anchor="s")
+    def construction(self):
+        self.canvas.create_image(self.x,self.y,image=self.lv1, anchor="s")
         
     @staticmethod
     def subimage(spritesheet, l, t, r, b):
