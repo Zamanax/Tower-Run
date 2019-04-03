@@ -46,17 +46,17 @@ class Character ():
         self.incrementSprite()
 
     # Méthode chargée du découpage du spritesheet
-    # l = abscisse du point en haut à gauche
-    # t = ordonnée du point en haut à gauche
-    # r = abscisse du point en bas à droite
-    # b = ordonnée du point en bas à droite
-    def subimage(self, l, t, r, b):
+    # x1 = abscisse du point en haut à gauche
+    # y1 = ordonnée du point en haut à gauche
+    # x2 = abscisse du point en bas à droite
+    # y2 = ordonnée du point en bas à droite
+    def subimage(self, x1, y1, x2, y2):
         # Création de la variable à retourner
         sprite = tk.PhotoImage()
 
         # Décupage de l'image en Tcl
         sprite.tk.call(sprite, 'copy', self.spritesheet,
-                    '-from', l, t, r, b, '-to', 0, 0)
+                    '-from', x1, y1, x2, y2, '-to', 0, 0)
         return sprite
 
     # Méthode chargée du placement de l'image d'attente
@@ -117,18 +117,6 @@ class Character ():
                 self.y-=1
             elif self.y<y:
                 self.y+=1
-            
-            # Si l'on court à droite alors on lance l'animation de droite et inversement
-            if self.state == "runRight":
-                self.canvas.delete(self.last_img)
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
-            else :
-                self.canvas.delete(self.last_img)
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
-
-            # On rappelle la fonction jusqu'a y arriver
-            self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
-            return
 
         # Sinon on vérifie que l'on est pas déjà arrivé 
         elif self.x!=x or self.y!=y:
@@ -141,16 +129,13 @@ class Character ():
             else:
                 self.state = "runRight"
 
-            # On se met à courir dans le bon sens 
-            if self.state == "runRight":
-                self.canvas.delete(self.last_img)
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
-            else :
-                self.canvas.delete(self.last_img)
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
-            
-           
-
-            self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
-            return
-            
+        # On se met à courir dans le bon sens 
+        if self.state == "runRight":
+            self.canvas.delete(self.last_img)
+            self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
+        else :
+            self.canvas.delete(self.last_img)
+            self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
+        
+        self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
+        return 
