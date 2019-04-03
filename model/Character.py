@@ -42,7 +42,7 @@ class Character ():
         self.runLeft = [self.subimage(32*i, 288, 32*(i+1), 288+32).zoom(2)
                        for i in range(self.num_sprintes["runLeft"])]
         # Lancement de l'animation
-        self.updateImage()
+        self.idleAnim()
         self.incrementSprite()
 
     # Méthode chargée du découpage du spritesheet
@@ -59,42 +59,44 @@ class Character ():
                     '-from', l, t, r, b, '-to', 0, 0)
         return sprite
 
-    # Méthode chargée du placement de l'image
-    def updateImage(self):
-        # On place l'image d'après
+    # Méthode chargée du placement de l'image d'attente
+    def idleAnim(self):
+        # On place l'image si on est en attente
         if self.state == "idle" :
+            # On supprime l'image précédente
             self.canvas.delete(self.last_img)
+            # On place l'image suivante
             self.last_img = self.canvas.create_image(self.x, self.y, image=self.idle[self.sprite], anchor="s")
 
-        return self.canvas.after(250, self.updateImage)
+        return self.canvas.after(250, self.idleAnim)
 
-    # On incrémente le sprite et/ou on reset puis on rappelle la fonction
+    # Méthode d'incrémentation de l'image à afficher
     def incrementSprite(self):
+        
+        # On incrémente le sprite et/ou on reset (en fonction de l'état)
         self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
+        # Si on est en attente on attends 200ms etc...
         if self.state == "idle":
             time = 250
         elif self.state == "runRight" or self.state == "runLeft":
             time = 100
+        # On rappelle la fonction
         self.canvas.after(time, self.incrementSprite)
 
 
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
+
+        # On vérifie s'il on est déjà en train de courrir
         if self.state == "runRight" or self.state == "runLeft":
-
-            if self.state == "runRight":
-                self.canvas.delete(self.last_img)
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
-            else :
-                self.canvas.delete(self.last_img)
-                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
-
             
+            # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x==x and self.y==y:
                 self.state = "idle"
                 self.move = None
 
                 return
+            # Sinon on se déplace
             elif self.x>x and self.y>y:
                 self.x-=1
                 self.y-=1
@@ -116,19 +118,30 @@ class Character ():
             elif self.y<y:
                 self.y+=1
             
-            
+            # Si l'on court à droite alors on lance l'animation de droite et inversement
+            if self.state == "runRight":
+                self.canvas.delete(self.last_img)
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
+            else :
+                self.canvas.delete(self.last_img)
+                self.last_img = self.canvas.create_image(self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
 
+            # On rappelle la fonction jusqu'a y arriver
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
             return
 
+        # Sinon on vérifie que l'on est pas déjà arrivé 
         elif self.x!=x or self.y!=y:
+            # On réinitialise l'animation à jouer
             self.sprite = 0
 
+            # Si l'on est trop à droite de l'objectif on court à gauche sinon à droite
             if self.x>x:
                 self.state = "runLeft"
             else:
                 self.state = "runRight"
 
+            # On se met à courir dans le bon sens 
             if self.state == "runRight":
                 self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
