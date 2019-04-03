@@ -17,7 +17,7 @@ class Character ():
     idle = []
     runRight = []
     runLeft = []
-    num_sprintes = []
+    num_sprintes = {}
     spritesheet = None
     sprite = 0
     move = None
@@ -37,10 +37,10 @@ class Character ():
                        for i in range(self.num_sprintes["idle"])]
 
         self.runRight = [self.subimage(32*i, 32, 32*(i+1), 32+32).zoom(2)
-                       for i in range(self.num_sprintes["run-right"])]
+                       for i in range(self.num_sprintes["runRight"])]
 
         self.runLeft = [self.subimage(32*i, 288, 32*(i+1), 288+32).zoom(2)
-                       for i in range(self.num_sprintes["run-left"])]
+                       for i in range(self.num_sprintes["runLeft"])]
         # Lancement de l'animation
         self.updateImage()
         self.incrementSprite()
@@ -73,16 +73,16 @@ class Character ():
         self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
         if self.state == "idle":
             time = 250
-        elif self.state == "run-right" or self.state == "run-left":
+        elif self.state == "runRight" or self.state == "runLeft":
             time = 100
         self.canvas.after(time, self.incrementSprite)
 
 
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
-        if self.state == "run-right" or self.state == "run-left":
+        if self.state == "runRight" or self.state == "runLeft":
 
-            if self.state == "run-right":
+            if self.state == "runRight":
                 self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
             else :
@@ -91,7 +91,6 @@ class Character ():
 
             
             if self.x==x and self.y==y:
-                self.state = "idle"
                 self.state = "idle"
                 self.move = None
 
@@ -120,17 +119,17 @@ class Character ():
             
 
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
-            return self.move
+            return
 
         elif self.x!=x or self.y!=y:
             self.sprite = 0
 
             if self.x>x:
-                self.state = "run-left"
+                self.state = "runLeft"
             else:
-                self.state = "run-right"
+                self.state = "runRight"
 
-            if self.state == "run-right":
+            if self.state == "runRight":
                 self.canvas.delete(self.last_img)
                 self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
             else :
@@ -140,6 +139,5 @@ class Character ():
            
 
             self.move = self.canvas.after(int(100/self.speed),self.moveTo,x,y)
-            return self.move    
+            return
             
-    
