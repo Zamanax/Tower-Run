@@ -131,3 +131,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+model/__pycache__/Character.cpython-37.pyc
