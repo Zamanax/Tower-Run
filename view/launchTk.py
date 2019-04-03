@@ -21,7 +21,7 @@ class Lvl1(tk.Frame):
         
         heros = Heros(canvas, 900,250, 285, 180)
         canvas.bind("<Button-3>", heros.mouseMove)
-        ennemy = Ennemy(canvas, 10, 10)
+        
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3

@@ -129,7 +129,7 @@ class Character ():
             else:
                 self.state = "runRight"
 
-        # On se met à courir dans le bon sens 
+        # On se met à courir dans le bon sens , a gauche ou a droite
         if self.state == "runRight":
             self.canvas.delete(self.last_img)
             self.last_img = self.canvas.create_image(self.x, self.y, image=self.runRight[self.sprite], anchor="s")
