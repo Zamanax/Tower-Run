@@ -1,7 +1,7 @@
 import tkinter as tk
 from model.Heros import Heros
-from model.Mortier import Mortier
-
+# from model.Mortier import Mortier
+from model.Ennemy import Ennemy
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -20,8 +20,8 @@ class Lvl1(tk.Frame):
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         
         heros = Heros(canvas, 900,250, 285, 180)
-    
         canvas.bind("<Button-3>", heros.mouseMove)
+        ennemy = Ennemy(canvas, 10, 10)
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
