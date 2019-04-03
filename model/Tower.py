@@ -9,7 +9,7 @@ class Tower():
         self.construction()
         
     def construction(self):
-        self.last_img = self.canvas.create_image(self.x,self.y,image=self.lv2, anchor="s")
+        self.last_img = self.canvas.create_image(self.x,self.y,image=self.lv1, anchor="s")
         
     @staticmethod
     def subimage(spritesheet, l, t, r, b):
