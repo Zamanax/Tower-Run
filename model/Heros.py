@@ -3,22 +3,26 @@ from model.Character import Character
 
 
 class Heros(Character):
+    # Stats du Héros
+    team = "ally"
+    hp = 30
+    name = "Heros"
+    speed = 15
+    attackSpeed = 2
+    state = "idle"
+
+    # Spritesheet du Heros
+    num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
 
     def __init__(self, master, x, y, max_y, min_y):
         
         # Stats du Heros
         self.x = x
         self.y = y
-        self.team = "ally"
-        self.hp = 30
-        self.name = "Heros"
-        self.speed = 15
-        self.attackSpeed = 2
-        self.state = "idle"
 
         # Spritesheet du Heros
         self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
-        self.num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
+        
         self.canvas = master
         self.max_y = max_y
         self.min_y = min_y
