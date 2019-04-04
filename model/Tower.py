@@ -2,14 +2,18 @@ import tkinter as tk
 class Tower(): 
     x = 0
     y = 0
+    lv1 = None
+    last_img = None
     def __init__(self,canvas, x, y ):
         self.canvas=canvas
         self.x=x
         self.y=y
         self.construction()
-    @classmethod   
-    def construction(cls):
-        self.last_img = self.canvas.create_image(self.x,self.y,image=cls.lv1, anchor="s")
+
+    def construction(self):
+        self.canvas.delete(self.last_img)
+        self.last_img = self.canvas.create_image(self.x,self.y,image=self.lv1, anchor="s")
+        self.canvas.after(1000000, self.construction, self)
         
     @staticmethod
     def subimage(spritesheet, l, t, r, b):
@@ -40,6 +44,7 @@ class Mortier(Tower):
 
     def __init__(self, canvas, x, y):
         #self.root=tk.Tk()
+        self.load()
         Tower.__init__(self, canvas, x, y)
         self.last_img = None
         self.damage=5
@@ -49,12 +54,11 @@ class Mortier(Tower):
         #self.spritesheet=tk.PhotoImage(file="towers.png")
         self.lv1
         #self.root.mainloop()
-    @classmethod
-    def load(cls):
-        cls.lv1=Tower.subimage("view/src/mortier.png",3,50,85,142)#,self.root)
-        cls.lv2=Tower.subimage("view/src/mortier.png", 91,30,191,142)#,self.root)
-        cls.lv3=Tower.subimage("view/src/mortier.png", 203,3,313,142)#,self.root)
-Mortier.load()
+    
+    def load(self):
+        self.lv1=Tower.subimage("view/src/Mortier.png",3,50,85,142)#,self.root)
+        self.lv2=Tower.subimage("view/src/Mortier.png", 91,30,191,142)#,self.root)
+        self.lv3=Tower.subimage("view/src/Mortier.png", 203,3,313,142)#,self.root)
 
 class Mage(Tower):
     def __init__(self, canvas, x, y):
@@ -72,12 +76,11 @@ class FireM(Mage):
         #self.spritesheet=tk.PhotoImage(file="Mage2.png")
         
         #self.root.mainloop()
-    @classmethod
-    def load(cls):
-        cls.lv1=cls.subimage("view/src/Mage2.png",3,72,69,129)#, self.root)
-        cls.lv2=cls.subimage("view/src/Mage2.png",91,49,191,139)#, self.root)
-        cls.lv3=cls.subimage("view/src/Mage2.png",203,3,313,141)#, self.root)
-    FierM.load()
+    
+    def load(self):
+        self.lv1=self.subimage("view/src/Mage2.png",3,72,69,129)#, self.root)
+        self.lv2=self.subimage("view/src/Mage2.png",91,49,191,139)#, self.root)
+        self.lv3=self.subimage("view/src/Mage2.png",203,3,313,141)#, self.root)
 
 class WaterM(Mage):
     def __init__(self, canvas, x, y):
@@ -86,12 +89,11 @@ class WaterM(Mage):
         self.damagetype="water"
         
         #self.root.mainloop()
-    @classmethod
-    def load(cls):
-        cls.lv1=cls.subimage("view/src/Mage3.png",3,72,82,139)#, self.root)
-        cls.lv2=cls.subimage("view/src/Mage3.png",91,47,195,139)#,self.root)
-        cls.lv3=cls.subimage("view/src/Mage3.png",203,0,323,139)#,self.root)
-    WaterM.load()
+    
+    def load(self):
+        self.lv1=self.subimage("view/src/Mage3.png",3,72,82,139)#, self.root)
+        self.lv2=self.subimage("view/src/Mage3.png",91,47,195,139)#,self.root)
+        self.lv3=self.subimage("view/src/Mage3.png",203,0,323,139)#,self.root)
 
 class EarthM(Mage):
     def __init__(self, canvas, x, y):
@@ -102,12 +104,11 @@ class EarthM(Mage):
         self.lv2=self.subimage("view/src/Mage1.png",91,47,195,132)#,self.root)
         self.lv3=self.subimage("view/src/Mage1.png",203,0,323,132)#,self.root)
         #self.root.mainloop()
-    @classmethod
-    def load(cls):
-        cls.lv1=cls.subimage("view/src/Mage1.png",3,62,82,132)#,self.root)
-        cls.lv2=cls.subimage("view/src/Mage1.png",91,47,195,132)#,self.root)
-        cls.lv3=cls.subimage("view/src/Mage1.png",203,0,323,132)#,self.root)
-    EarthM.load()
+    
+    def load(self):
+        self.lv1=self.subimage("view/src/Mage1.png",3,62,82,132)#,self.root)
+        self.lv2=self.subimage("view/src/Mage1.png",91,47,195,132)#,self.root)
+        self.lv3=self.subimage("view/src/Mage1.png",203,0,323,132)#,self.root)
 
 class Archer(Tower):
     def __init__(self,canvas,x,y):
@@ -119,12 +120,11 @@ class Archer(Tower):
         self.zone=1
         self.damagetype="shot"
         #self.root.mainloop()
-    @classmethod
-    def load(cls):
-        cls.lv1=cls.subimage("view/src/Archer.png",3,51,82,138)#,self.root)
-        cls.lv2=cls.subimage("view/src/Archer.png", 91,35,195,144)#,self.root)
-        cls.lv3=cls.subimage("view/src/Archer.png",203,0,295,144)#, self.root)
-    Archer.load()
+    
+    def load(self):
+        self.lv1=self.subimage("view/src/Archer.png",3,51,82,138)#,self.root)
+        self.lv2=self.subimage("view/src/Archer.png", 91,35,195,144)#,self.root)
+        self.lv3=self.subimage("view/src/Archer.png",203,0,295,144)#, self.root)
 
     
 

@@ -1,6 +1,7 @@
 import tkinter as tk
+
+import model.Tower as Tow
 from model.Heros import Heros
-# from model.Mortier import Mortier
 from model.Ennemy import Ennemy
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
@@ -21,6 +22,8 @@ class Lvl1(tk.Frame):
         
         heros = Heros(canvas, 900,250, 285, 190)
         canvas.bind("<Button-3>", heros.mouseMove)
+        
+        mortier  = Tow.Mortier(canvas, 900,170)
         
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
