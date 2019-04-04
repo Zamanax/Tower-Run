@@ -13,6 +13,8 @@ class Heros(Character):
 
     # Spritesheet du Heros
     num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
+    spriteSize = 32
+    y_Anim = {"idle" : 0, "runRight" : 32, "runLeft" : 288}
 
     def __init__(self, master, x, y, max_y, min_y):
         

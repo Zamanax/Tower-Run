@@ -2,7 +2,7 @@ import tkinter as tk
 
 import model.Tower as Tow
 from model.Heros import Heros
-from model.Ennemy import Ennemy
+import model.Ennemy as Enn
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -21,6 +21,7 @@ class Lvl1(tk.Frame):
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         
         heros = Heros(canvas, 900,250, 285, 190)
+        sk1 = Enn.Skeleton(canvas, 100, 250)
         canvas.bind("<Button-3>", heros.mouseMove)
         
         Tow.Mortier(canvas, 900,170)
