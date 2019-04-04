@@ -3,6 +3,24 @@ import tkinter as tk
 import model.Tower as Tow
 from model.Heros import Heros
 import model.Ennemy as Enn
+
+def refresh(canvas, img):
+        canvas.tag_raise(img)
+        canvas.after(1,refresh, canvas, img)
+
+class Interface(tk.Frame):
+    def __init__(self, parent, *args, **kwargs):
+        self.parent = parent
+
+        # Instance de la Frame
+        tk.Frame.__init__(self, parent)
+        canvas = tk.Canvas(self, width=200)
+        self.MortImg = Tow.Tower.load(Tow.Mortier.coordsLvl1, Tow.Mortier.image)
+        # canvas.create_image(0,0,image=)
+        canvas.create_image(0,0,image=self.MortImg, anchor="nw")
+
+        canvas.pack()
+
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -19,12 +37,14 @@ class Lvl1(tk.Frame):
         canvas = tk.Canvas(self, width=rootWidth,
                            height=rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
-        
+
         heros = Heros(canvas, 900,250, 285, 190)
-        sk1 = Enn.Skeleton(canvas, 100, 250)
+        Enn.Skeleton(canvas, -100, 250)
         canvas.bind("<Button-3>", heros.mouseMove)
+        Tow.Mortier(canvas, 900, 170)
+        arc1 = Tow.Archer(canvas, 900, 350)
         
-        Tow.Mortier(canvas, 900,170)
+        refresh(canvas, arc1.last_img)
         
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
@@ -55,8 +75,10 @@ class MainApplication(tk.Frame):
 
         # Chargement des Frames voulues
         self.lvl1 = Lvl1(self, parent)
-        
+        self.interface = Interface(self,parent)
         # Mise en vue principale des vues voulues
+        self.interface.pack(side="right")
+
         self.lvl1.pack()
 
 
@@ -71,3 +93,4 @@ def launchApp():
     root.resizable(False, False)
     root.mainloop()
     return root
+        

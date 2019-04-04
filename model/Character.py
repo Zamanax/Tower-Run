@@ -68,9 +68,11 @@ class Character ():
         if self.state == "idle":
             # On supprime l'image précédente
             self.canvas.delete(self.last_img)
-            # On place l'image suivante
+            # On place l'image 
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.idle[self.sprite], anchor="s")
+        # self.canvas.tag_lower(self.last_img)
+
 
         return self.canvas.after(250, self.idleAnim)
 
@@ -142,6 +144,7 @@ class Character ():
             self.canvas.delete(self.last_img)
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
+        # self.canvas.tag_lower(self.last_img)
 
         self.move = self.canvas.after(int(100/self.speed), self.moveTo, x, y)
         return

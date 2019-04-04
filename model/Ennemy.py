@@ -15,15 +15,16 @@ class Ennemy (Character):
 class Skeleton (Ennemy) :
     hp = 10
     name = "Skeleton"
-    speed = 15
+    speed = 5
     attackSpeed = 1
-    spriteSize = 64
-    y_Anim = {"idle" : 64, "runRight" : 64, "runLeft" : 0}
+    spriteSize = 32
+    y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0}
 
     def __init__(self, master, x, y):
     
         # Spritesheet du Heros
-        self.spritesheet = tk.PhotoImage(file="view/src/Skeleton.png")
-        self.num_sprintes = {"idle" : 4, "runRight" : 8, "runLeft" : 8}
+        self.spritesheet = tk.PhotoImage(file="view/src/Skeleton2.png")
+        self.num_sprintes = {"idle" : 1, "runRight" : 4, "runLeft" : 4}
 
         Ennemy.__init__(self, master, x, y)
+        self.moveTo(1200,self.y)
