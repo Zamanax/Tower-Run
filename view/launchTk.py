@@ -23,7 +23,7 @@ class Lvl1(tk.Frame):
         heros = Heros(canvas, 900,250, 285, 190)
         canvas.bind("<Button-3>", heros.mouseMove)
         
-        mortier  = Tow.Mortier(canvas, 900,170)
+        Tow.Mortier(canvas, 900,170)
         
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map

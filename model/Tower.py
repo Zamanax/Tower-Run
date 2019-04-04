@@ -73,6 +73,7 @@ class Mage(Tower):
 class FireM(Mage):
     def __init__(self, canvas, x, y):
         #self.root=tk.Tk()
+        self.load()
         Mage.__init__(self, canvas, x, y)
         self.damagetype="fire"
         #self.spritesheet=tk.PhotoImage(file="Mage2.png")
@@ -87,6 +88,7 @@ class FireM(Mage):
 class WaterM(Mage):
     def __init__(self, canvas, x, y):
         #self.root=tk.Tk()
+        self.load()
         Mage.__init__(self, canvas,x,y)
         self.damagetype="water"
         
@@ -100,6 +102,7 @@ class WaterM(Mage):
 class EarthM(Mage):
     def __init__(self, canvas, x, y):
         #self.root=tk.Tk()
+        self.load()
         Mage.__init__(self, canvas, x, y)
         self.damagetype="earth"
         self.lv1=self.subimage("view/src/Mage1.png",3,62,82,132)#,self.root)
@@ -115,6 +118,7 @@ class EarthM(Mage):
 class Archer(Tower):
     def __init__(self,canvas,x,y):
         #self.root=tk.Tk()
+        self.load()
         Tower.__init__(self, canvas, x, y)
         self.last_img = None
         self.damage=4
