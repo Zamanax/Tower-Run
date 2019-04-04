@@ -3,6 +3,8 @@ class Tower():
     x = 0
     y = 0
     lv1 = None
+    lv2 = None
+    lv3 = None
     last_img = None
     def __init__(self,canvas, x, y ):
         self.canvas=canvas
