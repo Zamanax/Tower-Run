@@ -33,7 +33,7 @@ class Character ():
         else:
             raise NameError("NoTargetError")
 
-    @staticmethod  # Méthode chargée de charger le spritesheet et de le rendre utilisable
+    # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
         self.idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(2)

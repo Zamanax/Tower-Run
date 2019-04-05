@@ -61,7 +61,7 @@ class Tower():
 
 class Mortier(Tower):
     
-    coordsLvl1=[ 3, 50, 85, 142]
+    coordsLvl1=[ 16, 54, 85, 142]
     coordsLvl2=[ 91, 30, 191, 142]
     coordsLvl3=[ 203, 3, 313, 142]
     image="view/src/Mortier.png"
@@ -79,7 +79,6 @@ class Mortier(Tower):
         self.zone = 3
         self.damagetype = "fire"
         # self.spritesheet=tk.PhotoImage(file="towers.png")
-        self.lv1
         # self.root.mainloop()
     
     

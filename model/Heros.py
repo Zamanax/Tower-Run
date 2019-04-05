@@ -13,6 +13,7 @@ class Heros(Character):
 
     # Spritesheet du Heros
     num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
+    spritesheet = "view/src/Adventurer.png"
     spriteSize = 32
     y_Anim = {"idle" : 0, "runRight" : 32, "runLeft" : 288}
 
@@ -23,13 +24,13 @@ class Heros(Character):
         self.y = y
 
         # Spritesheet du Heros
-        self.spritesheet = tk.PhotoImage(file="view/src/Adventurer.png")
+        self.spritesheet = tk.PhotoImage(file=self.spritesheet)
         
         self.canvas = master
         self.max_y = max_y
         self.min_y = min_y
 
-        self.getSprite(self)
+        self.getSprite()
 
     def mouseMove(self, event):
 
