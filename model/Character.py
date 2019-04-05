@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 class Character ():
     team = ""
     hp = 0
@@ -27,6 +26,15 @@ class Character ():
 
     canvas = None
 
+    def __init__ (self, master, x, y) :
+        #Stats
+        self.x = x
+        self.y = y
+        self.canvas = master
+        self.spritesheet = tk.PhotoImage(file=self.spritesheet)
+
+        self.getSprite()
+        
     def attack(self):
         if self.target:
             self.target.hp -= self.damage
@@ -90,7 +98,6 @@ class Character ():
         self.canvas.after(time, self.incrementSprite)
 
     # Méthode chargée du changement de position de l'image et du déplacement
-
     def moveTo(self, x, y):
 
         # On vérifie s'il on est déjà en train de courrir

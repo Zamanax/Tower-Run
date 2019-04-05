@@ -17,20 +17,10 @@ class Heros(Character):
     spriteSize = 32
     y_Anim = {"idle" : 0, "runRight" : 32, "runLeft" : 288}
 
-    def __init__(self, master, x, y, max_y, min_y):
-        
-        # Stats du Heros
-        self.x = x
-        self.y = y
-
-        # Spritesheet du Heros
-        self.spritesheet = tk.PhotoImage(file=self.spritesheet)
-        
-        self.canvas = master
+    def __init__(self, canvas, x, y, max_y, min_y):
+        Character.__init__(self,canvas,x,y)
         self.max_y = max_y
         self.min_y = min_y
-
-        self.getSprite()
 
     def mouseMove(self, event):
 

@@ -6,13 +6,7 @@ class Ennemy (Character):
     state = "idle"
 
     def __init__ (self, master, x, y) :
-        #Stats
-        self.x = x
-        self.y = y
-        self.canvas = master
-        self.spritesheet = tk.PhotoImage(file=self.spritesheet)
-
-        self.getSprite()
+        Character.__init__(self,master,x,y)
         self.moveTo(1200,self.y)
 
 class Skeleton (Ennemy) :
