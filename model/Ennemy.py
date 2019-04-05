@@ -19,3 +19,4 @@ class Skeleton (Ennemy) :
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0}
     num_sprintes = {"idle" : 1, "runRight" : 4, "runLeft" : 4}
     spritesheet = "view/src/Skeleton2.png"
+    zoom = 2

@@ -1,7 +1,7 @@
 import tkinter as tk
 
 import model.Tower as Tow
-from model.Heros import Heros
+import model.Heros as He
 import model.Ennemy as Enn
 
 def refresh(canvas, img):
@@ -17,20 +17,12 @@ class Interface(tk.Frame):
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
-        self.backImg = None
-        canvas = tk.Canvas(self, width=200, height=self.rootHeight-4)
-        # self.MortImg = Tow.Tower.load(Tow.Mortier.coordsLvl1, Tow.Mortier.image)
-        # self.ArchImg = Tow.Tower.load(Tow.Archer.coordsLvl1, Tow.Archer.image)
-        # self.FireImg = Tow.Tower.load(Tow.FireM.coordsLvl1, Tow.FireM.image)
-        # self.EarthImg = Tow.Tower.load(Tow.EarthM.coordsLvl1, Tow.EarthM.image)
-        # self.WaterImg = Tow.Tower.load(Tow.WaterM.coordsLvl1, Tow.WaterM.image)
-
-        # canvas.create_image(0,0,image=self.MortImg, anchor="nw")
-        # canvas.create_image(0,60,image=self.ArchImg, anchor="nw")
-        # canvas.create_image(50,0,image=self.FireImg, anchor="nw")
-        # canvas.create_image(50,60,image=self.EarthImg, anchor="nw")
-        # canvas.create_image(25,120,image=self.WaterImg, anchor="nw")
-        # canvas.create_image()
+        self.backImg = tk.PhotoImage(file="view/src/Interface.png")
+        canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
+        canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+        la = tk.Label(canvas, text="Test", bg="#743A3A")
+        la.place(x=31,y=616)
+        
         canvas.pack()
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
@@ -50,7 +42,7 @@ class Lvl1(tk.Frame):
                            height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
-        heros = Heros(canvas, 900,250, 285, 190)
+        heros = He.Ichigo(canvas, 900,250, 260, 160)
         Enn.Skeleton(canvas, -100, 250)
         
         canvas.bind("<Button-3>", heros.mouseMove)
@@ -89,7 +81,7 @@ class MainApplication(tk.Frame):
         self.lvl1 = Lvl1(self, parent)
         self.interface = Interface(self,parent)
         # Mise en vue principale des vues voulues
-        self.interface.pack(side="right")
+        self.interface.pack(side="right", fill="y")
 
         self.lvl1.pack()
 

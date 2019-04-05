@@ -13,6 +13,7 @@ class Character ():
     x = 0
     y = 0
 
+    zoom = 1
     last_img = None
     idle = []
     runRight = []
@@ -44,13 +45,13 @@ class Character ():
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
-        self.idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(2)
+        self.idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
                      for i in range(self.num_sprintes["idle"])]
 
-        self.runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(2)
+        self.runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
                          for i in range(self.num_sprintes["runRight"])]
 
-        self.runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(2)
+        self.runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["runLeft"])]
         # Lancement de l'animation
         self.idleAnim()
@@ -140,11 +141,11 @@ class Character ():
 
         if self.state == "runRight" :
             self.last_img = self.canvas.create_image(
-                self.x, self.y, image=self.runRight[self.sprite], anchor="s")
+                self.x, self.y, image=self.runRight[self.sprite])
         elif self.state == "runLeft" :
             self.last_img = self.canvas.create_image(
-                self.x, self.y, image=self.runLeft[self.sprite], anchor="s")
-        elif self.state == "idle" :
+                self.x, self.y, image=self.runLeft[self.sprite])
+        if self.state == "idle" :
             self.last_img = self.canvas.create_image(
-                self.x, self.y, image=self.idle[self.sprite], anchor="s")
+                self.x, self.y, image=self.idle[self.sprite])
     

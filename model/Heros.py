@@ -1,7 +1,6 @@
 import tkinter as tk
 from model.Character import Character
 
-
 class Heros(Character):
     # Stats du Héros
     team = "ally"
@@ -10,12 +9,6 @@ class Heros(Character):
     speed = 15
     attackSpeed = 2
     state = "idle"
-
-    # Spritesheet du Heros
-    num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
-    spritesheet = "view/src/Adventurer.png"
-    spriteSize = 32
-    y_Anim = {"idle" : 0, "runRight" : 32, "runLeft" : 288}
 
     def __init__(self, canvas, x, y, max_y, min_y):
         Character.__init__(self,canvas,x,y)
@@ -42,3 +35,35 @@ class Heros(Character):
                 self.moveTo(event.x, self.min_y)
             else:
                 self.moveTo(event.x,event.y)
+
+class Adventurer(Heros):
+    # Stats du Héros
+    team = "ally"
+    hp = 30
+    name = "Heros"
+    speed = 15
+    attackSpeed = 2
+    state = "idle"
+
+    # Spritesheet du Heros
+    num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
+    spritesheet = "view/src/Adventurer.png"
+    spriteSize = 32
+    zoom = 2
+    y_Anim = {"idle" : 0, "runRight" : 32, "runLeft" : 288}
+
+class Ichigo(Heros) :
+    # Stats du Héros
+    team = "ally"
+    hp = 30
+    name = "Heros"
+    speed = 15
+    attackSpeed = 2
+    state = "idle"
+
+    # Spritesheet du Heros
+    num_sprintes = {"idle" : 4, "runRight" : 8, "runLeft" : 8}
+    spritesheet = "view/src/Ichigo.png"
+    spriteSize = 200
+    y_Anim = {"idle" : 0, "runRight" : 400, "runLeft" : 600}
+    

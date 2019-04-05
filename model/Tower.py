@@ -58,6 +58,9 @@ class Tower():
     @staticmethod    
     def load(coords, image):
         return Tower.subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
+    
+    def projectile(self,coords ):
+        pass
 
 class Mortier(Tower):
     
