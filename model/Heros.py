@@ -5,7 +5,6 @@ class Heros(Character):
     # Stats du Héros
     team = "ally"
     hp = 30
-    name = "Heros"
     speed = 15
     attackSpeed = 2
     state = "idle"
@@ -38,12 +37,7 @@ class Heros(Character):
 
 class Adventurer(Heros):
     # Stats du Héros
-    team = "ally"
-    hp = 30
-    name = "Heros"
-    speed = 15
-    attackSpeed = 2
-    state = "idle"
+    name = "Aventurier"
 
     # Spritesheet du Heros
     num_sprintes = {"idle" : 13, "runRight" : 8, "runLeft" : 8}
@@ -54,12 +48,7 @@ class Adventurer(Heros):
 
 class Ichigo(Heros) :
     # Stats du Héros
-    team = "ally"
-    hp = 30
-    name = "Heros"
-    speed = 15
-    attackSpeed = 2
-    state = "idle"
+    name = "Ichigo"
 
     # Spritesheet du Heros
     num_sprintes = {"idle" : 4, "runRight" : 8, "runLeft" : 8}

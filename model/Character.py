@@ -99,6 +99,7 @@ class Character ():
 
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
+                self.sprite = 0
                 self.state = "idle"
                 self.move = None
 
