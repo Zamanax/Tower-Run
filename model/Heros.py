@@ -35,6 +35,7 @@ class Heros(Character):
             else:
                 self.moveTo(event.x,event.y)
         else :
+            self.sprite = 0
             if event.y > self.max_y:
                 self.moveTo(event.x, self.max_y)
             elif event.y < self.min_y:

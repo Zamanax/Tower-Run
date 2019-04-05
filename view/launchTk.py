@@ -19,10 +19,18 @@ class Interface(tk.Frame):
         self.rootHeight = self.backImg.height()
         self.backImg = None
         canvas = tk.Canvas(self, width=200, height=self.rootHeight-4)
-        self.MortImg = Tow.Tower.load(Tow.Mortier.coordsLvl1, Tow.Mortier.image)
-        # canvas.create_image(0,0,image=)
-        canvas.create_image(0,0,image=self.MortImg, anchor="nw")
+        # self.MortImg = Tow.Tower.load(Tow.Mortier.coordsLvl1, Tow.Mortier.image)
+        # self.ArchImg = Tow.Tower.load(Tow.Archer.coordsLvl1, Tow.Archer.image)
+        # self.FireImg = Tow.Tower.load(Tow.FireM.coordsLvl1, Tow.FireM.image)
+        # self.EarthImg = Tow.Tower.load(Tow.EarthM.coordsLvl1, Tow.EarthM.image)
+        # self.WaterImg = Tow.Tower.load(Tow.WaterM.coordsLvl1, Tow.WaterM.image)
 
+        # canvas.create_image(0,0,image=self.MortImg, anchor="nw")
+        # canvas.create_image(0,60,image=self.ArchImg, anchor="nw")
+        # canvas.create_image(50,0,image=self.FireImg, anchor="nw")
+        # canvas.create_image(50,60,image=self.EarthImg, anchor="nw")
+        # canvas.create_image(25,120,image=self.WaterImg, anchor="nw")
+        # canvas.create_image()
         canvas.pack()
 
 # -----------------Chargement de la Frame LVL 1 ----------------------

@@ -72,7 +72,6 @@ class Character ():
 
     # Méthode chargée du placement de l'image d'attente
     def idleAnim(self):
-
         # On place l'image si on est en attente
         self.show()
 
@@ -127,9 +126,6 @@ class Character ():
             self.show()
         # Sinon on vérifie que l'on est pas déjà arrivé
         elif self.x != x or self.y != y:
-            # On réinitialise l'animation à jouer
-            self.sprite = 0
-
             # Si l'on est trop à droite de l'objectif on court à gauche sinon à droite
             if self.x > x:
                 self.state = "runLeft"
