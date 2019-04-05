@@ -46,6 +46,11 @@ class Adventurer(Heros):
     zoom = 2
     y_Anim = {"idle" : 0, "runRight" : 32, "runLeft" : 288}
 
+    def __init__(self,canvas, x , y ,max_y, min_y) :
+        Heros.__init__(self, canvas, x , y , max_y, min_y)
+        self.max_y -= 5
+        self.min_y -= 5
+
 class Ichigo(Heros) :
     # Stats du Héros
     name = "Ichigo"

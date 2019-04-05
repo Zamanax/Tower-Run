@@ -42,7 +42,7 @@ class Lvl1(tk.Frame):
                            height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
-        heros = He.Ichigo(canvas, 900,250, 260, 160)
+        heros = He.Adventurer(canvas, 900,250, 260, 160)
         Enn.Skeleton(canvas, -100, 250)
         
         canvas.bind("<Button-3>", heros.mouseMove)
