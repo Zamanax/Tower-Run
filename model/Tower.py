@@ -139,7 +139,7 @@ class EarthM(Mage):
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "earth"
         
-    # self.root.mainloop()
+        # self.root.mainloop()
 
     
 
