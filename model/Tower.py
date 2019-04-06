@@ -1,7 +1,7 @@
 import tkinter as tk
 
 
-class Tower():
+class Tower(type):
     x = 0
     y = 0
     lv1 = None
@@ -59,10 +59,43 @@ class Tower():
     def load(coords, image):
         return Tower.subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
     
-    def projectile(self,coords ):
-        pass
+    def hit(self):
+        for ennemy in Ennemy.ennemies_position.values():
+            if distance(ennemy, self)<=self.range:
+                ennemy[3].hp-=tower.damage
 
-class Mortier(Tower):
+    def tir(self, cible):
+        v=10
+        x=self.x
+        y=self.y+10
+        projectile=self.cavas.create_image(x, y, image=munition)
+        if x > coords[0] and y > cible[1]:
+            x -= v
+            y -= v
+        elif x < coords[0] and y < cible[1]:
+            y += v
+            x += v
+        elif x > coords[0] and y < cible[1]:
+            x -= v
+            y += v
+        elif x < coords[0] and y > cible[1]:
+            x += v
+            y -= v
+        elif x > coords[0]:
+            x -= v
+        elif x < coords[0]:
+            x += v
+        elif y > cible[1]:
+            y -= v
+        elif y < cible[1]:
+            y += v
+        projectile=self.cavas.create_image(x, y, image=munition)
+        self.canvas.delete(projectile)
+        self.canvas.after(200,self.tir)
+
+                
+
+class Mortier(metaclass=Tower):
     
     coordsLvl1=[ 16, 54, 85, 142]
     coordsLvl2=[ 91, 30, 191, 142]
@@ -86,7 +119,7 @@ class Mortier(Tower):
     
     
 
-class Mage(Tower):
+class Mage(metaclass=Tower):
     def __init__(self, canvas, x, y):
         Tower.__init__(self, canvas, x, y)
         self.damage = 4
@@ -146,7 +179,7 @@ class EarthM(Mage):
 
     
 
-class Archer(Tower):
+class Archer(metaclass=Tower):
     image="view/src/Archer.png"
     coordsLvl1 = [3,51,82,138]
     coordsLvl2= [91,35,195,144]
@@ -163,4 +196,6 @@ class Archer(Tower):
         self.damagetype = "shot"
         # self.root.mainloop()
 
+def distance(tower, coords):
+    return ((coords[0]-tower.x)**2+(coords[1]-tower.y)**2)**0.5
 

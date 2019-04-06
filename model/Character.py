@@ -135,6 +135,13 @@ class Character ():
             elif self.y < y:
                 self.y += 1
             self.show()
+
+        #____________regarde par ICI max______________________
+            if type(self.super())==Ennemy:
+                Ennemy.ennemies_position[str(self)]=(self.x, self.y)
+        #______________________________________________________
+
+
         # Sinon on vérifie que l'on est pas déjà arrivé
         elif self.x != x or self.y != y:
             # Si l'on est trop à droite de l'objectif on court à gauche sinon à droite
