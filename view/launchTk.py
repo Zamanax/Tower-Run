@@ -4,7 +4,7 @@ import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
 
-selectedHeros = "Aventurier"
+selectedHeros = "Ichigo"
 
 def refresh(canvas, img):
         canvas.tag_raise(img)
@@ -100,6 +100,6 @@ def launchApp():
 
     root.title("Tower Run")
     # root.wm_attributes("-transparentcolor", "white")
-    root.resizable(False, False)
+    # root.resizable(False, False)
     root.mainloop()
         

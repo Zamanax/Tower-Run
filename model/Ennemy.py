@@ -1,43 +1,41 @@
 import tkinter as tk
-# from model.Character import Character
-# loadedEnnemies = []
+from model.Character import Character
+import model.Heros as He
+
+ennemies=[]
 
 class Ennemy (Character):
     team = "ennemy"
     state = "idle"
     number=0
-    ennemies_position={}
-
-    def showHp(self):
-        print(self.hp)
-        self.canvas.after(50, self.showHp)
         
     def __init__ (self, master, x, y) :
-        # global loadedEnnemies
-        #loadedEnnemies.append(self)
+        global ennemies
         Character.__init__(self,master,x,y)
-        Ennemy.number+=1
-        self.numero=Ennemy.number
-        Ennemy.ennemies_position[str(self)]=(x,y, self)
+        ennemies.append(self)
+        self.seek()
         self.moveTo(1200,self.y)
-        self.showHp()
-        
-    
-    # @classmethod 
-    # def inc(cls):
-    #     cls.number+=1
+
+    def seek(self):
+
+        if (((He.Heros.x-self.x)**2)+((He.Heros.y-self.y)**2))**0.5 < self.range:
+            self.target = He.Heros
+            self.canvas.after_cancel(self.seeking)
+            self.attack()
+            return self.target
+                
+        self.seeking = self.canvas.after(50, self.seek)
 
     def __str__(self):
         return "Ennemy_"+str(Ennemy.number)
-    
-    # def moveTo(self, x, y):
-    #     Character.moveTo()
 
 class Skeleton (Ennemy) :
+    __slot__=("__dict__","idle","runRight","runLeft")
+
     hp = 10
     name = "Skeleton"
     attackSpeed = 1
-    speed = 5
+    speed = 2
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0}

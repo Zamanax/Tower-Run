@@ -1,19 +1,27 @@
 import tkinter as tk
+import model.Ennemy as Enn
+from model.Character import Character
 
 
-class Tower(type):
+
+class Tower():
     x = 0
     y = 0
     lv1 = None
     lv2 = None
     lv3 = None
-    last_img = None
+    last_img=None
+    coordsLvl1=None
+    coordsLvl2=None
+    coordsLvl3=None
+
 
     def __init__(self, canvas, x, y):
         self.canvas = canvas
         self.x = x
         self.y = y
         self.construction()
+        self.damage=1
         # self.refresh()
 
     def construction(self):
@@ -23,79 +31,92 @@ class Tower(type):
         self.canvas.tag_raise(self.last_img)
 
         self.canvas.after(1000000, self.construction, self)
+    
+    __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
+
 
     # def refresh(self):
     #     self.canvas.tag_raise(self.last_img)
     #     self.canvas.after(1,self.refresh)
 
-    @staticmethod
-    def subimage(spritesheet, l, t, r, b):
+ 
 
-        # canvas=tk.Canvas(root)
-        sprite = tk.PhotoImage()
-        spritesheet = tk.PhotoImage(file=spritesheet)
-        sprite.tk.call(sprite, 'copy', spritesheet,
-                       '-from', l, t, r, b, '-to', 0, 0)
-        # canvas.create_image(0,0, image=sprite)
-        # canvas.pack()
-        # root.mainloop()
-        return sprite
+       
+def load(coords, image):
+    return subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
 
-    @staticmethod
-    def test_subimage(spritesheet, l, t, r, b, root):
+def subimage(spritesheet, l, t, r, b):
 
-        # root=tk.Tk()
-        canvas = tk.Canvas(root)
-        sprite = tk.PhotoImage()
-        spritesheet = tk.PhotoImage(file=spritesheet)
-        sprite.tk.call(sprite, 'copy', spritesheet,
-                       '-from', l, t, r, b, '-to', 0, 0)
-        canvas.create_image(100, 100, image=sprite)
-        canvas.pack()
-        # root.mainloop()
-        return sprite
-
-    @staticmethod    
-    def load(coords, image):
-        return Tower.subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
+        
+    sprite = tk.PhotoImage()
+    spritesheet = tk.PhotoImage(file=spritesheet)
+    sprite.tk.call(sprite, 'copy', spritesheet,
+                    '-from', l, t, r, b, '-to', 0, 0)
     
-    def hit(self):
-        for ennemy in Ennemy.ennemies_position.values():
-            if distance(ennemy, self)<=self.range:
-                ennemy[3].hp-=tower.damage
+    return sprite
 
-    def tir(self, cible):
-        v=10
-        x=self.x
-        y=self.y+10
-        projectile=self.cavas.create_image(x, y, image=munition)
-        if x > coords[0] and y > cible[1]:
-            x -= v
-            y -= v
-        elif x < coords[0] and y < cible[1]:
-            y += v
-            x += v
-        elif x > coords[0] and y < cible[1]:
-            x -= v
-            y += v
-        elif x < coords[0] and y > cible[1]:
-            x += v
-            y -= v
-        elif x > coords[0]:
-            x -= v
-        elif x < coords[0]:
-            x += v
-        elif y > cible[1]:
-            y -= v
-        elif y < cible[1]:
-            y += v
-        projectile=self.cavas.create_image(x, y, image=munition)
-        self.canvas.delete(projectile)
+
+def test_subimage(spritesheet, l, t, r, b, root):
+
+    # root=tk.Tk()
+    canvas = tk.Canvas(root)
+    sprite = tk.PhotoImage()
+    spritesheet = tk.PhotoImage(file=spritesheet)
+    sprite.tk.call(sprite, 'copy', spritesheet,
+                    '-from', l, t, r, b, '-to', 0, 0)
+    canvas.create_image(100, 100, image=sprite)
+    canvas.pack()
+    # root.mainloop()
+    return sprite
+    
+                
+class projectile():
+    def __init__(self, image,boom, canvas, x, y, damage):
+            self.canvas=canvas
+            self.img=tk.PhotoImage(image)
+            self.boom=tk.PhotoImage(boom)
+            self.px=x
+            self.py=y
+            self.target=Character.seek(self)
+            self.damage=damage
+            self.tir(self.target)
+           
+
+
+    def tir(self, ennemy):
+        v=5 
+        projectile=self.canvas.create_image(self.px, self.py, image=self.img)
+        if self.px==ennemy.x and self.py==ennemy.y:
+            self.canvas.delete(projectile)
+            projectile=self.canvas.create_image(self.px, self.py, image=self.boom)
+            ennemy.hp-=self.damage
+            self.canvas.after(500,self.canvas.delete, projectile)
+            return
+
+        elif self.px > ennemy.x and self.py > ennemy.y:
+            self.px -= v
+            self.py -= v
+        elif self.px < ennemy.x and self.py < ennemy.y:
+            self.py += v
+            self.px += v
+        elif self.px > ennemy.x and self.py < ennemy.y:
+            self.px -= v
+            self.py += v
+        elif self.px < ennemy.x and self.py > ennemy.y:
+            self.px += v
+            self.py -= v
+        elif self.px > ennemy.x:
+            self.px -= v
+        elif self.px < ennemy.x:
+            self.px += v
+        elif self.py > ennemy.y:
+            self.py -= v
+        elif self.py < ennemy.y:
+            self.py += v
         self.canvas.after(200,self.tir)
-
                 
 
-class Mortier(metaclass=Tower):
+class Mortier(Tower):
     
     coordsLvl1=[ 16, 54, 85, 142]
     coordsLvl2=[ 91, 30, 191, 142]
@@ -105,10 +126,9 @@ class Mortier(metaclass=Tower):
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
         
-        self.lv1=self.load(self.coordsLvl1, self.image)
-        self.lv2=self.load(self.coordsLvl2, self.image)
-        self.lv3=self.load(self.coordsLvl3, self.image)
-
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
         Tower.__init__(self, canvas, x, y)
         self.damage = 5
         self.speed = 1
@@ -119,7 +139,7 @@ class Mortier(metaclass=Tower):
     
     
 
-class Mage(metaclass=Tower):
+class Mage(Tower):
     def __init__(self, canvas, x, y):
         Tower.__init__(self, canvas, x, y)
         self.damage = 4
@@ -136,9 +156,9 @@ class FireM(Mage):
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
-        self.lv1=self.load(self.coordsLvl1, self.image)
-        self.lv2=self.load(self.coordsLvl2, self.image)
-        self.lv3=self.load(self.coordsLvl3, self.image)
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "fire"
         # self.spritesheet=tk.PhotoImage(file="Mage2.png")
@@ -152,9 +172,9 @@ class WaterM(Mage):
     image="view/src/Mage3.png"
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
-        self.lv1=self.load(self.coordsLvl1, self.image)
-        self.lv2=self.load(self.coordsLvl2, self.image)
-        self.lv3=self.load(self.coordsLvl3, self.image)
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "water"
 
@@ -169,9 +189,9 @@ class EarthM(Mage):
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
-        self.lv1=self.load(self.coordsLvl1, self.image)
-        self.lv2=self.load(self.coordsLvl2, self.image)
-        self.lv3=self.load(self.coordsLvl3, self.image)
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "earth"
         
@@ -179,16 +199,16 @@ class EarthM(Mage):
 
     
 
-class Archer(metaclass=Tower):
+class Archer(Tower):
     image="view/src/Archer.png"
     coordsLvl1 = [3,51,82,138]
     coordsLvl2= [91,35,195,144]
     coordsLvl3 = [203,0,295,144]
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
-        self.lv1=self.load(self.coordsLvl1, self.image)
-        self.lv2=self.load(self.coordsLvl2, self.image)
-        self.lv3=self.load(self.coordsLvl3, self.image)
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
         Tower.__init__(self, canvas, x, y)
         self.damage = 4
         self.speed = 4
@@ -196,6 +216,6 @@ class Archer(metaclass=Tower):
         self.damagetype = "shot"
         # self.root.mainloop()
 
-def distance(tower, coords):
-    return ((coords[0]-tower.x)**2+(coords[1]-tower.y)**2)**0.5
+def distance(tower, ennemy):
+    return ((ennemy.x-tower.x)**2+(ennemy.y-tower.y)**2)**0.5
 

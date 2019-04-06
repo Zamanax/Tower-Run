@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import model.Ennemy as Enn
 class Character ():
     team = ""
     hp = 0
@@ -12,6 +12,8 @@ class Character ():
     target = None
     x = 0
     y = 0
+    range = 50
+
 
     zoom = 1
     last_img = None
@@ -19,11 +21,16 @@ class Character ():
     runRight = []
     runLeft = []
     num_sprintes = {}
+    y_Anim = {}
+
     spritesheet = None
     sprite = 0
     spriteSize = 0
+
     move = None
-    y_Anim = {}
+    afterIdle = None
+    seeking = None
+
 
     canvas = None
 
@@ -33,6 +40,7 @@ class Character ():
         self.y = y
         self.canvas = master
         self.spritesheet = tk.PhotoImage(file=self.spritesheet)
+        self.numero=0
 
         self.getSprite()
         
@@ -41,14 +49,33 @@ class Character ():
             self.target.hp -= self.damage
             # self.state = "attack"
             # self.show()
-            self.canvas.after(int(1000/self.attackSpeed), self.attack)
+            if self.target.hp <= 0:
+                    self.target.die()
+                    self.target = None
+            self.attacking = self.canvas.after(int(1000/self.attackSpeed), self.attack)
         else :
             self.state = "idle"
+            self.seek()
 
     def die(self):
+        self.canvas.after_cancel(self.move)
+        # self.canvas.after_cancel(self.afterIdle)
+        self.canvas.after_cancel(self.seeking)
+        # self.canvas.after_cancel(self.attacking)
         self.canvas.delete(self.last_img)
-        self.
-        self = None
+
+        self.state = "dying"
+        
+
+    def seek(self):
+        for ennemy in Enn.ennemies:
+            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
+                self.target = ennemy
+                self.canvas.after_cancel(self.seeking)
+                self.attack()
+                return self.target
+                
+        self.seeking = self.canvas.after(50, self.seek)
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
@@ -82,8 +109,7 @@ class Character ():
     # Méthode chargée du placement de l'image d'attente
     def idleAnim(self):
         self.show()
-
-        return self.canvas.after(250, self.idleAnim)
+        self.adterIdle = self.canvas.after(250, self.idleAnim)
 
     # Méthode d'incrémentation de l'image à afficher
     def incrementSprite(self):
@@ -102,7 +128,7 @@ class Character ():
 
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
-
+        v = 2
         # On vérifie s'il on est déjà en train de courrir
         if self.state == "runRight" or self.state == "runLeft":
 
@@ -115,31 +141,34 @@ class Character ():
                 return
             # Sinon on se déplace
             elif self.x > x and self.y > y:
-                self.x -= 1
-                self.y -= 1
+                self.x -= v
+                self.y -= v
             elif self.x < x and self.y < y:
-                self.x += 1
-                self.y += 1
+                self.x += v
+                self.y += v
             elif self.x > x and self.y < y:
-                self.x -= 1
-                self.y += 1
+                self.x -= v
+                self.y += v
             elif self.x < x and self.y > y:
-                self.x += 1
-                self.y -= 1
+                self.x += v
+                self.y -= v
             elif self.x > x:
-                self.x -= 1
+                self.x -= v
             elif self.x < x:
-                self.x += 1
+                self.x += v
             elif self.y > y:
-                self.y -= 1
+                self.y -= v
             elif self.y < y:
+                self.y += v
+            if self.x == x + 1:
+                self.x -= 1
+            elif self.x == x - 1:
+                self.x += 1
+            elif self.y == y + 1:
+                self.y -= 1
+            elif self.y == y - 1:
                 self.y += 1
             self.show()
-
-        #____________regarde par ICI max______________________
-            if type(self.super())==Ennemy:
-                Ennemy.ennemies_position[str(self)]=(self.x, self.y)
-        #______________________________________________________
 
 
         # Sinon on vérifie que l'on est pas déjà arrivé
