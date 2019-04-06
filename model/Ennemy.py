@@ -1,13 +1,21 @@
 import tkinter as tk
 from model.Character import Character
+loadedEnnemies = []
 
 class Ennemy (Character):
     team = "ennemy"
     state = "idle"
 
+    def showHp(self):
+        print(self.hp)
+        self.canvas.after(50, self.showHp)
+        
     def __init__ (self, master, x, y) :
+        global loadedEnnemies
+        loadedEnnemies.append(self)
         Character.__init__(self,master,x,y)
         self.moveTo(1200,self.y)
+        self.showHp()
 
 class Skeleton (Ennemy) :
     hp = 10

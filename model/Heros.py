@@ -1,19 +1,21 @@
 import tkinter as tk
 from model.Character import Character
-
-
+import model.Ennemy as Enn
 class Heros(Character):
     # Stats du Héros
     team = "ally"
     hp = 30
+    damage = 5
     speed = 15
     attackSpeed = 2
     state = "idle"
+    range = 50
 
     def __init__(self, canvas, x, y, max_y, min_y):
         Character.__init__(self, canvas, x, y)
         self.max_y = max_y
         self.min_y = min_y
+        self.seek()
 
     def mouseMove(self, event):
 
@@ -35,6 +37,16 @@ class Heros(Character):
                 self.moveTo(event.x, self.min_y)
             else:
                 self.moveTo(event.x, event.y)
+
+    def seek(self):
+        for ennemy in Enn.loadedEnnemies:
+            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
+                self.target = ennemy
+                self.attack()
+                if self.target.hp <= 0:
+                    self.target.die()
+        self.canvas.after(50, self.seek)
+
 
 
 class Adventurer(Heros):

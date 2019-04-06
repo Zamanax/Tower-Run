@@ -39,13 +39,16 @@ class Character ():
     def attack(self):
         if self.target:
             self.target.hp -= self.damage
-            self.state = "attack"
-            self.show()
+            # self.state = "attack"
+            # self.show()
             self.canvas.after(int(1000/self.attackSpeed), self.attack)
         else :
             self.state = "idle"
 
-
+    def die(self):
+        self.canvas.delete(self.last_img)
+        self.
+        self = None
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
@@ -92,6 +95,8 @@ class Character ():
             time = 250
         elif self.state == "runRight" or self.state == "runLeft":
             time = 100
+        elif self.state == "attackRight" or self.state == "attackLeft":
+            time = 50
         # On rappelle la fonction
         self.canvas.after(time, self.incrementSprite)
 

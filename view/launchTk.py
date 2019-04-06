@@ -4,6 +4,8 @@ import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
 
+selectedHeros = "Aventurier"
+
 def refresh(canvas, img):
         canvas.tag_raise(img)
         canvas.after(1,refresh, canvas, img)
@@ -28,6 +30,7 @@ class Interface(tk.Frame):
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
+        global selectedHeros
         # Définiton des variables
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         self.rootWidth = self.backImg.width()
@@ -42,7 +45,11 @@ class Lvl1(tk.Frame):
                            height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
-        heros = He.Ichigo(canvas, 900,250, 260, 160)
+        if selectedHeros == "Ichigo" :
+            heros = He.Ichigo(canvas, 900,250, 260, 160)
+        else :
+            heros = He.Adventurer(canvas, 900,250, 260, 160)
+
         Enn.Skeleton(canvas, -100, 250)
         
         canvas.bind("<Button-3>", heros.mouseMove)
@@ -67,7 +74,6 @@ class Lvl1(tk.Frame):
                                (i+1)*self.rootHeight/squareWidth, stipple="gray50")
         
         canvas.pack(side="right", fill="both", expand="true")
-
 
 
 # -----------------Chargement de la vue principale--------------------
