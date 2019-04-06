@@ -39,8 +39,13 @@ class Character ():
     def attack(self):
         if self.target:
             self.target.hp -= self.damage
-        else:
-            raise NameError("NoTargetError")
+            self.state = "attack"
+            self.show()
+            self.canvas.after(int(1000/self.attackSpeed), self.attack)
+        else :
+            self.state = "idle"
+
+
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
@@ -73,7 +78,6 @@ class Character ():
 
     # Méthode chargée du placement de l'image d'attente
     def idleAnim(self):
-        # On place l'image si on est en attente
         self.show()
 
         return self.canvas.after(250, self.idleAnim)
