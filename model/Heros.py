@@ -12,10 +12,6 @@ class Singleton(type):
 class Heros(Character, metaclass=Singleton):
     # Stats du Héros
     team = "ally"
-    hp = 30
-    damage = 5
-    speed = 8
-    attackSpeed = 2
     state = "idle"
 
     def showHp(self):
@@ -31,12 +27,15 @@ class Heros(Character, metaclass=Singleton):
 
     
     def seek(self):
-        for ennemy in ennemies:
-            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
-                self.target = ennemy
-                self.canvas.after_cancel(self.seeking)
-                self.attack()
-                return self.target
+        if self.target:
+            self.attack()
+        else:
+            for ennemy in ennemies:
+                if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
+                    self.target = ennemy
+                    self.canvas.after_cancel(self.seeking)
+                    self.attack()
+                    return self.target
                 
         self.seeking = self.canvas.after(50, self.seek)
 
@@ -62,11 +61,13 @@ class Heros(Character, metaclass=Singleton):
                 self.moveTo(event.x, event.y)
                 
 
-
-
 class Adventurer(Heros):
     # Stats du Héros
     name = "Aventurier"
+    hp = 100
+    damage = 2
+    speed = 8
+    attackSpeed = 2
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 13, "runRight": 8,
@@ -86,6 +87,11 @@ class Adventurer(Heros):
 class Ichigo(Heros):
     # Stats du Héros
     name = "Ichigo"
+
+    hp = 50
+    damage = 2
+    speed = 8
+    attackSpeed = 2
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 2, "runRight": 8,

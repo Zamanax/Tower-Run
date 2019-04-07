@@ -53,15 +53,25 @@ class Character ():
         
     def attack(self):
         if self.target:
+            if self.target.move:
+                self.canvas.after_cancel(self.target.move)
+            if self.target.attacking != None :
+                self.target.target = self
+
+            if self.x > self.target.x:
+                self.state = "attackLeft"
+            else :
+                self.state = "attackRight"
+
             self.target.hp -= self.damage
-            # self.state = "attack"
-            # self.show()
+            self.show()
             if self.target.hp <= 0:
                     self.target.die()
                     self.target = None
-            self.attacking = self.canvas.after(int(1000/self.attackSpeed), self.attack)
+            self.attacking = self.canvas.after(int(500/self.attackSpeed), self.attack)
         else :
             self.state = "idle"
+            self.attacking = None
             # self.seek()
 
     def die(self):
@@ -206,10 +216,19 @@ class Character ():
         elif self.state == "runLeft" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.runLeft[self.sprite])
+        elif self.state == "attackRight" :
+            self.last_img = self.canvas.create_image(
+                self.x, self.y, image=self.attackRight[self.sprite])
+        elif self.state == "attackLeft" :
+            self.last_img = self.canvas.create_image(
+                self.x, self.y, image=self.attackLeft[self.sprite])
         elif self.state == "idle" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.idle[self.sprite])
         elif self.state == "die" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
+        if self.target:
+            if self.target.y < self.y:
+                self.canvas.tag_raise(self.last_img, self.target.last_img)
     

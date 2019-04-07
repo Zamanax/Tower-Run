@@ -16,7 +16,9 @@ class Ennemy (Character):
         self.moveTo(1200,self.y)
 
     def seek(self):
-        if (((self.heros.x-self.x)**2)+((self.heros.y-self.y)**2))**0.5 < self.range:
+        if self.target:
+            self.attack()
+        elif (((self.heros.x-self.x)**2)+((self.heros.y-self.y)**2))**0.5 < self.range:
             self.target = self.heros
             self.canvas.after_cancel(self.seeking)
             self.attack()
@@ -31,7 +33,7 @@ class Skeleton (Ennemy) :
     name = "Skeleton"
     attackSpeed = 1
     speed = 2
-    damage = 2
+    damage = 1
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
