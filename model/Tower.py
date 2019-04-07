@@ -4,17 +4,21 @@ from model.Heros import Heros
 
 
 class Tower():
+    # Coords de la tour
     x = 0
     y = 0
+    # Image de la tour
     lv1 = None
     lv2 = None
     lv3 = None
     last_img=None
+
+    # Point de l'image de chaque niveau de tour
     coordsLvl1=None
     coordsLvl2=None
     coordsLvl3=None
 
-
+    # Chargement et attribution des différentes propriétés
     def __init__(self, canvas, x, y):
         self.canvas = canvas
         self.x = x
@@ -23,14 +27,19 @@ class Tower():
         self.damage=1
         # self.refresh()
 
+    #Fonction chargée de l'apparition de la tour
     def construction(self):
+        #On supprime l'ancienne image
         self.canvas.delete(self.last_img)
+        #On place la nouvelle
         self.last_img = self.canvas.create_image(
             self.x, self.y, image=self.lv1, anchor="s")
+        #On la place au dessus
         self.canvas.tag_raise(self.last_img)
 
         self.canvas.after(1000000, self.construction, self)
-    
+
+    #Attribution des variables pour chaque instance de la classe
     __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
 
 
@@ -40,7 +49,7 @@ class Tower():
 
  
 
-       
+# Charge une image pour chaque point demandé
 def load(coords, image):
     return subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
 
@@ -68,8 +77,9 @@ def test_subimage(spritesheet, l, t, r, b, root):
     # root.mainloop()
     return sprite
     
-                
+# Classe projectile permattant de leur affecter des méthodes
 class projectile():
+    # Méthode chargée de l'apparition du projectile
     def __init__(self, image,boom, canvas, x, y, damage):
             self.canvas=canvas
             self.img=tk.PhotoImage(image)
@@ -79,9 +89,8 @@ class projectile():
             self.target=Heros.seek(self)
             self.damage=damage
             self.tir(self.target)
-           
 
-
+    # Méthode chargée du déplacement des projectiles
     def tir(self, ennemy):
         v=5 
         projectile=self.canvas.create_image(self.px, self.py, image=self.img)
@@ -114,7 +123,7 @@ class projectile():
             self.py += v
         self.canvas.after(200,self.tir)
                 
-
+# Classe des mortiers basés sur le même template que les autres
 class Mortier(Tower):
     
     coordsLvl1=[ 16, 54, 85, 142]

@@ -24,7 +24,8 @@ class Interface(tk.Frame):
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         Wallet = tk.Label(canvas, text="Test", bg="#743A3A")
         Wallet.place(x=31,y=616)
-        
+        Life = tk.Label(canvas, text="20", bg="#743A3A")
+        Life.place(x=150,y=616)
         canvas.pack()
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
@@ -47,7 +48,9 @@ class Lvl1(tk.Frame):
 
         if selectedHeros == "Ichigo" :
             heros = He.Ichigo(canvas, 900,250, 260, 160)
-        else :
+        elif selectedHeros == "Goku":
+            heros = He.Goku(canvas, 900,250, 260, 160)
+        else:
             heros = He.Adventurer(canvas, 900,250, 260, 160)
 
         Enn.Skeleton(canvas, -100, 250, heros)
@@ -100,6 +103,6 @@ def launchApp():
 
     root.title("Tower Run")
     # root.wm_attributes("-transparentcolor", "white")
-    # root.resizable(False, False)
+    root.resizable(False, False)
     root.mainloop()
         

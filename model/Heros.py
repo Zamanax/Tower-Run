@@ -31,7 +31,7 @@ class Heros(Character, metaclass=Singleton):
             self.attack()
         else:
             for ennemy in ennemies:
-                if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
+                if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
                     self.target = ennemy
                     self.canvas.after_cancel(self.seeking)
                     self.attack()
@@ -65,9 +65,9 @@ class Adventurer(Heros):
     # Stats du Héros
     name = "Aventurier"
     hp = 100
-    damage = 2
+    damage = 4
     speed = 8
-    attackSpeed = 2
+    attackSpeed = 1
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 13, "runRight": 8,
@@ -91,7 +91,7 @@ class Ichigo(Heros):
     hp = 50
     damage = 2
     speed = 8
-    attackSpeed = 2
+    attackSpeed = 1
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 2, "runRight": 8,
@@ -100,3 +100,17 @@ class Ichigo(Heros):
     spriteSize = 200
     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
               "attackRight": 800, "attackLeft": 1000, "die" : 0,"Transform": 1200}
+
+class Goku(Heros):
+    name = "Son Goku"
+
+    hp = 50
+    damage = 4
+    speed = 8
+    attackSpeed = 1
+    num_sprintes = {"idle": 8, "runRight": 4,
+                    "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 8,"Transform" : 8}
+    spritesheet = "view/src/Goku0.png"
+    spriteSize = 200
+    y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
+              "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}

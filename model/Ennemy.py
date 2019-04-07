@@ -12,6 +12,7 @@ class Ennemy (Character):
         Character.__init__(self,master,x,y)
         self.heros = heros
         ennemies.append(self)
+        self.index = len(ennemies)-1
         self.seek()
         self.moveTo(1200,self.y)
 
@@ -25,6 +26,12 @@ class Ennemy (Character):
             return self.target
                 
         self.seeking = self.canvas.after(50, self.seek)
+
+    # def die(self, delete):
+    #     global ennemies
+    #     super().die(delete)
+    #     ennemies.pop(self.index)
+
 
 class Skeleton (Ennemy) :
     __slot__=("__dict__","idle","runRight","runLeft")

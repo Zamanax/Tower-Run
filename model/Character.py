@@ -13,7 +13,7 @@ class Character ():
     target = None
     x = 0
     y = 0
-    range = 50
+    range = 35
 
 
     zoom = 1
@@ -41,6 +41,9 @@ class Character ():
 
     canvas = None
 
+    def seek(self):
+        pass
+
     def __init__ (self, master, x, y) :
         #Stats
         self.x = x
@@ -66,22 +69,26 @@ class Character ():
             self.target.hp -= self.damage
             self.show()
             if self.target.hp <= 0:
-                    self.target.die()
+                    self.target.die(False)
                     self.target = None
             self.attacking = self.canvas.after(int(500/self.attackSpeed), self.attack)
         else :
             self.state = "idle"
             self.attacking = None
-            # self.seek()
+            self.seek()
 
-    def die(self):
+    def die(self, delete):
+        if delete:
+            self.canvas.delete(self.last_img)
+
         if self.state == "die":
             self.show()
             if self.sprite == self.num_sprintes["die"]-1:
                 if self.afterIdle :
                     self.canvas.after_cancel(self.afterIdle)
-                self.canvas.after_cancel(self.dying)
                 self.canvas.after_cancel(self.incrementing)
+                delete = True
+                self.canvas.after(5000, self.die, delete)
                 return 
 
         self.canvas.after_cancel(self.move)
@@ -89,7 +96,7 @@ class Character ():
         if self.attacking:
             self.canvas.after_cancel(self.attacking)
         self.state = "die"
-        self.dying = self.canvas.after(150, self.die)
+        self.dying = self.canvas.after(150, self.die, delete)
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
@@ -209,6 +216,8 @@ class Character ():
 
     def show(self) :
         self.canvas.delete(self.last_img)
+        if self.sprite > self.num_sprintes[self.state]:
+            self.sprite = 0
 
         if self.state == "runRight" :
             self.last_img = self.canvas.create_image(
