@@ -58,8 +58,7 @@ class Heros(Character, metaclass=Singleton):
             elif event.y < self.min_y:
                 self.moveTo(event.x, self.min_y)
             else:
-                self.moveTo(event.x, event.y)
-                
+                self.moveTo(event.x, event.y)            
 
 class Adventurer(Heros):
     # Stats du Héros
@@ -101,16 +100,45 @@ class Ichigo(Heros):
     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
               "attackRight": 800, "attackLeft": 1000, "die" : 0,"Transform": 1200}
 
+# class Goku(Heros):
+#     name = "Son Goku"
+#     lvl = 0
+#     hp = 50
+#     damage = 4
+#     speed = 8
+#     attackSpeed = 1
+#     num_sprintes = {"idle": 8, "runRight": 4,
+#                     "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 8,"Transform" : 8}
+#     spritesheet = "view/src/Goku0.png"
+#     spriteSize = 200
+#     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
+#               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
+
 class Goku(Heros):
     name = "Son Goku"
-
+    
+    lvl = 1
     hp = 50
     damage = 4
     speed = 8
     attackSpeed = 1
-    num_sprintes = {"idle": 8, "runRight": 4,
-                    "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 8,"Transform" : 8}
-    spritesheet = "view/src/Goku0.png"
+    num_sprintes = {"idle": 4, "runRight": 4,
+                    "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 4,"Transform" : 8}
+    spritesheet = "view/src/Goku1.png"
     spriteSize = 200
     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
+
+# class Goku(Heros):
+#     name = "Son Goku"
+#     lvl = 2
+#     hp = 50
+#     damage = 4
+#     speed = 8
+#     attackSpeed = 1
+#     num_sprintes = {"idle": 4, "runRight": 4,
+#                     "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die" : 4,"Transform" : 8}
+#     spritesheet = "view/src/Goku2.png"
+#     spriteSize = 200
+#     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
+#               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}

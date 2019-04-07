@@ -4,15 +4,17 @@ import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
 
-selectedHeros = "Ichigo"
+selectedHeros = "Goku"
 
 def refresh(canvas, img):
         canvas.tag_raise(img)
         canvas.after(1,refresh, canvas, img)
 
 class Interface(tk.Frame):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, canvas, *args, **kwargs):
         self.parent = parent
+        self.canvas = canvas
+
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
 
@@ -23,9 +25,10 @@ class Interface(tk.Frame):
         canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
         Wallet = tk.Label(canvas, text="Test", bg="#743A3A")
-        Wallet.place(x=31,y=616)
+        Wallet.place(x=31,y=617)
+
         Life = tk.Label(canvas, text="20", bg="#743A3A")
-        Life.place(x=150,y=616)
+        Life.place(x=150,y=617)
         canvas.pack()
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
@@ -59,7 +62,10 @@ class Lvl1(tk.Frame):
         Tow.Mortier(canvas, 900, 170)
         arc1 = Tow.Archer(canvas, 900, 350)
         refresh(canvas, arc1.last_img)
-        
+
+        self.interface = Interface(self, parent, canvas)
+        self.interface.pack(side="right", fill="y")
+
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
@@ -88,10 +94,8 @@ class MainApplication(tk.Frame):
 
         # Chargement des Frames voulues
         self.lvl1 = Lvl1(self, parent)
-        self.interface = Interface(self,parent)
-        # Mise en vue principale des vues voulues
-        self.interface.pack(side="right", fill="y")
 
+        # Mise en vue principale des vues voulues
         self.lvl1.pack()
 
 
@@ -105,4 +109,3 @@ def launchApp():
     # root.wm_attributes("-transparentcolor", "white")
     root.resizable(False, False)
     root.mainloop()
-        

@@ -80,23 +80,30 @@ class Character ():
     def die(self, delete):
         if delete:
             self.canvas.delete(self.last_img)
+            self.canvas.after_cancel(self.dying)
+            self = None
+            del self
+            return
 
-        if self.state == "die":
+        elif self.state == "die":
             self.show()
             if self.sprite == self.num_sprintes["die"]-1:
-                if self.afterIdle :
-                    self.canvas.after_cancel(self.afterIdle)
+                self.canvas.after_cancel(self.afterIdle)
+                self.afterIdle = None
                 self.canvas.after_cancel(self.incrementing)
                 delete = True
-                self.canvas.after(5000, self.die, delete)
+                self.dying = self.canvas.after(5000, self.die, delete)
                 return 
-
-        self.canvas.after_cancel(self.move)
-        self.canvas.after_cancel(self.seeking)
-        if self.attacking:
-            self.canvas.after_cancel(self.attacking)
-        self.state = "die"
-        self.dying = self.canvas.after(150, self.die, delete)
+            self.dying = self.canvas.after(150, self.die, delete)
+            
+        else :
+            self.canvas.after_cancel(self.move)
+            self.canvas.after_cancel(self.seeking)
+            if self.attacking:
+                self.canvas.after_cancel(self.attacking)
+            self.state = "die"
+            self.dying = self.canvas.after(150, self.die, delete)
+        
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
@@ -139,7 +146,7 @@ class Character ():
     # Méthode chargée du placement de l'image d'attente
     def idleAnim(self):
         self.show()
-        self.adterIdle = self.canvas.after(250, self.idleAnim)
+        self.afterIdle = self.canvas.after(250, self.idleAnim)
 
     # Méthode d'incrémentation de l'image à afficher
     def incrementSprite(self):
@@ -153,6 +160,8 @@ class Character ():
             time = 100
         elif self.state == "attackRight" or self.state == "attackLeft":
             time = 50
+        elif self.state == "die":
+            time = 400
         else :
             time = 200
         # On rappelle la fonction
@@ -240,4 +249,7 @@ class Character ():
         if self.target:
             if self.target.y < self.y:
                 self.canvas.tag_raise(self.last_img, self.target.last_img)
+            else :
+                self.canvas.tag_lower(self.last_img, self.target.last_img)
+
     

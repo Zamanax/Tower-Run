@@ -1,8 +1,6 @@
 import tkinter as tk
 from model.Heros import Heros
 
-
-
 class Tower():
     # Coords de la tour
     x = 0
@@ -210,7 +208,7 @@ class EarthM(Mage):
 class Archer(Tower):
     image="view/src/Archer.png"
     coordsLvl1 = [3,51,82,138]
-    coordsLvl2= [91,35,195,144]
+    coordsLvl2 = [91,35,195,144]
     coordsLvl3 = [203,0,295,144]
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
