@@ -50,7 +50,7 @@ class Lvl1(tk.Frame):
         else :
             heros = He.Adventurer(canvas, 900,250, 260, 160)
 
-        Enn.Skeleton(canvas, -100, 250)
+        Enn.Skeleton(canvas, -100, 250, heros)
         
         canvas.bind("<Button-3>", heros.mouseMove)
         Tow.Mortier(canvas, 900, 170)

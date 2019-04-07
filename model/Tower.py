@@ -1,6 +1,5 @@
 import tkinter as tk
-import model.Ennemy as Enn
-from model.Character import Character
+from model.Heros import Heros
 
 
 
@@ -77,7 +76,7 @@ class projectile():
             self.boom=tk.PhotoImage(boom)
             self.px=x
             self.py=y
-            self.target=Character.seek(self)
+            self.target=Heros.seek(self)
             self.damage=damage
             self.tir(self.target)
            

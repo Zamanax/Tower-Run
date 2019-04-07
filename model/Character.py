@@ -1,5 +1,6 @@
 import tkinter as tk
-import model.Ennemy as Enn
+# from model.Ennemy import ennemies
+
 class Character ():
     team = ""
     hp = 0
@@ -20,6 +21,9 @@ class Character ():
     idle = []
     runRight = []
     runLeft = []
+    attackRight = []
+    attackLeft = []
+    death = []
     num_sprintes = {}
     y_Anim = {}
 
@@ -28,8 +32,11 @@ class Character ():
     spriteSize = 0
 
     move = None
+    attacking = None
     afterIdle = None
     seeking = None
+    incrementing = None
+    dying = None
 
 
     canvas = None
@@ -55,27 +62,24 @@ class Character ():
             self.attacking = self.canvas.after(int(1000/self.attackSpeed), self.attack)
         else :
             self.state = "idle"
-            self.seek()
+            # self.seek()
 
     def die(self):
+        if self.state == "die":
+            self.show()
+            if self.sprite == self.num_sprintes["die"]-1:
+                if self.afterIdle :
+                    self.canvas.after_cancel(self.afterIdle)
+                self.canvas.after_cancel(self.dying)
+                self.canvas.after_cancel(self.incrementing)
+                return 
+
         self.canvas.after_cancel(self.move)
-        # self.canvas.after_cancel(self.afterIdle)
         self.canvas.after_cancel(self.seeking)
-        # self.canvas.after_cancel(self.attacking)
-        self.canvas.delete(self.last_img)
-
-        self.state = "dying"
-        
-
-    def seek(self):
-        for ennemy in Enn.ennemies:
-            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
-                self.target = ennemy
-                self.canvas.after_cancel(self.seeking)
-                self.attack()
-                return self.target
-                
-        self.seeking = self.canvas.after(50, self.seek)
+        if self.attacking:
+            self.canvas.after_cancel(self.attacking)
+        self.state = "die"
+        self.dying = self.canvas.after(150, self.die)
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
     def getSprite(self):
@@ -88,6 +92,15 @@ class Character ():
 
         self.runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["runLeft"])]
+
+        self.attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
+                        for i in range(self.num_sprintes["attackRight"])]
+
+        self.attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
+                        for i in range(self.num_sprintes["attackLeft"])]
+
+        self.death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
+                        for i in range(self.num_sprintes["die"])]
         # Lancement de l'animation
         self.idleAnim()
         self.incrementSprite()
@@ -123,8 +136,10 @@ class Character ():
             time = 100
         elif self.state == "attackRight" or self.state == "attackLeft":
             time = 50
+        else :
+            time = 200
         # On rappelle la fonction
-        self.canvas.after(time, self.incrementSprite)
+        self.incrementing = self.canvas.after(time, self.incrementSprite)
 
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
@@ -191,7 +206,10 @@ class Character ():
         elif self.state == "runLeft" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.runLeft[self.sprite])
-        if self.state == "idle" :
+        elif self.state == "idle" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.idle[self.sprite])
+        elif self.state == "die" :
+            self.last_img = self.canvas.create_image(
+                self.x, self.y, image=self.death[self.sprite])
     

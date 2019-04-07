@@ -1,6 +1,6 @@
 import tkinter as tk
 from model.Character import Character
-import model.Ennemy as Enn
+from model.Ennemy import ennemies
 
 class Singleton(type):
     _instances = {}
@@ -18,11 +18,27 @@ class Heros(Character, metaclass=Singleton):
     attackSpeed = 2
     state = "idle"
 
+    def showHp(self):
+        print(self.hp)
+        self.canvas.after(50, self.showHp)
+
     def __init__(self, canvas, x, y, max_y, min_y):
         Character.__init__(self, canvas, x, y)
         self.max_y = max_y
         self.min_y = min_y
         self.seek()
+        # self.showHp()
+
+    
+    def seek(self):
+        for ennemy in ennemies:
+            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range:
+                self.target = ennemy
+                self.canvas.after_cancel(self.seeking)
+                self.attack()
+                return self.target
+                
+        self.seeking = self.canvas.after(50, self.seek)
 
     def mouseMove(self, event):
 
@@ -54,12 +70,12 @@ class Adventurer(Heros):
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 13, "runRight": 8,
-                    "runLeft": 8, "attackRight": 10, "attackLeft": 10}
+                    "runLeft": 8, "attackRight": 10, "attackLeft": 10, "die":7}
     spritesheet = "view/src/Adventurer.png"
     spriteSize = 32
     zoom = 2
     y_Anim = {"idle": 0, "runRight": 32, "runLeft": 288,
-              "attackRight": 64, "attackLeft": 324}
+              "attackRight": 64, "attackLeft": 324, "die": 256}
 
     def __init__(self, canvas, x, y, max_y, min_y):
         Heros.__init__(self, canvas, x, y, max_y, min_y)
@@ -73,8 +89,8 @@ class Ichigo(Heros):
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 2, "runRight": 8,
-                    "runLeft": 8, "attackRight": 16, "attackLeft": 16, "Transform" : 3}
+                    "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die" : 2,"Transform" : 3}
     spritesheet = "view/src/Ichigo1.png"
     spriteSize = 200
     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
-              "attackRight": 800, "attackLeft": 1000, "Transform": 1200}
+              "attackRight": 800, "attackLeft": 1000, "die" : 0,"Transform": 1200}
