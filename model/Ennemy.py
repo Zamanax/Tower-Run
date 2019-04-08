@@ -37,7 +37,7 @@ class Ennemy (Character):
 
 
 class Skeleton (Ennemy) :
-    __slot__=("__dict__","idle","runRight","runLeft")
+    __slot__=("__dict__","idle","runRight","runLeft", "attackRight", "attackLeft")
 
     hp = 10
     name = "Skeleton"
@@ -51,3 +51,27 @@ class Skeleton (Ennemy) :
     num_sprintes = {"idle" : 1, "runRight" : 4, "runLeft" : 4, "attackRight" : 8, "attackLeft": 8, "die": 4}
     spritesheet = "view/src/Skeleton.png"
     zoom = 2
+
+class miniSkeleton (Skeleton) :
+    zoom = 1
+
+class Totor (Ennemy):
+    __slot__ = ("__dict__", "idle", "runRight",
+                "runLeft", "attackRight", "attackLeft")
+
+    hp = 200
+    name = "Totor"
+    attackSpeed = 0.5
+    speed = 1
+    damage = 10
+    
+    spritesheet = 'view/src/Totor.png'
+    spriteSize = 96
+    y_Anim = {"idle" : 0, "runRight" : 96, "runLeft" : 96*12, "attackRight": 96*3, "attackLeft": 96*13, "die" : 96*10}
+    damagingSprite = [1,2,3]
+    num_sprintes = {"idle" : 5, "runRight" : 8, "runLeft" : 8, "attackRight" : 9, "attackLeft": 9, "die": 6}
+    zoom = 2
+
+class Fat_Totor (Totor) :
+    zoom = 3
+    

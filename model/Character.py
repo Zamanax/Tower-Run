@@ -260,11 +260,3 @@ class Character ():
         elif self.state == "die" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
-
-        # if self.target:
-        #     if self.target.y < self.y:
-        #         self.canvas.tag_raise(self.last_img, self.target.last_img)
-        #     else :
-        #         self.canvas.tag_lower(self.last_img, self.target.last_img)
-
-    

@@ -1,6 +1,8 @@
 import tkinter as tk
 from model.Character import Character
 from model.Ennemy import ennemies
+from threading import Thread
+#pour 
 
 class Singleton(type):
     _instances = {}
@@ -12,7 +14,7 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class Heros(Character, metaclass=Singleton):
+class Heros(Character,Thread, metaclass=Singleton):
     # Stats du Héros
     team = "ally"
     state = "idle"
@@ -69,6 +71,9 @@ class Heros(Character, metaclass=Singleton):
                     return self.target
 
         self.seeking = self.canvas.after(50, self.seek)
+    
+    # def p_seek(self):
+    #     Thread(target=self.seek).start
 
     def mouseMove(self, event):
 
@@ -107,6 +112,17 @@ class Heros(Character, metaclass=Singleton):
         self.attackLeft = self.attackLeft1
         self.attackRight = self.attackRight1
         self.death = self.death1
+
+    # def show(self):
+    #     super().show()
+    #     for ennemy in ennemies:
+    #         if ennemy.state == "die":
+    #             if ennemy.y < self.y:
+    #                 self.canvas.tag_raise(self.last_img, ennemy.last_img)
+    #             else :
+    #                 self.canvas.tag_lower(self.last_img, ennemy.last_img)
+
+    
 
 class Adventurer(Heros):
     # Stats du Héros

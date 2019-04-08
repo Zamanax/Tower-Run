@@ -56,7 +56,9 @@ class Lvl1(tk.Frame):
         else:
             heros = He.Adventurer(canvas, 900,250, 260, 160)
 
-        Enn.Skeleton(canvas, -100, 250, heros)
+       
+        Enn.miniSkeleton(canvas, -100, 250, heros)
+
         
         canvas.bind("<Button-3>", heros.mouseMove)
         canvas.bind("<Button-1>", heros.transformTo1)
@@ -108,6 +110,5 @@ def launchApp():
     MainApplication(root).pack(side="top", fill="both", expand=True)
 
     root.title("Tower Run")
-    # root.wm_attributes("-transparentcolor", "white")
     root.resizable(False, False)
     root.mainloop()
