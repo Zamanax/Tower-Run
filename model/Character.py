@@ -13,7 +13,7 @@ class Character ():
     target = None
     x = 0
     y = 0
-    range = 35
+    range = 70
 
 
     zoom = 1
@@ -60,6 +60,8 @@ class Character ():
                 self.canvas.after_cancel(self.target.move)
             if self.target.attacking != None :
                 self.target.target = self
+            if self.afterIdle:
+                self.canvas.after_cancel(self.afterIdle)
 
             if self.x > self.target.x:
                 self.state = "attackLeft"
@@ -71,11 +73,13 @@ class Character ():
             if self.target.hp <= 0:
                     self.target.die(False)
                     self.target = None
+            
             self.attacking = self.canvas.after(int(500/self.attackSpeed), self.attack)
         else :
             self.state = "idle"
             self.attacking = None
             self.seek()
+            self.idleAnim()
 
     def die(self, delete):
         if delete:
@@ -116,12 +120,14 @@ class Character ():
 
         self.runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["runLeft"])]
+        self.runLeft.reverse()
 
         self.attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["attackRight"])]
 
         self.attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["attackLeft"])]
+        self.attackLeft.reverse()
 
         self.death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["die"])]
@@ -159,7 +165,7 @@ class Character ():
         elif self.state == "runRight" or self.state == "runLeft":
             time = 100
         elif self.state == "attackRight" or self.state == "attackLeft":
-            time = 50
+            time = int(500/self.attackSpeed)
         elif self.state == "die":
             time = 400
         else :
@@ -246,10 +252,11 @@ class Character ():
         elif self.state == "die" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
-        if self.target:
-            if self.target.y < self.y:
-                self.canvas.tag_raise(self.last_img, self.target.last_img)
-            else :
-                self.canvas.tag_lower(self.last_img, self.target.last_img)
+
+        # if self.target:
+        #     if self.target.y < self.y:
+        #         self.canvas.tag_raise(self.last_img, self.target.last_img)
+        #     else :
+        #         self.canvas.tag_lower(self.last_img, self.target.last_img)
 
     

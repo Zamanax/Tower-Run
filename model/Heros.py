@@ -34,6 +34,7 @@ class Heros(Character, metaclass=Singleton):
                 if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
                     self.target = ennemy
                     self.canvas.after_cancel(self.seeking)
+                    self.sprite = 0
                     self.attack()
                     return self.target
                 
@@ -100,45 +101,61 @@ class Ichigo(Heros):
     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
               "attackRight": 800, "attackLeft": 1000, "die" : 0,"Transform": 1200}
 
-# class Goku(Heros):
-#     name = "Son Goku"
-#     lvl = 0
-#     hp = 50
-#     damage = 4
-#     speed = 8
-#     attackSpeed = 1
-#     num_sprintes = {"idle": 8, "runRight": 4,
-#                     "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 8,"Transform" : 8}
-#     spritesheet = "view/src/Goku0.png"
-#     spriteSize = 200
-#     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
-#               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
-
 class Goku(Heros):
     name = "Son Goku"
-    
-    lvl = 1
+    lvl = 0
     hp = 50
-    damage = 4
+    damage = 2
     speed = 8
-    attackSpeed = 1
-    num_sprintes = {"idle": 4, "runRight": 4,
-                    "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 4,"Transform" : 8}
-    spritesheet = "view/src/Goku1.png"
+    attackSpeed = 3
+    num_sprintes = {"idle": 8, "runRight": 4,
+                    "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 8,"Transform" : 8}
+    spritesheet = "view/src/Goku0.png"
     spriteSize = 200
     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
 
 # class Goku(Heros):
 #     name = "Son Goku"
+    
+#     lvl = 1
+#     hp = 50
+#     damage = 4
+#     speed = 12
+#     attackSpeed = 1
+#     num_sprintes = {"idle": 4, "runRight": 4,
+#                     "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 4,"Transform" : 8}
+#     spritesheet = "view/src/Goku1.png"
+#     spriteSize = 200
+#     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
+#               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
+
+# class Goku(Heros):
+#     name = "Son Goku"
+
 #     lvl = 2
 #     hp = 50
 #     damage = 4
-#     speed = 8
-#     attackSpeed = 1
+#     speed = 16
+#     attackSpeed = 5
 #     num_sprintes = {"idle": 4, "runRight": 4,
 #                     "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die" : 4,"Transform" : 8}
 #     spritesheet = "view/src/Goku2.png"
 #     spriteSize = 200
 #     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
 #               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
+
+# class Goku(Heros):
+#     name = "Son Goku"
+    
+#     lvl = 3
+#     hp = 50
+#     damage = 4
+#     speed = 20
+#     attackSpeed = 7
+#     num_sprintes = {"idle": 4, "runRight": 4,
+#                     "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die" : 4}
+#     spritesheet = "view/src/Goku3.png"
+#     spriteSize = 200
+#     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
+#               "attackRight": 800, "attackLeft": 1000, "die" : 200}

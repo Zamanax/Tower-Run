@@ -76,7 +76,7 @@ def test_subimage(spritesheet, l, t, r, b, root):
     return sprite
     
 # Classe projectile permattant de leur affecter des méthodes
-class projectile():
+class Projectile():
     # Méthode chargée de l'apparition du projectile
     def __init__(self, image,boom, canvas, x, y, damage):
             self.canvas=canvas
@@ -136,6 +136,7 @@ class Mortier(Tower):
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
         Tower.__init__(self, canvas, x, y)
+        Projectile("cercle noir.png", "cercle noir.png", self.canvas, 100, 100, self.damage)
         self.damage = 5
         self.speed = 1
         self.zone = 3
