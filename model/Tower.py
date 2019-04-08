@@ -32,6 +32,16 @@ def test_subimage(spritesheet, l, t, r, b, root):
     canvas.pack()
     # root.mainloop()
     return sprite
+
+def coeffdirecteur(object1x,object1y, object2):
+    try:
+        return (object1y-object2.y)/(object1x-object2.x)
+    except ZeroDivisionError:
+        return "x"
+
+# def bouger():
+#     obj.x+=1
+#     obj.y+=a
 #____________________________________________________________________________________________________________
 
 
@@ -121,10 +131,10 @@ class Projectile(Tower):
             self.img=tk.PhotoImage(image)
             self.boom=tk.PhotoImage(boom)
             self.canvas=canvas
+            self.tx=self.target.x
+            self.ty=self.target.y
             self.tir()         
             
-    
-    
     # Méthode chargée du déplacement des projectiles
     def tir(self):
         
@@ -133,37 +143,46 @@ class Projectile(Tower):
         if type(self.corps)!=None:
             self.canvas.delete(self.corps)
             
-        if self.x==self.target.x and self.y==self.target.y:
-            print("arrivé")
+        if self.x==self.tx and self.y==self.ty:
             self.canvas.delete(self.corps)
             self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
             self.target.hp-=self.damage
             self.seek()
-            self.canvas.after(5,self.canvas.delete, self.corps)
+            self.canvas.after(5, self.canvas.delete, self.corps)
             return
 
-        elif self.x > self.target.x and self.y > self.target.y:
-            self.x -= v
-            self.y -= v
-        elif self.x < self.target.x and self.y < self.target.y:
-            self.y += v
-            self.x += v
-        elif self.x > self.target.x and self.y < self.target.y:
-            self.x -= v
-            self.y += v
-        elif self.x < self.target.x and self.y > self.target.y:
-            self.x += v
-            self.y -= v
-        # elif self.x > self.target.x:
+        # elif self.x > self.tx and self.y > self.ty:
         #     self.x -= v
-        # elif self.x < self.target.x:
+        #     self.y -= v
+        # elif self.x < self.tx and self.y < self.ty:
+        #     self.y += v
         #     self.x += v
-        elif self.y > self.target.y:
-            self.y -= v
-        elif self.y < self.target.y:
-            self.y += v
+        # elif self.x > self.tx and self.y < self.ty:
+        #     self.x -= v
+        #     self.y += v
+        # elif self.x < self.tx and self.y > self.ty:
+        #     self.x += v
+        #     self.y -= v
+        # # elif self.x > self.target.x:
+        # #     self.x -= v
+        # # elif self.x < self.target.x:
+        # #     self.x += v
+        # elif self.y > self.ty:
+        #     self.y -= v
+        # elif self.y < self.ty:
+        #     self.y += v
+        
+        a=coeffdirecteur(self.tx, self.ty, self)
+        if a =="x":
+            self.y+=v
+        elif self.x>self.tx:
+            self.x-=v
+            self.y-=v*a
+        elif self.x<self.tx:
+            self.x+=v
+            self.y+=v*a
 
-        self.corps=self.canvas.create_oval(self.x, self.y, self.x+20, self.y+20, fill="black")
+        self.corps=self.canvas.create_oval(self.x-5, self.y-5, self.x+5, self.y+5, fill="black")
         self.canvas.after(20,self.tir)
 
 #________________________________________________________________________________________________________________________
