@@ -38,12 +38,11 @@ class Ennemy (Character):
 
 class Skeleton (Ennemy) :
     __slot__=("__dict__","idle","runRight","runLeft", "attackRight", "attackLeft")
-
     hp = 10
     name = "Skeleton"
     attackSpeed = 1
-    speed = 2
-    damage = 1
+    speed = 1
+    damage = 2
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
@@ -53,6 +52,10 @@ class Skeleton (Ennemy) :
     zoom = 2
 
 class miniSkeleton (Skeleton) :
+    hp = 5
+    attackSpeed = 2
+    speed = 2
+    damage = 1
     zoom = 1
 
 class Totor (Ennemy):
@@ -73,5 +76,22 @@ class Totor (Ennemy):
     zoom = 2
 
 class Fat_Totor (Totor) :
+    hp = 1000
+    name = "Fat_Totor"
+    damage = 20
+    speed = 0.5
     zoom = 3
-    
+
+class Dwarf (Ennemy) :
+    __slot__ = ('__dict__', 'idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft')
+
+    hp = 50
+    name = 'Dwarf'
+    attackSpeed = 1
+    speed = 1
+    damage = 5
+
+    spritesheet = 'view/src/Dwarf.png'
+    spriteSize = 96 
+    num_sprintes = {'idle' : 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 9, 'attackLeft' : 9, 'die' : 6}
+    zoom = 1
