@@ -13,7 +13,7 @@ class Character ():
     target = None
     x = 0
     y = 0
-    range = 70
+    range = 35
 
     lv1 = []
     zoom = 1
