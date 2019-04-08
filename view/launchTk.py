@@ -63,6 +63,7 @@ class Lvl1(tk.Frame):
         arc1 = Tow.Archer(canvas, 900, 350)
         refresh(canvas, arc1.last_img)
 
+        # Début de l'interface
         self.interface = Interface(self, parent, canvas)
         self.interface.pack(side="right", fill="y")
 

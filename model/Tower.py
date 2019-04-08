@@ -1,5 +1,6 @@
 import tkinter as tk
 from model.Heros import Heros
+from model.Ennemy import ennemies
 
 class Tower():
     # Coords de la tour
@@ -68,7 +69,7 @@ def test_subimage(spritesheet, l, t, r, b, root):
     canvas = tk.Canvas(root)
     sprite = tk.PhotoImage()
     spritesheet = tk.PhotoImage(file=spritesheet)
-    sprite.tk.call(sprite, 'copy', spritesheet,
+    sprite.tk.call(sprite, 'coy', spritesheet,
                     '-from', l, t, r, b, '-to', 0, 0)
     canvas.create_image(100, 100, image=sprite)
     canvas.pack()
@@ -77,48 +78,66 @@ def test_subimage(spritesheet, l, t, r, b, root):
     
 # Classe projectile permattant de leur affecter des méthodes
 class Projectile():
+    target = None
+    seeking = None
     # Méthode chargée de l'apparition du projectile
-    def __init__(self, image,boom, canvas, x, y, damage):
+    def __init__(self, image,boom, canvas, x, y, damage, range):
             self.canvas=canvas
+            self.range=range
             self.img=tk.PhotoImage(image)
             self.boom=tk.PhotoImage(boom)
-            self.px=x
-            self.py=y
-            self.target=Heros.seek(self)
+            self.x=x
+            self.y=y
+            self.seek()
             self.damage=damage
-            self.tir(self.target)
+            # if type(self.target)!=None:
+            #     self.tir(self.target)
+    
+    def seek(self):
+        for ennemy in ennemies:
+            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
+                print("targeted")
+                self.target = ennemy
+                if self.seeking:
+                    self.canvas.after_cancel(self.seeking)
+                self.tir()
+            else:
+                self.seeking = self.canvas.after(250, self.seek)
+                
 
     # Méthode chargée du déplacement des projectiles
-    def tir(self, ennemy):
+    def tir(self):
         v=5 
-        projectile=self.canvas.create_image(self.px, self.py, image=self.img)
-        if self.px==ennemy.x and self.py==ennemy.y:
+        projectile=self.canvas.create_oval(self.x, self.y,self.x+10, self.y+10, fill="black")# image=self.img)
+        if self.x==self.target.x and self.y==self.target.y:
             self.canvas.delete(projectile)
-            projectile=self.canvas.create_image(self.px, self.py, image=self.boom)
-            ennemy.hp-=self.damage
+            projectile=self.canvas.create_image(self.x, self.y, image=self.boom)
+            self.target.hp-=self.damage
+            self.seek()
             self.canvas.after(500,self.canvas.delete, projectile)
             return
 
-        elif self.px > ennemy.x and self.py > ennemy.y:
-            self.px -= v
-            self.py -= v
-        elif self.px < ennemy.x and self.py < ennemy.y:
-            self.py += v
-            self.px += v
-        elif self.px > ennemy.x and self.py < ennemy.y:
-            self.px -= v
-            self.py += v
-        elif self.px < ennemy.x and self.py > ennemy.y:
-            self.px += v
-            self.py -= v
-        elif self.px > ennemy.x:
-            self.px -= v
-        elif self.px < ennemy.x:
-            self.px += v
-        elif self.py > ennemy.y:
-            self.py -= v
-        elif self.py < ennemy.y:
-            self.py += v
+        elif self.x > self.target.x and self.y > self.target.y:
+            self.x -= v
+            self.y -= v
+        elif self.x < self.target.x and self.y < self.target.y:
+            self.y += v
+            self.x += v
+        elif self.x > self.target.x and self.y < self.target.y:
+            self.x -= v
+            self.y += v
+        elif self.x < self.target.x and self.y > self.target.y:
+            self.x += v
+            self.y -= v
+        elif self.x > self.target.x:
+            self.x -= v
+        elif self.x < self.target.x:
+            self.x += v
+        elif self.y > self.target.y:
+            self.y -= v
+        elif self.y < self.target.y:
+            self.y += v
+        self.canvas.delete(projectile)
         self.canvas.after(200,self.tir)
                 
 # Classe des mortiers basés sur le même template que les autres
@@ -136,11 +155,13 @@ class Mortier(Tower):
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
         Tower.__init__(self, canvas, x, y)
-        Projectile("cercle noir.png", "cercle noir.png", self.canvas, 100, 100, self.damage)
-        self.damage = 5
+       
+        self.range=2000
+        self.damage = 1
         self.speed = 1
         self.zone = 3
         self.damagetype = "fire"
+        Projectile("cercle noir.png", "cercle noir.png", self.canvas, self.x, self.y+50, self.damage, self.range)
         # self.spritesheet=tk.PhotoImage(file="towers.png")
         # self.root.mainloop()
     
