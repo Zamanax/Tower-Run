@@ -1,5 +1,5 @@
 import tkinter as tk
-# from model.Ennemy import ennemies
+from functools import lru_cache
 
 class Character ():
     team = ""
@@ -15,12 +15,15 @@ class Character ():
     y = 0
     range = 70
 
-
+    lv1 = []
     zoom = 1
     last_img = None
     idle = []
+    idle1 = []
     runRight = []
     runLeft = []
+
+    damagingSprite = []
     attackRight = []
     attackLeft = []
     death = []
@@ -49,8 +52,7 @@ class Character ():
         self.x = x
         self.y = y
         self.canvas = master
-        self.spritesheet = tk.PhotoImage(file=self.spritesheet)
-        self.numero=0
+        # self.spritesheet = tk.PhotoImage(file=self.spritesheet)
 
         self.getSprite()
         
@@ -67,9 +69,11 @@ class Character ():
                 self.state = "attackLeft"
             else :
                 self.state = "attackRight"
-
-            self.target.hp -= self.damage
             self.show()
+
+            if self.sprite in self.damagingSprite:
+                self.target.hp -= self.damage
+
             if self.target.hp <= 0:
                     self.target.die(False)
                     self.target = None
@@ -110,7 +114,10 @@ class Character ():
         
 
     # Méthode chargée de charger le spritesheet et de le rendre utilisable
+    @lru_cache(128)
     def getSprite(self):
+        self.spritesheet = tk.PhotoImage(file=self.spritesheet)
+
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
         self.idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
                      for i in range(self.num_sprintes["idle"])]
@@ -131,6 +138,7 @@ class Character ():
 
         self.death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["die"])]
+        
         # Lancement de l'animation
         self.idleAnim()
         self.incrementSprite()
@@ -231,7 +239,7 @@ class Character ():
 
     def show(self) :
         self.canvas.delete(self.last_img)
-        if self.sprite > self.num_sprintes[self.state]:
+        if self.sprite >= self.num_sprintes[self.state]:
             self.sprite = 0
 
         if self.state == "runRight" :

@@ -59,9 +59,10 @@ class Lvl1(tk.Frame):
         Enn.Skeleton(canvas, -100, 250, heros)
         
         canvas.bind("<Button-3>", heros.mouseMove)
-        Tow.Mortier(canvas, 900, 170)
-        arc1 = Tow.Archer(canvas, 900, 350)
-        refresh(canvas, arc1.last_img)
+        canvas.bind("<Button-1>", heros.transformTo1)
+        # Tow.Mortier(canvas, 900, 170)
+        # arc1 = Tow.Archer(canvas, 900, 350)
+        # refresh(canvas, arc1.last_img)
 
         # Début de l'interface
         self.interface = Interface(self, parent, canvas)

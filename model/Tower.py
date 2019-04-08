@@ -2,55 +2,11 @@ import tkinter as tk
 from model.Heros import Heros
 from model.Ennemy import ennemies
 
-class Tower():
-    # Coords de la tour
-    x = 0
-    y = 0
-    # Image de la tour
-    lv1 = None
-    lv2 = None
-    lv3 = None
-    last_img=None
-
-    # Point de l'image de chaque niveau de tour
-    coordsLvl1=None
-    coordsLvl2=None
-    coordsLvl3=None
-
-    # Chargement et attribution des différentes propriétés
-    def __init__(self, canvas, x, y):
-        self.canvas = canvas
-        self.x = x
-        self.y = y
-        self.construction()
-        self.damage=1
-        # self.refresh()
-
-    #Fonction chargée de l'apparition de la tour
-    def construction(self):
-        #On supprime l'ancienne image
-        self.canvas.delete(self.last_img)
-        #On place la nouvelle
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv1, anchor="s")
-        #On la place au dessus
-        self.canvas.tag_raise(self.last_img)
-
-        self.canvas.after(1000000, self.construction, self)
-
-    #Attribution des variables pour chaque instance de la classe
-    __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
-
-
-    # def refresh(self):
-    #     self.canvas.tag_raise(self.last_img)
-    #     self.canvas.after(1,self.refresh)
-
- 
-
 # Charge une image pour chaque point demandé
+
 def load(coords, image):
     return subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
+
 
 def subimage(spritesheet, l, t, r, b):
 
@@ -75,28 +31,78 @@ def test_subimage(spritesheet, l, t, r, b, root):
     canvas.pack()
     # root.mainloop()
     return sprite
+#_____________________________________________________________________________________________________________________________________________
+
+
+
+class Tower():
+    # Coords de la tour
+    x = 0
+    y = 0
+    # Image de la tour
+    lv1 = None
+    lv2 = None
+    lv3 = None
+    last_img=None
+
+    # Point de l'image de chaque niveau de tour
+    coordsLvl1=None
+    coordsLvl2=None
+    coordsLvl3=None
+
+    # Chargement et attribution des différentes propriétés
+
+    def __init__(self, canvas, x, y):
+        self.canvas = canvas
+        self.x = x
+        self.y = y
+        self.construction()
+        self.damage=1
+        # self.refresh()
+
+    #Fonction chargée de l'apparition de la tour
+
+    def construction(self):
+        #On supprime l'ancienne image
+        self.canvas.delete(self.last_img)
+        #On place la nouvelle
+        self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.lv1, anchor="s")
+        #On la place au dessus
+        self.canvas.tag_raise(self.last_img)
+
+        self.canvas.after(1000000, self.construction, self)
+
+    #Attribution des variables pour chaque instance de la classe
+    __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
+
+
+    # def refresh(self):
+    #     self.canvas.tag_raise(self.last_img)
+    #     self.canvas.after(1,self.refresh)
+
+ 
+
+
     
 # Classe projectile permattant de leur affecter des méthodes
-class Projectile():
+class Projectile(Tower):
     target = None
     seeking = None
     # Méthode chargée de l'apparition du projectile
-    def __init__(self, image,boom, canvas, x, y, damage, range):
-            self.canvas=canvas
-            self.range=range
+
+    def __init__(self, image,boom,):
             self.img=tk.PhotoImage(image)
             self.boom=tk.PhotoImage(boom)
-            self.x=x
-            self.y=y
+    
+            self.y+=10
             self.seek()
-            self.damage=damage
             # if type(self.target)!=None:
             #     self.tir(self.target)
     
     def seek(self):
         for ennemy in ennemies:
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
-                print("targeted")
                 self.target = ennemy
                 if self.seeking:
                     self.canvas.after_cancel(self.seeking)
@@ -139,6 +145,8 @@ class Projectile():
             self.y += v
         self.canvas.delete(projectile)
         self.canvas.after(200,self.tir)
+
+
                 
 # Classe des mortiers basés sur le même template que les autres
 class Mortier(Tower):
@@ -161,9 +169,13 @@ class Mortier(Tower):
         self.speed = 1
         self.zone = 3
         self.damagetype = "fire"
-        Projectile("cercle noir.png", "cercle noir.png", self.canvas, self.x, self.y+50, self.damage, self.range)
+        Projectile("cercle noir.png", "cercle noir.png", self.x, self.y+50, self.damage, self.range)
         # self.spritesheet=tk.PhotoImage(file="towers.png")
         # self.root.mainloop()
+
+class Boulet(Mortier, Projectile):
+    def __init__(self):
+        Projectile.__init__(self)
     
     
 
