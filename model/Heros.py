@@ -1,8 +1,7 @@
 import tkinter as tk
 from model.Character import Character
 from model.Ennemy import ennemies
-from threading import Thread
-#pour 
+from functools import lru_cache 
 
 class Singleton(type):
     _instances = {}
@@ -14,11 +13,12 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class Heros(Character,Thread, metaclass=Singleton):
+class Heros(Character, metaclass=Singleton):
     # Stats du Héros
     team = "ally"
     state = "idle"
     lv1 = {}
+    lv2 = {}
 
     def showHp(self):
         print(self.hp)
@@ -31,7 +31,7 @@ class Heros(Character,Thread, metaclass=Singleton):
         self.min_y = min_y
         self.seek()
         # self.showHp()
-    
+    @lru_cache(128)
     def getSprite(self):
         super().getSprite()
         if hasattr(self, 'lv1') and self.lv1 != []:

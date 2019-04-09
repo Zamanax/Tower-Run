@@ -41,7 +41,7 @@ class Character ():
     incrementing = None
     dying = None
 
-
+    healthBar = None
     canvas = None
 
     def seek(self):
@@ -261,4 +261,6 @@ class Character ():
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
 
-        
+        if self.healthBar:
+            self.canvas.delete(self.healthBar)
+        self.healthBar = self.canvas.create_line(self.x-15,self.y+25,self.x+25,self.y+25, width= 5,fill="green")

@@ -55,6 +55,8 @@ class Tower():
     last_img=None
     seeking=None
     range=0
+    d_up=15
+    r_up=25
 
     # Chargement et attribution des différentes propriétés
 
@@ -65,6 +67,8 @@ class Tower():
         self.construction()
         self.damage=1
         self.seek()
+        self.canvas.after(5000, self.upgrade1)
+        
         # self.refresh()
 
     #Fonction chargée de l'apparition de la tour
@@ -92,6 +96,31 @@ class Tower():
                 self.tir_p()
                 return
         self.seeking = self.canvas.after(250, self.seek)
+    
+    def upgrade1(self):
+        self.damage+=self.d_up
+        self.range+=self.r_up
+        self.canvas.delete(self.last_img)
+        #On place la nouvelle
+        self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.lv2, anchor="s")
+        #On la place au dessus
+        self.canvas.tag_raise(self.last_img)
+
+        self.canvas.after(1000000, self.construction, self)
+    
+    def upgrade2(self):
+        self.damage*=1.25
+        self.range+=self.r_up
+        self.canvas.delete(self.last_img)
+            #On place la nouvelle
+        self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.lv1, anchor="s")
+        #On la place au dessus
+        self.canvas.tag_raise(self.last_img)
+
+        self.canvas.after(1000000, self.construction, self)
+
     
     def tir_p(self):
         if self.target :
