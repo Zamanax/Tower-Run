@@ -24,7 +24,7 @@ class Interface(tk.Frame):
         self.backImg = tk.PhotoImage(file="view/src/Interface.png")
         canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
-        Wallet = tk.Label(canvas, text="Test", bg="#743A3A")
+        Wallet = tk.Label(canvas, text="Riche", bg="#743A3A")
         Wallet.place(x=31,y=617)
 
         Life = tk.Label(canvas, text="20", bg="#743A3A")
@@ -57,11 +57,12 @@ class Lvl1(tk.Frame):
             heros = He.Adventurer(canvas, 900,250, 260, 160)
 
        
-        Enn.miniSkeleton(canvas, -100, 250, heros)
+        Enn.Skeleton(canvas, -100, 250, heros)
 
         
         canvas.bind("<Button-3>", heros.mouseMove)
         canvas.bind("<Button-1>", heros.transformTo1)
+        canvas.bind('<Key-T>', heros.transformTo2)
         Tow.Mortier(canvas, 900, 170)
         # arc1 = Tow.Archer(canvas, 900, 350)
         # refresh(canvas, arc1.last_img)

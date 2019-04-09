@@ -55,7 +55,27 @@ class Heros(Character,Thread, metaclass=Singleton):
 
             self.death1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["die"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+self.lv1["spriteSize"]).zoom(self.zoom)
                             for i in range(self.lv1["num_sprintes"]["die"])]
+        if hasattr(self, 'lv2') and self.lv2 != [] :
+            self.spritesheet = tk.PhotoImage(file=self.lv2["spritesheet"])
+            self.idle2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["idle"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["idle"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                          for i in range(self.lv2["num_sprintes"]["idle"])]
 
+            self.runRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runRight"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["runRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                              for i in range(self.lv2["num_sprintes"]["runRight"])]
+
+            self.runLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runLeft"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["runLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                             for i in range(self.lv2["num_sprintes"]["runLeft"])]
+            self.runLeft2.reverse()
+
+            self.attackRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackRight"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                                 for i in range(self.lv2["num_sprintes"]["attackRight"])]
+
+            self.attackLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackLeft"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                                for i in range(self.lv2["num_sprintes"]["attackLeft"])]
+            self.attackLeft2.reverse()
+
+            self.death2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["die"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                           for i in range(self.lv2["num_sprintes"]["die"])]
     def seek(self):
         if self.target:
             self.attack()
@@ -121,7 +141,22 @@ class Heros(Character,Thread, metaclass=Singleton):
     #                 self.canvas.tag_raise(self.last_img, ennemy.last_img)
     #             else :
     #                 self.canvas.tag_lower(self.last_img, ennemy.last_img)
-
+    def transformTo2(self, event):
+        self.hp = self.lv2["hp"]
+        self.damage = self.lv2["damage"]
+        self.damagingSprite = self.lv2["damagingSprite"]
+        self.speed = self.lv2["speed"]
+        self.attackSpeed = self.lv2["attackSpeed"]
+        self.num_sprintes = self.lv2["num_sprintes"]
+        self.spritesheet = self.lv2["spritesheet"]
+        self.spriteSize = self.lv2["spriteSize"]
+        self.y_Anim = self.lv2["y_Anim"]
+        self.idle = self.idle2
+        self.runRight = self.runRight2
+        self.runLeft = self.runLeft2
+        self.attackLeft = self.attackLeft2
+        self.attackRight = self.attackRight2
+        self.death = self.death2
     
 
 class Adventurer(Heros):
