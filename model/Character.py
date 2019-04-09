@@ -210,30 +210,36 @@ class Character ():
                 
             
             # Sinon on se déplace
-            a=coeffdirecteur(x, y, self)
-   
-            if a == "x":
-                if self.y>y:
-                    self.y-=self.v
-                else:
-                    self.y+=self.v
+            n_coups=int((((self.x-x)**2+(self.y-y)**2)**0.5)/2)
+            inc_abs=-(self.x-x)/n_coups
+            inc_ord=-(self.y-y)/n_coups
             
-            # if ((self.v*a)**2+(self.v)**2)**0.5=2 
+            self.x+=inc_abs
+            self.y+=inc_ord
+            # a=coeffdirecteur(x, y, self)
+   
+            # if a == "x":
+            #     if self.y>y:
+            #         self.y-=self.v
+            #     else:
+            #         self.y+=self.v
+            
+            # # if ((self.v*a)**2+(self.v)**2)**0.5=2 
 
-            elif self.x > x and self.y >=y: #haut à gauche
-                self.x-=self.v
-                self.y-=self.v*a
-            elif self.x < x and self.y <=y: #bas à droite
-                self.x+=self.v
-                self.y+=self.v*a
-            elif self.x < x and self.y > y:  #haut à droite
-                # print("haut a droite")                
-                self.x+=self.v
-                self.y+=self.v*a
-            elif self.x > x and self.y < y: #bas à gauche
-                # print("bas a gauche")
-                self.x-=self.v
-                self.y-=self.v*a
+            # elif self.x > x and self.y >=y: #haut à gauche
+            #     self.x-=self.v
+            #     self.y-=self.v*a
+            # elif self.x < x and self.y <=y: #bas à droite
+            #     self.x+=self.v
+            #     self.y+=self.v*a
+            # elif self.x < x and self.y > y:  #haut à droite
+            #     # print("haut a droite")                
+            #     self.x+=self.v
+            #     self.y+=self.v*a
+            # elif self.x > x and self.y < y: #bas à gauche
+            #     # print("bas a gauche")
+            #     self.x-=self.v
+            #     self.y-=self.v*a
 
             
             self.show()
