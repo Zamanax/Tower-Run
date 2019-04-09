@@ -260,3 +260,5 @@ class Character ():
         elif self.state == "die" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
+
+        

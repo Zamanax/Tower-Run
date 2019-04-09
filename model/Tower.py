@@ -86,14 +86,12 @@ class Tower():
     def seek(self):
         for ennemy in ennemies:
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
-            
+                print("trouvé")
                 self.target = ennemy
-                if self.seeking:
-                    self.canvas.after_cancel(self.seeking) 
 
                 self.tir_p()
-            else:
-                self.seeking = self.canvas.after(250, self.seek)
+                return
+        self.seeking = self.canvas.after(250, self.seek)
     
     def tir_p(self):
         if self.target :
