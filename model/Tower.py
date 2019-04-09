@@ -205,7 +205,7 @@ class Mortier(Tower):
         self.range = 150
        
         self.damage = 1
-        self.speed = 1
+        self.speed = 2
         self.zone = 3
         self.damagetype = "fire"
         # print("le dico des Tours mon seigneur Ragy contient: "+str(Tower.__dict__))
@@ -223,8 +223,8 @@ class Mortier(Tower):
 class Boulet(Projectile):
     damage = 3
     def __init__(self,canvas, x, y, target):
-        self.x=x-5
-        self.y=y-80
+        self.x=x-10
+        self.y=y-100
         self.target = target
         Projectile.__init__(self,canvas, "cercle noir.png", "cercle noir.png")
     

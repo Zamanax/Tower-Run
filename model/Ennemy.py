@@ -95,3 +95,4 @@ class Dwarf (Ennemy) :
     spriteSize = 96 
     num_sprintes = {'idle' : 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 9, 'attackLeft' : 9, 'die' : 6}
     zoom = 1
+    
