@@ -1,5 +1,6 @@
 import tkinter as tk
 from functools import lru_cache
+from model.fonctions_utiles import coeffdirecteur
 
 class Character ():
     team = ""
@@ -44,6 +45,7 @@ class Character ():
 
     healthBar = None
     canvas = None
+    v = 2
 
     def seek(self):
         pass
@@ -182,11 +184,21 @@ class Character ():
         # On rappelle la fonction
         self.incrementing = self.canvas.after(time, self.incrementSprite)
 
+
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
-        v = 2
+        
         # On vérifie s'il on est déjà en train de courrir
         if self.state == "runRight" or self.state == "runLeft":
+
+            if self.x == x+1:
+                self.x += 1
+            elif self.x == x-1:
+                self.x -= 1
+            if self.y-1 == y:
+                self.y += 1
+            elif self.y == y-1:
+                self.y -= 1
 
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
@@ -195,38 +207,36 @@ class Character ():
                 self.move = None
 
                 return
+                
+            
             # Sinon on se déplace
-            elif self.x > x and self.y > y:
-                self.x -= v
-                self.y -= v
-            elif self.x < x and self.y < y:
-                self.x += v
-                self.y += v
-            elif self.x > x and self.y < y:
-                self.x -= v
-                self.y += v
-            elif self.x < x and self.y > y:
-                self.x += v
-                self.y -= v
-            elif self.x > x:
-                self.x -= v
-            elif self.x < x:
-                self.x += v
-            elif self.y > y:
-                self.y -= v
-            elif self.y < y:
-                self.y += v
-            if self.x == x + 1:
-                self.x -= 1
-            elif self.x == x - 1:
-                self.x += 1
-            elif self.y == y + 1:
-                self.y -= 1
-            elif self.y == y - 1:
-                self.y += 1
+            a=coeffdirecteur(x, y, self)
+   
+            if a == "x":
+                if self.y>y:
+                    self.y-=self.v
+                else:
+                    self.y+=self.v
+            
+            # if ((self.v*a)**2+(self.v)**2)**0.5=2 
+
+            elif self.x > x and self.y >=y: #haut à gauche
+                self.x-=self.v
+                self.y-=self.v*a
+            elif self.x < x and self.y <=y: #bas à droite
+                self.x+=self.v
+                self.y+=self.v*a
+            elif self.x < x and self.y > y:  #haut à droite
+                # print("haut a droite")                
+                self.x+=self.v
+                self.y+=self.v*a
+            elif self.x > x and self.y < y: #bas à gauche
+                # print("bas a gauche")
+                self.x-=self.v
+                self.y-=self.v*a
+
+            
             self.show()
-
-
         # Sinon on vérifie que l'on est pas déjà arrivé
         elif self.x != x or self.y != y:
             # Si l'on est trop à droite de l'objectif on court à gauche sinon à droite
@@ -234,7 +244,8 @@ class Character ():
                 self.state = "runLeft"
             else:
                 self.state = "runRight"
-
+        
+        
         self.move = self.canvas.after(int(100/self.speed), self.moveTo, x, y)
         return
 

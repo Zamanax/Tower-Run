@@ -1,43 +1,8 @@
 import tkinter as tk
 from model.Heros import Heros
 from model.Ennemy import ennemies
-#pour optimiser le chargement des tours, il faut importer le canvas de launchTk.py
+from model.fonctions_utiles import *
 
-# Charge une image pour chaque point demandé
-
-def load(coords, image):
-    return subimage(image, coords[0], coords[1], coords[2], coords[3])  # , self.root)
-
-
-def subimage(spritesheet, l, t, r, b):
-
-        
-    sprite = tk.PhotoImage()
-    spritesheet = tk.PhotoImage(file=spritesheet)
-    sprite.tk.call(sprite, 'copy', spritesheet,
-                    '-from', l, t, r, b, '-to', 0, 0)
-    
-    return sprite
-
-
-def test_subimage(spritesheet, l, t, r, b, root):
-
-    # root=tk.Tk()
-    canvas = tk.Canvas(root)
-    sprite = tk.PhotoImage()
-    spritesheet = tk.PhotoImage(file=spritesheet)
-    sprite.tk.call(sprite, 'coy', spritesheet,
-                    '-from', l, t, r, b, '-to', 0, 0)
-    canvas.create_image(100, 100, image=sprite)
-    canvas.pack()
-    # root.mainloop()
-    return sprite
-
-def coeffdirecteur(object1x,object1y, object2):
-    try:
-        return (object1y-object2.y)/(object1x-object2.x)
-    except ZeroDivisionError:
-        return "x"
 
 # def bouger():
 #     obj.x+=1
@@ -182,20 +147,20 @@ class Projectile(Tower):
                 self.y-=self.v
             else:
                 self.y+=self.v
-        elif self.x > self.tx and self.y > self.ty:
+        elif self.x > self.tx and self.y > self.ty: #haut à gauche
             self.x-=self.v
             self.y-=self.v*a
-        elif self.x < self.tx and self.y < self.ty:
+        elif self.x < self.tx and self.y < self.ty: #bas à droite
             self.x+=self.v
             self.y+=self.v*a
-        elif self.x > self.tx and self.y < self.ty:
+        elif self.x < self.tx and self.y > self.ty:  #haut à droite
+            # print("haut a droite")                
+            self.x+=self.v
+            self.y+=self.v*a
+        elif self.x > self.tx and self.y < self.ty: #bas à gauche
+            # print("bas a gauche")
             self.x-=self.v
-            self.y+=self.v*a
-        elif self.x < self.tx and self.y > self.ty:
-            self.x+=self.v
             self.y-=self.v*a
-
-           
 
         self.corps=self.canvas.create_oval(self.x-5, self.y-5, self.x+5, self.y+5, fill="black")
         self.canvas.after(20,self.tir)

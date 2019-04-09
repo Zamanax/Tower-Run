@@ -1,5 +1,4 @@
 import tkinter as tk
-
 import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
@@ -57,16 +56,10 @@ class Lvl1(tk.Frame):
         else:
             heros = He.Adventurer(canvas, 900,250, 260, 160)
 
-        
-
-        canvas.after(2000, Enn.Totor, canvas, -50, 200, heros)
-
-
-        
         canvas.bind("<Button-3>", heros.mouseMove)
         canvas.bind("<Button-1>", heros.transformTo1)
         canvas.bind('<Key-T>', heros.transformTo2)
-        Tow.Mortier(canvas, 900, 170)
+        # Tow.Mortier(canvas, 900, 170)
         # arc1 = Tow.Archer(canvas, 900, 350)
         # refresh(canvas, arc1.last_img)
 
