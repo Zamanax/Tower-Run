@@ -16,6 +16,7 @@ class Character ():
     range = 35
 
     lv1 = []
+    lv2 = []
     zoom = 1
     last_img = None
     idle = []
@@ -260,5 +261,3 @@ class Character ():
         elif self.state == "die" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
-
-        

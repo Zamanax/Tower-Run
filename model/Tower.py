@@ -55,6 +55,9 @@ class Tower():
     last_img=None
     seeking=None
     range=0
+    d_up=2
+    r_up=25
+    damage=1
 
     # Chargement et attribution des différentes propriétés
 
@@ -63,7 +66,6 @@ class Tower():
         self.x = x
         self.y = y
         self.construction()
-        self.damage=1
         self.seek()
         # self.refresh()
 
@@ -86,12 +88,12 @@ class Tower():
     def seek(self):
         for ennemy in ennemies:
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
-                print("trouvé")
-                self.target = ennemy
 
+                self.target = ennemy
+                print("ciblé")
                 self.tir_p()
                 return
-        self.seeking = self.canvas.after(250, self.seek)
+        self.canvas.after(250, self.seek)
     
     def tir_p(self):
         if self.target :
@@ -105,14 +107,28 @@ class Tower():
                 self.canvas.after(1000, self.tir_p)
         else :
             self.seek()
+    
+    def upgrade1():
+        self.damage+=self.d_up
+        self.range+=r_up
+        self.canvas.delete(self.last_img)
+        self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.lv2, anchor="s")
+        self.canvas.tag_raise(self.last_img)
+        self.canvas.after(1000000, self.construction, self)
+    
+    def upgrade2():
+        self.damage*=1.2
+        self.ragne+=r_up
+
+
+
+        
         
 
     # def refresh(self):
     #     self.canvas.tag_raise(self.last_img)
     #     self.canvas.after(1,self.refresh)
-
- 
-
 
     
 # Classe projectile permattant de leur affecter des méthodes
@@ -131,16 +147,15 @@ class Projectile(Tower):
             self.canvas=canvas
             self.tx=self.target.x
             self.ty=self.target.y
+            self.v=1
             self.tir()         
             
     # Méthode chargée du déplacement des projectiles
     def tir(self):
-        
-        v=1
 
         if type(self.corps)!=None:
             self.canvas.delete(self.corps)
-            
+
         if self.x==self.tx and self.y==self.ty:
             self.canvas.delete(self.corps)
             self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
@@ -148,37 +163,28 @@ class Projectile(Tower):
             self.seek()
             self.canvas.after(5, self.canvas.delete, self.corps)
             return
-
-        # elif self.x > self.tx and self.y > self.ty:
-        #     self.x -= v
-        #     self.y -= v
-        # elif self.x < self.tx and self.y < self.ty:
-        #     self.y += v
-        #     self.x += v
-        # elif self.x > self.tx and self.y < self.ty:
-        #     self.x -= v
-        #     self.y += v
-        # elif self.x < self.tx and self.y > self.ty:
-        #     self.x += v
-        #     self.y -= v
-        # # elif self.x > self.target.x:
-        # #     self.x -= v
-        # # elif self.x < self.target.x:
-        # #     self.x += v
-        # elif self.y > self.ty:
-        #     self.y -= v
-        # elif self.y < self.ty:
-        #     self.y += v
+        
         
         a=coeffdirecteur(self.tx, self.ty, self)
-        if a =="x":
-            self.y+=v
-        elif self.x>self.tx:
-            self.x-=v
-            self.y-=v*a
-        elif self.x<self.tx:
-            self.x+=v
-            self.y+=v*a
+        if a=="x":
+            if self.y>self.ty:
+                self.y-=v
+            else:
+                self.y+=v
+        elif self.x > self.tx and self.y > self.ty:
+            self.x-=self.v
+            self.y-=self.v*a
+        elif self.x < self.tx and self.y < self.ty:
+            self.x+=self.v
+            self.y+=self.v*a
+        elif self.x > self.tx and self.y < self.ty:
+            self.x-=self.v
+            self.y+=self.v*a
+        elif self.x < self.tx and self.y > self.ty:
+            self.x+=self.v
+            self.y-=self.v*a
+
+           
 
         self.corps=self.canvas.create_oval(self.x-5, self.y-5, self.x+5, self.y+5, fill="black")
         self.canvas.after(20,self.tir)
