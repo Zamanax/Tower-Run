@@ -261,10 +261,7 @@ class Character ():
         elif self.state == "die" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.death[self.sprite])
-<<<<<<< HEAD
 
         if self.healthBar:
             self.canvas.delete(self.healthBar)
         self.healthBar = self.canvas.create_line(self.x-15,self.y+25,self.x+25,self.y+25, width= 5,fill="green")
-=======
->>>>>>> 7d6b78f481db6cc27f8c50a2c53e004c2cbf424b

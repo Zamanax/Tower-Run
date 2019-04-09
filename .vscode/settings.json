@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
     "python.pythonPath": "C:\\Users\\zamax\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
     "code-runner.saveAllFilesBeforeRun": true,
     "code-runner.customCommand": "python main.pyw"
-=======
-    "python.pythonPath": "C:\\Users\\PIGNOL Romain\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"
->>>>>>> 7d6b78f481db6cc27f8c50a2c53e004c2cbf424b
 }

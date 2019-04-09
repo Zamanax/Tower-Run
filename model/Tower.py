@@ -55,14 +55,9 @@ class Tower():
     last_img=None
     seeking=None
     range=0
-<<<<<<< HEAD
-    d_up=15
-    r_up=25
-=======
-    d_up=2
+    d_up=20
     r_up=25
     damage=1
->>>>>>> 7d6b78f481db6cc27f8c50a2c53e004c2cbf424b
 
     # Chargement et attribution des différentes propriétés
 
@@ -140,23 +135,7 @@ class Tower():
         else :
             self.seek()
     
-    def upgrade1():
-        self.damage+=self.d_up
-        self.range+=r_up
-        self.canvas.delete(self.last_img)
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv2, anchor="s")
-        self.canvas.tag_raise(self.last_img)
-        self.canvas.after(1000000, self.construction, self)
-    
-    def upgrade2():
-        self.damage*=1.2
-        self.ragne+=r_up
 
-
-
-        
-        
 
     # def refresh(self):
     #     self.canvas.tag_raise(self.last_img)
@@ -200,9 +179,9 @@ class Projectile(Tower):
         a=coeffdirecteur(self.tx, self.ty, self)
         if a=="x":
             if self.y>self.ty:
-                self.y-=v
+                self.y-=self.v
             else:
-                self.y+=v
+                self.y+=self.v
         elif self.x > self.tx and self.y > self.ty:
             self.x-=self.v
             self.y-=self.v*a

@@ -141,6 +141,8 @@ class Heros(Character, metaclass=Singleton):
     #                 self.canvas.tag_raise(self.last_img, ennemy.last_img)
     #             else :
     #                 self.canvas.tag_lower(self.last_img, ennemy.last_img)
+
+    
     def transformTo2(self, event):
         self.hp = self.lv2["hp"]
         self.damage = self.lv2["damage"]
