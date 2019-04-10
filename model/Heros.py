@@ -1,7 +1,8 @@
 import tkinter as tk
 from model.Character import Character
 from model.Ennemy import ennemies
-from functools import lru_cache 
+from functools import lru_cache
+
 
 class Singleton(type):
     _instances = {}
@@ -17,8 +18,10 @@ class Heros(Character, metaclass=Singleton):
     # Stats du Héros
     team = "ally"
     state = "idle"
+    lvl = 0
     lv1 = {}
     lv2 = {}
+    lv3 = {}
 
     def showHp(self):
         print(self.hp)
@@ -31,51 +34,76 @@ class Heros(Character, metaclass=Singleton):
         self.min_y = min_y
         self.seek()
         # self.showHp()
-    @lru_cache(128)
+
+    @lru_cache(512)
     def getSprite(self):
         super().getSprite()
-        if hasattr(self, 'lv1') and self.lv1 != []:
+        if hasattr(self, 'lv1') and self.lv1 != {}:
             self.spritesheet = tk.PhotoImage(file=self.lv1["spritesheet"])
             self.idle1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["idle"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["idle"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                        for i in range(self.lv1["num_sprintes"]["idle"])]
+                          for i in range(self.lv1["num_sprintes"]["idle"])]
 
             self.runRight1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["runRight"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["runRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                            for i in range(self.lv1["num_sprintes"]["runRight"])]
+                              for i in range(self.lv1["num_sprintes"]["runRight"])]
 
             self.runLeft1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["runLeft"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["runLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                            for i in range(self.lv1["num_sprintes"]["runLeft"])]
+                             for i in range(self.lv1["num_sprintes"]["runLeft"])]
             self.runLeft1.reverse()
 
             self.attackRight1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["attackRight"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                            for i in range(self.lv1["num_sprintes"]["attackRight"])]
+                                 for i in range(self.lv1["num_sprintes"]["attackRight"])]
 
             self.attackLeft1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["attackLeft"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                            for i in range(self.lv1["num_sprintes"]["attackLeft"])]
+                                for i in range(self.lv1["num_sprintes"]["attackLeft"])]
             self.attackLeft1.reverse()
 
             self.death1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["die"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                            for i in range(self.lv1["num_sprintes"]["die"])]
-        if hasattr(self, 'lv2') and self.lv2 != [] :
+                           for i in range(self.lv1["num_sprintes"]["die"])]
+
+        if hasattr(self, 'lv2') and self.lv2 != {}:
             self.spritesheet = tk.PhotoImage(file=self.lv2["spritesheet"])
-            self.idle2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["idle"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["idle"]+self.lv1["spriteSize"]).zoom(self.zoom)
+            self.idle2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["idle"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["idle"]+self.lv2["spriteSize"]).zoom(self.zoom)
                           for i in range(self.lv2["num_sprintes"]["idle"])]
 
-            self.runRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runRight"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["runRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+            self.runRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runRight"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["runRight"]+self.lv2["spriteSize"]).zoom(self.zoom)
                               for i in range(self.lv2["num_sprintes"]["runRight"])]
 
-            self.runLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runLeft"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["runLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
+            self.runLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runLeft"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["runLeft"]+self.lv2["spriteSize"]).zoom(self.zoom)
                              for i in range(self.lv2["num_sprintes"]["runLeft"])]
             self.runLeft2.reverse()
 
-            self.attackRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackRight"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+            self.attackRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackRight"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["attackRight"]+self.lv2["spriteSize"]).zoom(self.zoom)
                                  for i in range(self.lv2["num_sprintes"]["attackRight"])]
 
-            self.attackLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackLeft"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
+            self.attackLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackLeft"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["attackLeft"]+self.lv2["spriteSize"]).zoom(self.zoom)
                                 for i in range(self.lv2["num_sprintes"]["attackLeft"])]
             self.attackLeft2.reverse()
 
-            self.death2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["die"], self.lv2["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+self.lv1["spriteSize"]).zoom(self.zoom)
+            self.death2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["die"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["die"]+self.lv2["spriteSize"]).zoom(self.zoom)
                            for i in range(self.lv2["num_sprintes"]["die"])]
+
+        if hasattr(self, 'lv3') and self.lv3 != {}:
+            self.spritesheet = tk.PhotoImage(file=self.lv3["spritesheet"])
+            self.idle3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["idle"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["idle"]+self.lv3["spriteSize"]).zoom(self.zoom)
+                          for i in range(self.lv3["num_sprintes"]["idle"])]
+
+            self.runRight3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["runRight"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["runRight"]+self.lv3["spriteSize"]).zoom(self.zoom)
+                              for i in range(self.lv3["num_sprintes"]["runRight"])]
+
+            self.runLeft3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["runLeft"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["runLeft"]+self.lv3["spriteSize"]).zoom(self.zoom)
+                             for i in range(self.lv3["num_sprintes"]["runLeft"])]
+            self.runLeft3.reverse()
+
+            self.attackRight3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["attackRight"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["attackRight"]+self.lv3["spriteSize"]).zoom(self.zoom)
+                                 for i in range(self.lv3["num_sprintes"]["attackRight"])]
+
+            self.attackLeft3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["attackLeft"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["attackLeft"]+self.lv3["spriteSize"]).zoom(self.zoom)
+                                for i in range(self.lv3["num_sprintes"]["attackLeft"])]
+            self.attackLeft3.reverse()
+
+            self.death3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["die"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["die"]+self.lv3["spriteSize"]).zoom(self.zoom)
+                           for i in range(self.lv3["num_sprintes"]["die"])]
+
     def seek(self):
         if self.target:
             self.attack()
@@ -89,11 +117,9 @@ class Heros(Character, metaclass=Singleton):
                     self.sprite = 0
                     self.attack()
                     return self.target
-
+            # if self.hp < self.baseHp:
+            #     self.hp += 1 
         self.seeking = self.canvas.after(50, self.seek)
-    
-    # def p_seek(self):
-    #     Thread(target=self.seek).start
 
     def mouseMove(self, event):
 
@@ -115,23 +141,61 @@ class Heros(Character, metaclass=Singleton):
                 self.moveTo(event.x, self.min_y)
             else:
                 self.moveTo(event.x, event.y)
- 
-    def transformTo1(self, event):
-        self.hp = self.lv1["hp"]
-        self.damage = self.lv1["damage"]
-        self.damagingSprite = self.lv1["damagingSprite"]
-        self.speed = self.lv1["speed"]
-        self.attackSpeed = self.lv1["attackSpeed"]
-        self.num_sprintes = self.lv1["num_sprintes"]
-        self.spritesheet = self.lv1["spritesheet"]
-        self.spriteSize = self.lv1["spriteSize"]
-        self.y_Anim = self.lv1["y_Anim"]
-        self.idle = self.idle1
-        self.runRight = self.runRight1
-        self.runLeft = self.runLeft1
-        self.attackLeft = self.attackLeft1
-        self.attackRight = self.attackRight1
-        self.death = self.death1
+
+    def transform(self, event):
+        if self.lvl == 0:
+            self.lvl = 1
+            self.hp = self.lv1["hp"]
+            self.damage = self.lv1["damage"]
+            self.damagingSprite = self.lv1["damagingSprite"]
+            self.speed = self.lv1["speed"]
+            self.attackSpeed = self.lv1["attackSpeed"]
+            self.num_sprintes = self.lv1["num_sprintes"]
+            self.spritesheet = self.lv1["spritesheet"]
+            self.spriteSize = self.lv1["spriteSize"]
+            self.y_Anim = self.lv1["y_Anim"]
+            self.idle = self.idle1
+            self.runRight = self.runRight1
+            self.runLeft = self.runLeft1
+            self.attackLeft = self.attackLeft1
+            self.attackRight = self.attackRight1
+            self.death = self.death1
+
+        elif self.lvl == 1:
+            self.lvl = 2
+            self.hp = self.lv2["hp"]
+            self.damage = self.lv2["damage"]
+            self.damagingSprite = self.lv2["damagingSprite"]
+            self.speed = self.lv2["speed"]
+            self.attackSpeed = self.lv2["attackSpeed"]
+            self.num_sprintes = self.lv2["num_sprintes"]
+            self.spritesheet = self.lv2["spritesheet"]
+            self.spriteSize = self.lv2["spriteSize"]
+            self.y_Anim = self.lv2["y_Anim"]
+            self.idle = self.idle2
+            self.runRight = self.runRight2
+            self.runLeft = self.runLeft2
+            self.attackLeft = self.attackLeft2
+            self.attackRight = self.attackRight2
+            self.death = self.death2
+        
+        elif self.lvl == 2:
+            self.lvl = 3
+            self.hp = self.lv3["hp"]
+            self.damage = self.lv3["damage"]
+            self.damagingSprite = self.lv3["damagingSprite"]
+            self.speed = self.lv3["speed"]
+            self.attackSpeed = self.lv3["attackSpeed"]
+            self.num_sprintes = self.lv3["num_sprintes"]
+            self.spritesheet = self.lv3["spritesheet"]
+            self.spriteSize = self.lv3["spriteSize"]
+            self.y_Anim = self.lv3["y_Anim"]
+            self.idle = self.idle3
+            self.runRight = self.runRight3
+            self.runLeft = self.runLeft3
+            self.attackLeft = self.attackLeft3
+            self.attackRight = self.attackRight3
+            self.death = self.death3
 
     # def show(self):
     #     super().show()
@@ -142,24 +206,6 @@ class Heros(Character, metaclass=Singleton):
     #             else :
     #                 self.canvas.tag_lower(self.last_img, ennemy.last_img)
 
-    
-    def transformTo2(self, event):
-        self.hp = self.lv2["hp"]
-        self.damage = self.lv2["damage"]
-        self.damagingSprite = self.lv2["damagingSprite"]
-        self.speed = self.lv2["speed"]
-        self.attackSpeed = self.lv2["attackSpeed"]
-        self.num_sprintes = self.lv2["num_sprintes"]
-        self.spritesheet = self.lv2["spritesheet"]
-        self.spriteSize = self.lv2["spriteSize"]
-        self.y_Anim = self.lv2["y_Anim"]
-        self.idle = self.idle2
-        self.runRight = self.runRight2
-        self.runLeft = self.runLeft2
-        self.attackLeft = self.attackLeft2
-        self.attackRight = self.attackRight2
-        self.death = self.death2
-    
 
 class Adventurer(Heros):
     # Stats du Héros
@@ -204,7 +250,7 @@ class Ichigo(Heros):
 
 class Goku(Heros):
     name = "Son Goku"
-    
+
     def __init__(self, canvas, x, y, max_y, min_y):
         self.hp = self.lv0["hp"]
         self.damage = self.lv0["damage"]
@@ -215,7 +261,7 @@ class Goku(Heros):
         self.spritesheet = self.lv0["spritesheet"]
         self.spriteSize = self.lv0["spriteSize"]
         self.y_Anim = self.lv0["y_Anim"]
-        Heros.__init__(self, canvas, x, y, max_y, min_y)        
+        Heros.__init__(self, canvas, x, y, max_y, min_y)
 
     lv0 = {
         "hp": 50,
@@ -234,7 +280,7 @@ class Goku(Heros):
     lv1 = {
         "hp": 50,
         "damage": 4,
-        "damagingSprite" : [2,3,4,5,6,7,12,13,14,15],
+        "damagingSprite": [2, 3, 4, 5, 6, 7, 12, 13, 14, 15],
         "speed": 15,
         "attackSpeed": 3,
         "num_sprintes": {"idle": 4, "runRight": 4,
@@ -248,6 +294,7 @@ class Goku(Heros):
     lv2 = {
         "hp": 50,
         "damage": 4,
+        "damagingSprite": [1, 2, 3, 5, 6, 7, 8, 12, 13, 16, 17, 21, 22, 23, 24, 25],
         "speed": 20,
         "attackSpeed": 5,
         "num_sprintes": {"idle": 4, "runRight": 4,
@@ -271,64 +318,3 @@ class Goku(Heros):
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
                    "attackRight": 800, "attackLeft": 1000, "die": 200}
     }
-
-# class Goku(Heros):
-#     name = "Son Goku"
-#     lvl = 0
-#     hp = 50
-#     damage = 2
-#     damagingSprite = [5,10,11,12,13,18,22,23]
-#     speed = 8
-#     attackSpeed = 3
-#     num_sprintes = {"idle": 8, "runRight": 4,
-#                     "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 8,"Transform" : 8}
-#     spritesheet = "view/src/Goku0.png"
-#     spriteSize = 200
-#     y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
-#               "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
-
-# class Goku(Heros):
-#     name = "Son Goku"
-
-#     lvl = 1
-    # hp = 50
-    # damage = 4
-    # speed = 12
-    # attackSpeed = 1
-    # num_sprintes = {"idle": 4, "runRight": 4,
-    #                 "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die" : 4,"Transform" : 8}
-    # spritesheet = "view/src/Goku1.png"
-    # spriteSize = 200
-    # y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
-    #           "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
-
-# class Goku(Heros):
-#     name = "Son Goku"
-
-#     lvl = 2
-    # hp = 50
-    # damage = 4
-    # speed = 16
-    # attackSpeed = 5
-    # num_sprintes = {"idle": 4, "runRight": 4,
-    #                 "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die" : 4,"Transform" : 8}
-    # spritesheet = "view/src/Goku2.png"
-    # spriteSize = 200
-    # y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
-    #           "attackRight": 1200, "attackLeft": 1400, "die" : 200,"Transform": 2200}
-
-# class Goku(Heros):
-#     name = "Son Goku"
-
-#     lvl = 3
-    # hp = 50
-    # damage = 4
-    # speed = 25
-    # attackSpeed = 5
-    # damagingSprite = [3,7,10,12,13,14,16,17,18,19,20,21,22,23,24]
-    # num_sprintes = {"idle": 4, "runRight": 4,
-    #                 "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die" : 4}
-    # spritesheet = "view/src/Goku3.png"
-    # spriteSize = 200
-    # y_Anim = {"idle": 200, "runRight": 400, "runLeft": 600,
-    #           "attackRight": 800, "attackLeft": 1000, "die" : 200}

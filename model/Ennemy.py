@@ -1,7 +1,6 @@
 # import tkinter as tk
 from model.Character import Character
 import model.Heros as He
-from functools import lru_cache
 
 ennemies=[]
 
@@ -14,11 +13,10 @@ class Ennemy (Character):
         Character.__init__(self,master,x,y)
         self.heros = heros
         ennemies.append(self)
-        self.index = len(ennemies)-1
+        # self.index = len(ennemies)-1
         self.seek()
         self.moveTo(1200,self.y)
 
-    @lru_cache(128)
     def seek(self):
         if self.target:
             self.attack()
@@ -38,11 +36,11 @@ class Ennemy (Character):
 
 class Skeleton (Ennemy) :
     __slot__=("__dict__", "idle", "runRight", "runLeft", "attackRight", "attackLeft", "die")
-    hp = 100
+    hp = 10
     name = "Skeleton"
-    attackSpeed = 3
+    attackSpeed = 1
     speed = 1
-    damage = 5
+    damage = 2
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
@@ -50,9 +48,6 @@ class Skeleton (Ennemy) :
     num_sprintes = {"idle" : 1, "runRight" : 4, "runLeft" : 4, "attackRight" : 8, "attackLeft": 8, "die": 4}
     spritesheet = "view/src/Skeleton.png"
     zoom = 2
-    def attack(self):
-        Character.attack(self)
-        print("attaque")
 
 class miniSkeleton (Skeleton) :
     hp = 5

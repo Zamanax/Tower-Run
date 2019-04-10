@@ -8,7 +8,7 @@ selectedHeros = "Goku"
 def refresh(canvas, img):
         canvas.tag_raise(img)
         canvas.after(1,refresh, canvas, img)
-
+        
 class Interface(tk.Frame):
     def __init__(self, parent, canvas, *args, **kwargs):
         self.parent = parent
@@ -18,8 +18,8 @@ class Interface(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
-        self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
+
         self.backImg = tk.PhotoImage(file="view/src/Interface.png")
         canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
@@ -35,6 +35,7 @@ class Interface(tk.Frame):
 class Lvl1(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         global selectedHeros
+        
         # Définiton des variables
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         self.rootWidth = self.backImg.width()
@@ -56,12 +57,11 @@ class Lvl1(tk.Frame):
         else:
             heros = He.Adventurer(canvas, 900,250, 260, 160)
 
-        Enn.Skeleton(canvas, -100, 225, heros)
+        Enn.Skeleton(canvas, 400, 225, heros)
 
         canvas.bind("<Button-3>", heros.mouseMove)
-        canvas.bind("<Button-1>", heros.transformTo1)
-        canvas.bind('<Key-T>', heros.transformTo2)
-        Tow.Mortier(canvas, 400, 170)
+        canvas.bind("<Button-1>", heros.transform)
+        # Tow.Mortier(canvas, 400, 170)
         # arc1 = Tow.Archer(canvas, 900, 350)
         # refresh(canvas, arc1.last_img)
 
@@ -85,7 +85,7 @@ class Lvl1(tk.Frame):
                 canvas.create_line(0, (i+1)*self.rootHeight/squareWidth, self.rootWidth,
                                (i+1)*self.rootHeight/squareWidth, stipple="gray50")
         
-        canvas.pack(side="right", fill="both", expand="true")
+        canvas.pack(side="right", fill='both', expand=True)
 
 
 # -----------------Chargement de la vue principale--------------------

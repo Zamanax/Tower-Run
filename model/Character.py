@@ -52,7 +52,7 @@ class Character (Thread):
     def seek(self):
         pass
 
-    def __init__ (self, master, x, y) : 
+    def __init__ (self, master, x, y) :
         # Threading       
         Thread.__init__(self)
         self.start()
@@ -71,7 +71,7 @@ class Character (Thread):
         if self.target:
             if self.target.move:
                 self.canvas.after_cancel(self.target.move)
-            if self.target.attacking != None :
+            if self.target.target == None :
                 self.target.target = self
                 self.canvas.after_cancel(self.target.seeking)
                 self.target.attack()
@@ -197,6 +197,10 @@ class Character (Thread):
             time = 200
         # On rappelle la fonction
         self.incrementing = self.canvas.after(time, self.incrementSprite)
+    
+    # def calctraj(self,x ,y):  
+    
+    #     self.moveTo(x,y)
 
 
     # Méthode chargée du changement de position de l'image et du déplacement
@@ -219,41 +223,15 @@ class Character (Thread):
                 self.sprite = 0
                 self.state = "idle"
                 self.move = None
-
                 return
                 
-            
+
             # Sinon on se déplace
             n_coups=int((((self.x-x)**2+(self.y-y)**2)**0.5)/2)
-            inc_abs=-(self.x-x)/n_coups
-            inc_ord=-(self.y-y)/n_coups
-            
-            self.x+=inc_abs
-            self.y+=inc_ord
-            # a=coeffdirecteur(x, y, self)
-   
-            # if a == "x":
-            #     if self.y>y:
-            #         self.y-=self.v
-            #     else:
-            #         self.y+=self.v
-            
-            # # if ((self.v*a)**2+(self.v)**2)**0.5=2 
-
-            # elif self.x > x and self.y >=y: #haut à gauche
-            #     self.x-=self.v
-            #     self.y-=self.v*a
-            # elif self.x < x and self.y <=y: #bas à droite
-            #     self.x+=self.v
-            #     self.y+=self.v*a
-            # elif self.x < x and self.y > y:  #haut à droite
-            #     # print("haut a droite")                
-            #     self.x+=self.v
-            #     self.y+=self.v*a
-            # elif self.x > x and self.y < y: #bas à gauche
-            #     # print("bas a gauche")
-            #     self.x-=self.v
-            #     self.y-=self.v*a
+            self.inc_abs=-(self.x-x)/n_coups
+            self.inc_ord=-(self.y-y)/n_coups
+            self.x+=self.inc_abs
+            self.y+=self.inc_ord
 
             
             self.show()

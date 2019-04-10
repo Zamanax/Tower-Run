@@ -1,17 +1,16 @@
 import tkinter as tk
+from threading import Thread
 from model.Heros import Heros
 from model.Ennemy import ennemies
 from model.fonctions_utiles import *
 
 
-# def bouger():
-#     obj.x+=1
-#     obj.y+=a
+
 #____________________________________________________________________________________________________________
 
 
 
-class Tower():
+class Tower(Thread):
     # Coords de la tour
     # Image de la tour
     lv1 = None
@@ -27,6 +26,9 @@ class Tower():
     # Chargement et attribution des différentes propriétés
 
     def __init__(self, canvas, x, y):
+        Thread.__init__(self)
+        self.start()
+        
         self.canvas = canvas
         self.x = x
         self.y = y
@@ -94,6 +96,9 @@ class Tower():
                 self.target = None
                 self.seek()
                 return
+            elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range:
+                self.seek()
+                return
             else :
                 self.canvas.after(1000, self.tir_p)
         else :
@@ -123,11 +128,14 @@ class Projectile(Tower):
             self.tx=self.target.x
             self.ty=self.target.y
             self.v=1
-            self.tir()         
-            
+            self.tir()   
+
+    # def calctraj(self):  
+        
+    #     self.tir()
     # Méthode chargée du déplacement des projectiles
     def tir(self):
-
+        
         if type(self.corps)!=None:
             self.canvas.delete(self.corps)
 
@@ -139,30 +147,18 @@ class Projectile(Tower):
             self.canvas.after(5, self.canvas.delete, self.corps)
             return
         
-        
-        a=coeffdirecteur(self.tx, self.ty, self)
-        if a=="x":
-            if self.y>self.ty:
-                self.y-=self.v
-            else:
-                self.y+=self.v
-        elif self.x > self.tx and self.y > self.ty: #haut à gauche
-            self.x-=self.v
-            self.y-=self.v*a
-        elif self.x < self.tx and self.y < self.ty: #bas à droite
-            self.x+=self.v
-            self.y+=self.v*a
-        elif self.x < self.tx and self.y > self.ty:  #haut à droite
-            # print("haut a droite")                
-            self.x+=self.v
-            self.y+=self.v*a
-        elif self.x > self.tx and self.y < self.ty: #bas à gauche
-            # print("bas a gauche")
-            self.x-=self.v
-            self.y-=self.v*a
+
+        n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/2)
+        self.inc_abs=-(self.x-self.tx)/n_coups
+        self.inc_ord=-(self.y-self.ty)/n_coups
+        self.x+=self.inc_abs
+        self.y+=self.inc_ord
+    
 
         self.corps=self.canvas.create_oval(self.x-5, self.y-5, self.x+5, self.y+5, fill="black")
         self.canvas.after(20,self.tir)
+
+        
 
 #________________________________________________________________________________________________________________________
                 
@@ -202,8 +198,8 @@ class Mortier(Tower):
 class Boulet(Projectile):
     damage = 3
     def __init__(self,canvas, x, y, target):
-        self.x=x-10
-        self.y=y-100
+        self.x=x-5
+        self.y=y-70
         self.target = target
         Projectile.__init__(self,canvas, "cercle noir.png", "cercle noir.png")
     
