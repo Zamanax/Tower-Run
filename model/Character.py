@@ -1,8 +1,9 @@
 import tkinter as tk
 from functools import lru_cache
+from threading import Thread
 from model.fonctions_utiles import coeffdirecteur
 
-class Character ():
+class Character (Thread):
     team = ""
     hp = 0
     name = ""
@@ -43,6 +44,7 @@ class Character ():
     incrementing = None
     dying = None
 
+    damageBar = None
     healthBar = None
     canvas = None
     v = 2
@@ -50,14 +52,20 @@ class Character ():
     def seek(self):
         pass
 
-    def __init__ (self, master, x, y) :
-        #Stats
+    def __init__ (self, master, x, y) : 
+        # Threading       
+        Thread.__init__(self)
+        self.start()
+
+        # Initialisation de la position
         self.x = x
         self.y = y
         self.canvas = master
-        # self.spritesheet = tk.PhotoImage(file=self.spritesheet)
+
         self.baseHp = self.hp
         self.getSprite()
+        
+
         
     def attack(self):
         if self.target:
@@ -100,6 +108,7 @@ class Character ():
 
         elif self.state == "die":
             self.show()
+            self.canvas.delete(self.damageBar)
             self.canvas.delete(self.healthBar)
             if self.sprite == self.num_sprintes["die"]-1:
                 self.canvas.after_cancel(self.afterIdle)
@@ -112,6 +121,7 @@ class Character ():
             
         else :
             self.canvas.delete(self.healthBar)
+            self.canvas.delete(self.damageBar)
             self.canvas.after_cancel(self.move)
             self.canvas.after_cancel(self.seeking)
             if self.attacking:
@@ -285,9 +295,12 @@ class Character ():
 
         if self.healthBar:
             self.canvas.delete(self.healthBar)
+        if self.damageBar :
+            self.canvas.delete(self.damageBar)
         # print("base " + str(self.baseHp))
         # print("hp " + str(self.hp))
     
         missingHealth = 40*self.hp/self.baseHp
 
         self.healthBar = self.canvas.create_line(self.x-15,self.y+25,self.x+missingHealth-15,self.y+25, width= 5, fill="green")
+        self.damageBar = self.canvas.create_line(self.x+missingHealth-15,self.y+25,self.x+25,self.y+25, width= 5, fill="red")

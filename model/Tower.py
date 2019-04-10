@@ -32,7 +32,7 @@ class Tower():
         self.y = y
         self.construction()
         self.seek()
-        self.canvas.after(5000, self.upgrade1)
+        # self.canvas.after(5000, self.upgrade1)
         
         # self.refresh()
 
@@ -57,7 +57,6 @@ class Tower():
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
 
                 self.target = ennemy
-                print("ciblé")
                 self.tir_p()
                 return
         self.canvas.after(250, self.seek)
