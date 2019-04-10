@@ -56,7 +56,7 @@ class Character ():
         self.y = y
         self.canvas = master
         # self.spritesheet = tk.PhotoImage(file=self.spritesheet)
-
+        self.baseHp = self.hp
         self.getSprite()
         
     def attack(self):
@@ -65,6 +65,8 @@ class Character ():
                 self.canvas.after_cancel(self.target.move)
             if self.target.attacking != None :
                 self.target.target = self
+                self.canvas.after_cancel(self.target.seeking)
+                self.target.attack()
             if self.afterIdle:
                 self.canvas.after_cancel(self.afterIdle)
 
@@ -98,6 +100,7 @@ class Character ():
 
         elif self.state == "die":
             self.show()
+            self.canvas.delete(self.healthBar)
             if self.sprite == self.num_sprintes["die"]-1:
                 self.canvas.after_cancel(self.afterIdle)
                 self.afterIdle = None
@@ -108,6 +111,7 @@ class Character ():
             self.dying = self.canvas.after(150, self.die, delete)
             
         else :
+            self.canvas.delete(self.healthBar)
             self.canvas.after_cancel(self.move)
             self.canvas.after_cancel(self.seeking)
             if self.attacking:
@@ -281,4 +285,9 @@ class Character ():
 
         if self.healthBar:
             self.canvas.delete(self.healthBar)
-        self.healthBar = self.canvas.create_line(self.x-15,self.y+25,self.x+25,self.y+25, width= 5,fill="green")
+        # print("base " + str(self.baseHp))
+        # print("hp " + str(self.hp))
+    
+        missingHealth = 40*self.hp/self.baseHp
+
+        self.healthBar = self.canvas.create_line(self.x-15,self.y+25,self.x+missingHealth-15,self.y+25, width= 5, fill="green")

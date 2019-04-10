@@ -24,10 +24,10 @@ class Interface(tk.Frame):
         canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
  
-        Wallet = tk.Label(canvas, text="Riche", bg="#743A3A")
+        Wallet = tk.Label(canvas, text="Riche", bg="#743A3A", fg="white")
         Wallet.place(x=31,y=617)
 
-        Life = tk.Label(canvas, text="20", bg="#743A3A")
+        Life = tk.Label(canvas, text="20", bg="#743A3A", fg="white")
         Life.place(x=150,y=617)
         canvas.pack()
 
@@ -55,6 +55,8 @@ class Lvl1(tk.Frame):
             heros = He.Goku(canvas, 900,250, 260, 160)
         else:
             heros = He.Adventurer(canvas, 900,250, 260, 160)
+
+        Enn.Skeleton(canvas, -100, 225, heros)
 
         canvas.bind("<Button-3>", heros.mouseMove)
         canvas.bind("<Button-1>", heros.transformTo1)

@@ -37,12 +37,12 @@ class Ennemy (Character):
 
 
 class Skeleton (Ennemy) :
-    __slot__=("__dict__","idle","runRight","runLeft", "attackRight", "attackLeft")
-    hp = 10
+    __slot__=("__dict__", "idle", "runRight", "runLeft", "attackRight", "attackLeft", "die")
+    hp = 100
     name = "Skeleton"
-    attackSpeed = 1
+    attackSpeed = 3
     speed = 1
-    damage = 2
+    damage = 5
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
@@ -50,6 +50,9 @@ class Skeleton (Ennemy) :
     num_sprintes = {"idle" : 1, "runRight" : 4, "runLeft" : 4, "attackRight" : 8, "attackLeft": 8, "die": 4}
     spritesheet = "view/src/Skeleton.png"
     zoom = 2
+    def attack(self):
+        Character.attack(self)
+        print("attaque")
 
 class miniSkeleton (Skeleton) :
     hp = 5
