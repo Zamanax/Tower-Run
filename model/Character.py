@@ -11,12 +11,13 @@ class Character (Thread):
     damage = 0
     attackSpeed = 0
     state = ""
-    position = 0
-    target = None
+    
     x = 0
     y = 0
+    target = None
     range = 35
 
+    barOffset  = 0
     lv1 = []
     lv2 = []
     zoom = 1
@@ -29,6 +30,7 @@ class Character (Thread):
     damagingSprite = []
     attackRight = []
     attackLeft = []
+    transformAnim = []
     death = []
     num_sprintes = {}
     y_Anim = {}
@@ -177,10 +179,23 @@ class Character (Thread):
     # Méthode chargée du placement de l'image d'attente
     def idleAnim(self):
         self.show()
-        self.afterIdle = self.canvas.after(250, self.idleAnim)
+        if self.state == "transform":
+            time = 350
+        else : 
+            time = 250
+        self.afterIdle = self.canvas.after(time, self.idleAnim)
 
     # Méthode d'incrémentation de l'image à afficher
     def incrementSprite(self):
+        if "transform" in self.num_sprintes:
+            if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
+                self.state = "idle"
+                if self.lvl == 1:
+                    self.transformAnim = self.transformAnim1
+                elif self.lvl == 2:
+                    self.transformAnim = self.transformAnim2
+                    
+
 
         # On incrémente le sprite et/ou on reset (en fonction de l'état)
         self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
@@ -191,17 +206,14 @@ class Character (Thread):
             time = 100
         elif self.state == "attackRight" or self.state == "attackLeft":
             time = int(500/self.attackSpeed)
+        elif self.state == "transform" :
+            time = 350
         elif self.state == "die":
             time = 400
         else :
             time = 200
         # On rappelle la fonction
         self.incrementing = self.canvas.after(time, self.incrementSprite)
-    
-    # def calctraj(self,x ,y):  
-    
-    #     self.moveTo(x,y)
-
 
     # Méthode chargée du changement de position de l'image et du déplacement
     def moveTo(self, x, y):
@@ -264,6 +276,9 @@ class Character (Thread):
         elif self.state == "attackLeft" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.attackLeft[self.sprite])
+        elif self.state == "transform":
+            self.last_img = self.canvas.create_image(
+                self.x, self.y, image=self.transformAnim[self.sprite])
         elif self.state == "idle" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.idle[self.sprite])
@@ -280,5 +295,5 @@ class Character (Thread):
     
         missingHealth = 40*self.hp/self.baseHp
 
-        self.healthBar = self.canvas.create_line(self.x-15,self.y+25,self.x+missingHealth-15,self.y+25, width= 5, fill="green")
-        self.damageBar = self.canvas.create_line(self.x+missingHealth-15,self.y+25,self.x+25,self.y+25, width= 5, fill="red")
+        self.healthBar = self.canvas.create_line(self.x-15+self.barOffset,self.y+25,self.x+missingHealth-15+self.barOffset,self.y+25, width= 5, fill="green")
+        self.damageBar = self.canvas.create_line(self.x+missingHealth-15+self.barOffset,self.y+25,self.x+25+self.barOffset,self.y+25, width= 5, fill="red")

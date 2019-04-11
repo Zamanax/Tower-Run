@@ -24,7 +24,7 @@ class Interface(tk.Frame):
         canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
  
-        Wallet = tk.Label(canvas, text="Riche", bg="#743A3A", fg="white")
+        Wallet = tk.Label(canvas, text="0", bg="#743A3A", fg="white")
         Wallet.place(x=31,y=617)
 
         Life = tk.Label(canvas, text="20", bg="#743A3A", fg="white")
@@ -51,18 +51,23 @@ class Lvl1(tk.Frame):
         canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
         if selectedHeros == "Ichigo" :
-            heros = He.Ichigo(canvas, 900,250, 260, 160)
+            heros = He.Ichigo(canvas, 900, 250, 260, 160)
         elif selectedHeros == "Goku":
-            heros = He.Goku(canvas, 900,250, 260, 160)
+            heros = He.Goku(canvas, 900, 250, 260, 160)
         else:
-            heros = He.Adventurer(canvas, 900,250, 260, 160)
+            heros = He.Adventurer(canvas, 900, 250, 260, 160)
 
-        Enn.Skeleton(canvas, 400, 225, heros)
+        Enn.Skeleton(canvas, 0, 225, heros)
+        Enn.Skeleton(canvas, -100, 225, heros)
+        Enn.Skeleton(canvas, -50, 225, heros)
+        Enn.Skeleton(canvas, -150, 225, heros)
+        Enn.Skeleton(canvas, -200, 225, heros)
+        Enn.Skeleton(canvas, 100, 225, heros)
 
         canvas.bind("<Button-3>", heros.mouseMove)
         canvas.bind("<Button-1>", heros.transform)
         # Tow.Mortier(canvas, 400, 170)
-        # arc1 = Tow.Archer(canvas, 900, 350)
+        # Tow.Archer(canvas, 400, 350)
         # refresh(canvas, arc1.last_img)
 
         # Début de l'interface

@@ -19,6 +19,7 @@ class Heros(Character, metaclass=Singleton):
     team = "ally"
     state = "idle"
     lvl = 0
+    lv0 = {}
     lv1 = {}
     lv2 = {}
     lv3 = {}
@@ -38,6 +39,12 @@ class Heros(Character, metaclass=Singleton):
     @lru_cache(512)
     def getSprite(self):
         super().getSprite()
+
+
+        self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
+                          for i in range(self.lv0["num_sprintes"]["transform"])]
+        self.transformAnim.reverse()
+
         if hasattr(self, 'lv1') and self.lv1 != {}:
             self.spritesheet = tk.PhotoImage(file=self.lv1["spritesheet"])
             self.idle1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["idle"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["idle"]+self.lv1["spriteSize"]).zoom(self.zoom)
@@ -56,6 +63,10 @@ class Heros(Character, metaclass=Singleton):
             self.attackLeft1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["attackLeft"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
                                 for i in range(self.lv1["num_sprintes"]["attackLeft"])]
             self.attackLeft1.reverse()
+
+            self.transformAnim1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["transform"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["transform"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                          for i in range(self.lv1["num_sprintes"]["transform"])]
+            self.transformAnim1.reverse()
 
             self.death1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["die"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+self.lv1["spriteSize"]).zoom(self.zoom)
                            for i in range(self.lv1["num_sprintes"]["die"])]
@@ -78,6 +89,10 @@ class Heros(Character, metaclass=Singleton):
             self.attackLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackLeft"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["attackLeft"]+self.lv2["spriteSize"]).zoom(self.zoom)
                                 for i in range(self.lv2["num_sprintes"]["attackLeft"])]
             self.attackLeft2.reverse()
+
+            self.transformAnim2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["transform"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["transform"]+self.lv2["spriteSize"]).zoom(self.zoom)
+                          for i in range(self.lv2["num_sprintes"]["transform"])]
+            self.transformAnim2.reverse()
 
             self.death2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["die"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["die"]+self.lv2["spriteSize"]).zoom(self.zoom)
                            for i in range(self.lv2["num_sprintes"]["die"])]
@@ -144,6 +159,9 @@ class Heros(Character, metaclass=Singleton):
 
     def transform(self, event):
         if self.lvl == 0:
+            self.sprite = 0
+            self.state = "transform"
+            
             self.lvl = 1
             self.hp = self.lv1["hp"]
             self.damage = self.lv1["damage"]
@@ -159,10 +177,14 @@ class Heros(Character, metaclass=Singleton):
             self.runLeft = self.runLeft1
             self.attackLeft = self.attackLeft1
             self.attackRight = self.attackRight1
+            # self.transformAnim = self.transformAnim1
             self.death = self.death1
 
         elif self.lvl == 1:
             self.lvl = 2
+            self.sprite = 0
+            self.state = "transform"
+
             self.hp = self.lv2["hp"]
             self.damage = self.lv2["damage"]
             self.damagingSprite = self.lv2["damagingSprite"]
@@ -177,10 +199,14 @@ class Heros(Character, metaclass=Singleton):
             self.runLeft = self.runLeft2
             self.attackLeft = self.attackLeft2
             self.attackRight = self.attackRight2
+            # self.transformAnim = self.transformAnim2
             self.death = self.death2
         
         elif self.lvl == 2:
             self.lvl = 3
+            self.sprite = 0
+            self.state = "transform"
+
             self.hp = self.lv3["hp"]
             self.damage = self.lv3["damage"]
             self.damagingSprite = self.lv3["damagingSprite"]
@@ -196,6 +222,11 @@ class Heros(Character, metaclass=Singleton):
             self.attackLeft = self.attackLeft3
             self.attackRight = self.attackRight3
             self.death = self.death3
+
+    # def incrementSprite(self):
+    #     if self.sprite == self.num_sprintes["transform"] and self.state == "transform":
+    #         self.state = "idle"
+    #     super().incrementSprite()
 
     # def show(self):
     #     super().show()
@@ -241,11 +272,11 @@ class Ichigo(Heros):
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 2, "runRight": 8,
-                    "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "Transform": 3}
+                    "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 3}
     spritesheet = "view/src/Ichigo1.png"
     spriteSize = 200
     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
-              "attackRight": 800, "attackLeft": 1000, "die": 0, "Transform": 1200}
+              "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1200}
 
 
 class Goku(Heros):
@@ -270,11 +301,11 @@ class Goku(Heros):
         "speed": 10,
         "attackSpeed": 3,
         "num_sprintes": {"idle": 8, "runRight": 4,
-                         "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 8, "Transform": 8},
+                         "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 8, "transform": 9},
         "spritesheet": "view/src/Goku0.png",
         "spriteSize": 200,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
-                   "attackRight": 1200, "attackLeft": 1400, "die": 200, "Transform": 2200}
+                   "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200}
     }
 
     lv1 = {
@@ -284,11 +315,11 @@ class Goku(Heros):
         "speed": 15,
         "attackSpeed": 3,
         "num_sprintes": {"idle": 4, "runRight": 4,
-                         "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 4, "Transform": 8},
+                         "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 4, "transform": 8},
         "spritesheet": "view/src/Goku1.png",
         "spriteSize": 200,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
-                   "attackRight": 1200, "attackLeft": 1400, "die": 200, "Transform": 2200}
+                   "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200}
     }
 
     lv2 = {
@@ -298,11 +329,11 @@ class Goku(Heros):
         "speed": 20,
         "attackSpeed": 5,
         "num_sprintes": {"idle": 4, "runRight": 4,
-                         "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die": 4, "Transform": 8},
+                         "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die": 4, "transform": 8},
         "spritesheet": "view/src/Goku2.png",
         "spriteSize": 200,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
-                   "attackRight": 1200, "attackLeft": 1400, "die": 200, "Transform": 2200}
+                   "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200}
     }
 
     lv3 = {
@@ -312,7 +343,7 @@ class Goku(Heros):
         "attackSpeed": 5,
         "damagingSprite": [3, 7, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24],
         "num_sprintes": {"idle": 4, "runRight": 4,
-                         "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die": 4},
+                         "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die": 4, "transform": 8},
         "spritesheet": "view/src/Goku3.png",
         "spriteSize": 200,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,

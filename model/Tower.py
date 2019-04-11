@@ -269,6 +269,7 @@ class Archer(Tower):
     coordsLvl1 = [3,51,82,138]
     coordsLvl2 = [91,35,195,144]
     coordsLvl3 = [203,0,295,144]
+    range=200
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
         self.lv1=load(self.coordsLvl1, self.image)

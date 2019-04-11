@@ -41,6 +41,7 @@ class Skeleton (Ennemy) :
     attackSpeed = 1
     speed = 1
     damage = 2
+    barOffset = -20
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
