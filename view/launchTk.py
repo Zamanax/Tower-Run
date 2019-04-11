@@ -104,7 +104,7 @@ class MainApplication(tk.Frame):
         self.lvl1 = Lvl1(self, parent)
 
         # Mise en vue principale des vues voulues
-        self.lvl1.pack()
+        self.lvl1.pack(side="top", fill="both", expand=True)
 
 
 # -----------------Fonction à executer pour lancer le jeu-------------

@@ -17,6 +17,7 @@ class Character (Thread):
     target = None
     range = 35
 
+    lvl = 0
     barOffset  = 0
     lv1 = []
     lv2 = []
@@ -31,6 +32,8 @@ class Character (Thread):
     attackRight = []
     attackLeft = []
     transformAnim = []
+    transformAnim1 = []
+    transformAnim2 = []
     death = []
     num_sprintes = {}
     y_Anim = {}
@@ -54,10 +57,14 @@ class Character (Thread):
     def seek(self):
         pass
 
+    def goToObjective(self):
+        pass
+
     def __init__ (self, master, x, y) :
         # Threading       
         Thread.__init__(self)
         self.start()
+        # self.join()
 
         # Initialisation de la position
         self.x = x
@@ -71,34 +78,47 @@ class Character (Thread):
         
     def attack(self):
         if self.target:
-            if self.target.move:
-                self.canvas.after_cancel(self.target.move)
-            if self.target.target == None :
-                self.target.target = self
-                self.canvas.after_cancel(self.target.seeking)
-                self.target.attack()
-            if self.afterIdle:
-                self.canvas.after_cancel(self.afterIdle)
+            if ((self.target.x-self.x)**2+(self.target.y-self.y)**2)**0.5>self.range:
+                self.target.goToObjective()
+                self.goToObjective()
+                self.target=None
+                self.state ="idle"
+                self.attacking = None
+                self.seek()
+                self.idleAnim()
+                return 
+            else:
+                if self.target.move:
+                    self.canvas.after_cancel(self.target.move)
+                if self.target.target == None :
+                    self.target.target = self
+                    self.canvas.after_cancel(self.target.seeking)
+                    self.target.attack()
+                if self.afterIdle:
+                    self.canvas.after_cancel(self.afterIdle)
+                if self.x > self.target.x:
+                    self.state = "attackLeft"
+                else :
+                    self.state = "attackRight"
+                self.show()
 
-            if self.x > self.target.x:
-                self.state = "attackLeft"
-            else :
-                self.state = "attackRight"
-            self.show()
+                if self.sprite in self.damagingSprite:
+                    self.target.hp -= self.damage
 
-            if self.sprite in self.damagingSprite:
-                self.target.hp -= self.damage
-
-            if self.target.hp <= 0:
+                if self.target.hp <= 0:
                     self.target.die(False)
                     self.target = None
-            
-            self.attacking = self.canvas.after(int(500/self.attackSpeed), self.attack)
-        else :
+                    self.goToObjective()
+        
+        else:
             self.state = "idle"
             self.attacking = None
             self.seek()
             self.idleAnim()
+            return
+        self.attacking = self.canvas.after(int(500/self.attackSpeed), self.attack)
+            
+
 
     def die(self, delete):
         if delete:

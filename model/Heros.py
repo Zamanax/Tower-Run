@@ -24,17 +24,12 @@ class Heros(Character, metaclass=Singleton):
     lv2 = {}
     lv3 = {}
 
-    def showHp(self):
-        print(self.hp)
-        self.canvas.after(50, self.showHp)
-
     def __init__(self, canvas, x, y, max_y, min_y):
         Character.__init__(self, canvas, x, y)
         self.spritesheet1 = tk.PhotoImage(file=self.lv1["spritesheet"])
         self.max_y = max_y
         self.min_y = min_y
         self.seek()
-        # self.showHp()
 
     @lru_cache(512)
     def getSprite(self):
@@ -137,7 +132,8 @@ class Heros(Character, metaclass=Singleton):
         self.seeking = self.canvas.after(50, self.seek)
 
     def mouseMove(self, event):
-
+        if self.state == "transform":
+            return
         if self.move:
             self.state = "idle"
             self.canvas.after_cancel(self.move)
@@ -148,6 +144,18 @@ class Heros(Character, metaclass=Singleton):
                 self.moveTo(event.x, self.min_y)
             else:
                 self.moveTo(event.x, event.y)
+        
+        elif self.attacking:
+            self.state="idle"
+            self.canvas.after_cancel(self.attack)
+
+            if event.y > self.max_y:
+                self.moveTo(event.x, self.max_y)
+            elif event.y < self.min_y:
+                self.moveTo(event.x, self.min_y)
+            else:
+                self.moveTo(event.x, event.y)
+
         else:
             self.sprite = 0
             if event.y > self.max_y:
@@ -158,10 +166,11 @@ class Heros(Character, metaclass=Singleton):
                 self.moveTo(event.x, event.y)
 
     def transform(self, event):
+
         if self.lvl == 0:
             self.sprite = 0
             self.state = "transform"
-            
+
             self.lvl = 1
             self.hp = self.lv1["hp"]
             self.damage = self.lv1["damage"]
@@ -222,12 +231,7 @@ class Heros(Character, metaclass=Singleton):
             self.attackLeft = self.attackLeft3
             self.attackRight = self.attackRight3
             self.death = self.death3
-
-    # def incrementSprite(self):
-    #     if self.sprite == self.num_sprintes["transform"] and self.state == "transform":
-    #         self.state = "idle"
-    #     super().incrementSprite()
-
+    
     # def show(self):
     #     super().show()
     #     for ennemy in ennemies:

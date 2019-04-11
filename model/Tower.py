@@ -2,6 +2,7 @@ import tkinter as tk
 from threading import Thread
 from model.Heros import Heros
 from model.Ennemy import ennemies
+#@UnusedWildImport 
 from model.fonctions_utiles import *
 
 

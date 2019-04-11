@@ -15,7 +15,7 @@ class Ennemy (Character):
         ennemies.append(self)
         # self.index = len(ennemies)-1
         self.seek()
-        self.moveTo(1200,self.y)
+        self.goToObjective()
 
     def seek(self):
         if self.target:
@@ -27,6 +27,9 @@ class Ennemy (Character):
             return self.target
                 
         self.seeking = self.canvas.after(100, self.seek)
+
+    def goToObjective(self):
+        self.moveTo(1200,self.y)
 
     # def die(self, delete):
     #     global ennemies
