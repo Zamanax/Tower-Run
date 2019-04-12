@@ -26,7 +26,8 @@ class Heros(Character, metaclass=Singleton):
 
     def __init__(self, canvas, x, y, max_y, min_y):
         Character.__init__(self, canvas, x, y)
-        self.spritesheet1 = tk.PhotoImage(file=self.lv1["spritesheet"])
+        if "spritesheet" in self.lv0:
+            self.spritesheet1 = tk.PhotoImage(file=self.lv1["spritesheet"])
         self.max_y = max_y
         self.min_y = min_y
         self.seek()
@@ -35,10 +36,10 @@ class Heros(Character, metaclass=Singleton):
     def getSprite(self):
         super().getSprite()
 
-
-        self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
-                          for i in range(self.lv0["num_sprintes"]["transform"])]
-        self.transformAnim.reverse()
+        if "num_sprintes" in self.lv0:
+            self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
+                            for i in range(self.lv0["num_sprintes"]["transform"])]
+            self.transformAnim.reverse()
 
         if hasattr(self, 'lv1') and self.lv1 != {}:
             self.spritesheet = tk.PhotoImage(file=self.lv1["spritesheet"])
@@ -166,7 +167,7 @@ class Heros(Character, metaclass=Singleton):
                 self.moveTo(event.x, event.y)
 
     def transform(self, event):
-
+        self.sprite = 0
         if self.lvl == 0:
             self.sprite = 0
             self.state = "transform"
@@ -247,10 +248,13 @@ class Adventurer(Heros):
     name = "Aventurier"
     hp = 100
     damage = 4
+    damagingSprite = [1,2,3,4]
     speed = 8
-    attackSpeed = 1
-
+    attackSpeed = 4
+    
     # Spritesheet du Heros
+    barOffsetx = -8.5
+    barOffsety = 10
     num_sprintes = {"idle": 13, "runRight": 8,
                     "runLeft": 8, "attackRight": 10, "attackLeft": 10, "die": 7}
     spritesheet = "view/src/Adventurer.png"
@@ -264,6 +268,8 @@ class Adventurer(Heros):
         self.max_y -= 5
         self.min_y -= 5
 
+    def transform(self):
+        pass
 
 class Ichigo(Heros):
     # Stats du Héros
@@ -272,7 +278,7 @@ class Ichigo(Heros):
     hp = 50
     damage = 2
     speed = 8
-    attackSpeed = 1
+    attackSpeed = 4
 
     # Spritesheet du Heros
     num_sprintes = {"idle": 2, "runRight": 8,

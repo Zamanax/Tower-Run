@@ -18,7 +18,8 @@ class Character (Thread):
     range = 35
 
     lvl = 0
-    barOffset  = 0
+    barOffsetx  = 0
+    barOffsety  = 0
     lv1 = []
     lv2 = []
     zoom = 1
@@ -79,6 +80,7 @@ class Character (Thread):
     def attack(self):
         if self.target:
             if ((self.target.x-self.x)**2+(self.target.y-self.y)**2)**0.5>self.range:
+                self.target.move = None
                 self.target.goToObjective()
                 self.goToObjective()
                 self.target=None
@@ -315,5 +317,5 @@ class Character (Thread):
     
         missingHealth = 40*self.hp/self.baseHp
 
-        self.healthBar = self.canvas.create_line(self.x-15+self.barOffset,self.y+25,self.x+missingHealth-15+self.barOffset,self.y+25, width= 5, fill="green")
-        self.damageBar = self.canvas.create_line(self.x+missingHealth-15+self.barOffset,self.y+25,self.x+25+self.barOffset,self.y+25, width= 5, fill="red")
+        self.healthBar = self.canvas.create_line(self.x-15+self.barOffsetx,self.y+25+self.barOffsety,self.x+missingHealth-15+self.barOffsetx,self.y+25+self.barOffsety, width= 5, fill="green")
+        self.damageBar = self.canvas.create_line(self.x+missingHealth-15+self.barOffsetx,self.y+25+self.barOffsety,self.x+25+self.barOffsetx,self.y+25+self.barOffsety, width= 5, fill="red")

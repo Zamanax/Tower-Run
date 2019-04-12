@@ -29,7 +29,8 @@ class Ennemy (Character):
         self.seeking = self.canvas.after(100, self.seek)
 
     def goToObjective(self):
-        self.moveTo(1200,self.y)
+        if self.move == None:
+            self.moveTo(1200,self.y)
 
     # def die(self, delete):
     #     global ennemies
@@ -44,7 +45,7 @@ class Skeleton (Ennemy) :
     attackSpeed = 1
     speed = 1
     damage = 2
-    barOffset = -20
+    barOffsetx = -20
 
     spriteSize = 32
     y_Anim = {"idle" : 32, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
