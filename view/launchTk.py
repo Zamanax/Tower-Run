@@ -62,7 +62,7 @@ class Lvl1(tk.Frame):
         Enn.Skeleton(canvas, -50, 225, heros)
         Enn.Skeleton(canvas, -150, 225, heros)
         Enn.Skeleton(canvas, -200, 225, heros)
-        Enn.Skeleton(canvas, 100, 225, heros)
+        Enn.Skeleton(canvas, 50, 225, heros)
 
         canvas.bind("<Button-3>", heros.mouseMove)
         canvas.bind("<Button-1>", heros.transform)

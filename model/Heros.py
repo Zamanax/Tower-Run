@@ -226,6 +226,7 @@ class Heros(Character, metaclass=Singleton):
             self.spritesheet = self.lv3["spritesheet"]
             self.spriteSize = self.lv3["spriteSize"]
             self.y_Anim = self.lv3["y_Anim"]
+            # self.changeStats(self.lv3)
             self.idle = self.idle3
             self.runRight = self.runRight3
             self.runLeft = self.runLeft3
@@ -233,6 +234,17 @@ class Heros(Character, metaclass=Singleton):
             self.attackRight = self.attackRight3
             self.death = self.death3
     
+    def changeStats(self, dict):
+        self.hp = dict["hp"]
+        self.damage = dict["damage"]
+        self.damagingSprite = dict["damagingSprite"]
+        self.speed = dict["speed"]
+        self.attackSpeed = dict["attackSpeed"]
+        self.num_sprintes = dict["num_sprintes"]
+        self.spritesheet = dict["spritesheet"]
+        self.spriteSize = dict["spriteSize"]
+        self.y_Anim = dict["y_Anim"]
+
     # def show(self):
     #     super().show()
     #     for ennemy in ennemies:
@@ -283,7 +295,7 @@ class Ichigo(Heros):
     # Spritesheet du Heros
     num_sprintes = {"idle": 2, "runRight": 8,
                     "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 3}
-    spritesheet = "view/src/Ichigo1.png"
+    spritesheet = "view/src/Ichigo0.png"
     spriteSize = 200
     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
               "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1200}
