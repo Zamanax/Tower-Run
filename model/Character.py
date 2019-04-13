@@ -135,7 +135,8 @@ class Character (Thread):
             self.canvas.delete(self.damageBar)
             self.canvas.delete(self.healthBar)
             if self.sprite == self.num_sprintes["die"]-1:
-                self.canvas.after_cancel(self.afterIdle)
+                if self.afterIdle:
+                    self.canvas.after_cancel(self.afterIdle)
                 self.afterIdle = None
                 self.canvas.after_cancel(self.incrementing)
                 delete = True

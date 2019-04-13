@@ -14,6 +14,7 @@ from model.fonctions_utiles import *
 class Tower(Thread):
     # Coords de la tour
     # Image de la tour
+    lvl = 1
     lv1 = None
     lv2 = None
     lv3 = None
@@ -64,7 +65,14 @@ class Tower(Thread):
                 return
         self.canvas.after(250, self.seek)
     
+    def upgrade(self):
+        if self.lvl == 1:
+            self.upgrade1()
+        elif self.lvl == 2:
+            self.upgrade2()
+
     def upgrade1(self):
+        self.lvl = 2
         self.damage+=self.d_up
         self.range+=self.r_up
         self.canvas.delete(self.last_img)
@@ -77,12 +85,13 @@ class Tower(Thread):
         self.canvas.after(1000000, self.construction, self)
     
     def upgrade2(self):
+        self.lvl = 3
         self.damage*=1.25
         self.range+=self.r_up
         self.canvas.delete(self.last_img)
             #On place la nouvelle
         self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv1, anchor="s")
+            self.x, self.y, image=self.lv3, anchor="s")
         #On la place au dessus
         self.canvas.tag_raise(self.last_img)
 

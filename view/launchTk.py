@@ -1,41 +1,37 @@
 import tkinter as tk
+import view.Interface as View
 import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
 
-selectedHeros = "Goku"
 
 def refresh(canvas, img):
         canvas.tag_raise(img)
         canvas.after(1,refresh, canvas, img)
-        
-class Interface(tk.Frame):
-    def __init__(self, parent, canvas, *args, **kwargs):
-        self.parent = parent
-        self.canvas = canvas
 
-        # Instance de la Frame
-        tk.Frame.__init__(self, parent)
-
-        self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
-        self.rootHeight = self.backImg.height()
-
-        self.backImg = tk.PhotoImage(file="view/src/Interface.png")
-        canvas = tk.Canvas(self, width=200, height=self.rootHeight, highlightthickness=0)
-        canvas.create_image(0, 0, image=self.backImg, anchor="nw")
- 
-        Wallet = tk.Label(canvas, text="0", bg="#743A3A", fg="white")
-        Wallet.place(x=31,y=617)
-
-        Life = tk.Label(canvas, text="20", bg="#743A3A", fg="white")
-        Life.place(x=150,y=617)
-        canvas.pack()
+class Emplacement():
+    bonus = {}
+    state = "None"
+    last_img = None
+    tower = None
+    def __init__(self, x, y, *args, **kwargs):
+        state = kwargs.get('state', None)
+        bonus = kwargs.get('bonus', None)
+        self.x = x
+        self.y = y
+        if state:
+            self.state = state
+        if bonus: 
+            self.bonus = bonus
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
+    canvas = None
     def __init__(self, parent, *args, **kwargs):
-        global selectedHeros
-        
+        self.selectedHeros = "Aventurier"
+        self.spots = []
+        self.spotsImage = []
+        self.fillspots(self.spots)
         # Définiton des variables
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         self.rootWidth = self.backImg.width()
@@ -46,34 +42,49 @@ class Lvl1(tk.Frame):
         self.parent = parent
 
         # Reste du GUI
-        canvas = tk.Canvas(self, width=self.rootWidth,
+        self.canvas = tk.Canvas(self, width=self.rootWidth,
                            height=self.rootHeight, highlightthickness=0)
-        canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+        self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
-        if selectedHeros == "Ichigo" :
-            heros = He.Ichigo(canvas, 900, 250, 260, 160)
-        elif selectedHeros == "Goku":
-            heros = He.Goku(canvas, 900, 250, 260, 160)
+        if self.selectedHeros == "Ichigo" :
+            heros = He.Ichigo(self.canvas, 900, 250, 260, 160)
+        elif self.selectedHeros == "Goku":
+            heros = He.Goku(self.canvas, 900, 250, 260, 160)
         else:
-            heros = He.Adventurer(canvas, 900, 250, 260, 160)
+            heros = He.Adventurer(self.canvas, 900, 250, 260, 160)
 
-        Enn.Skeleton(canvas, 0, 225, heros)
-        Enn.Skeleton(canvas, -100, 225, heros)
-        Enn.Skeleton(canvas, -50, 225, heros)
-        Enn.Skeleton(canvas, -150, 225, heros)
-        Enn.Skeleton(canvas, -200, 225, heros)
-        Enn.Skeleton(canvas, 50, 225, heros)
+        Enn.Skeleton(self.canvas, 0, 225, heros)
+        Enn.Skeleton(self.canvas, -100, 225, heros)
+        Enn.Skeleton(self.canvas, -50, 225, heros)
+        Enn.Skeleton(self.canvas, -150, 225, heros)
+        Enn.Skeleton(self.canvas, -200, 225, heros)
+        Enn.Skeleton(self.canvas, 50, 225, heros)
 
-        canvas.bind("<Button-3>", heros.mouseMove)
-        canvas.bind("<Button-1>", heros.transform)
+        self.canvas.bind("<Button-3>", heros.mouseMove)
         # Tow.Mortier(canvas, 400, 170)
         # Tow.Archer(canvas, 400, 350)
         # refresh(canvas, arc1.last_img)
 
         # Début de l'interface
-        self.interface = Interface(self, parent, canvas)
-        self.interface.pack(side="right", fill="y")
+        self.interface = View.Interface(self)
+        self.canvas.bind("<Button-2>", self.interface.buildTower)
 
+        self.interface.pack(side="right", fill="y")
+        
+        self.canvas.pack(side="right", fill='both', expand=True)
+
+    @staticmethod
+    def fillspots(dict):
+        dict.append(Emplacement(180,170))
+        dict.append(Emplacement(358,170))
+        dict.append(Emplacement(574,170))
+        dict.append(Emplacement(755,170))
+        dict.append(Emplacement(791,350))
+        dict.append(Emplacement(538,350))
+        dict.append(Emplacement(323,350))
+        dict.append(Emplacement(143,350))
+
+    def makeLigns(self):
         #---------------Définition des lignes---------------
         # Variable permmetant de définir la grille de la map
         squareFactor = 3
@@ -84,14 +95,11 @@ class Lvl1(tk.Frame):
         # Mise en place de la grid de la map
         if showSquare:
             for i in range(squareHeight):
-                canvas.create_line((i+1)*self.rootWidth/squareHeight, 0, (i+1)
+                self.canvas.create_line((i+1)*self.rootWidth/squareHeight, 0, (i+1)
                                * self.rootWidth/squareHeight, self.rootHeight, stipple="gray50")
             for i in range(squareWidth):
-                canvas.create_line(0, (i+1)*self.rootHeight/squareWidth, self.rootWidth,
+                self.canvas.create_line(0, (i+1)*self.rootHeight/squareWidth, self.rootWidth,
                                (i+1)*self.rootHeight/squareWidth, stipple="gray50")
-        
-        canvas.pack(side="right", fill='both', expand=True)
-
 
 # -----------------Chargement de la vue principale--------------------
 class MainApplication(tk.Frame):
