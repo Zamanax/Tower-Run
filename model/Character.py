@@ -61,7 +61,7 @@ class Character (Thread):
     def goToObjective(self):
         pass
 
-    def __init__ (self, master, x, y) :
+    def __init__ (self, parent, x, y) :
         # Threading       
         Thread.__init__(self)
         self.start()
@@ -70,7 +70,8 @@ class Character (Thread):
         # Initialisation de la position
         self.x = x
         self.y = y
-        self.canvas = master
+        self.parent = parent
+        self.canvas = parent.canvas
 
         self.baseHp = self.hp
         self.getSprite()

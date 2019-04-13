@@ -47,18 +47,18 @@ class Lvl1(tk.Frame):
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
         if self.selectedHeros == "Ichigo" :
-            heros = He.Ichigo(self.canvas, 900, 250, 260, 160)
+            heros = He.Ichigo(self, 900, 250, 260, 160)
         elif self.selectedHeros == "Goku":
-            heros = He.Goku(self.canvas, 900, 250, 260, 160)
+            heros = He.Goku(self, 900, 250, 260, 160)
         else:
-            heros = He.Adventurer(self.canvas, 900, 250, 260, 160)
+            heros = He.Adventurer(self, 900, 250, 260, 160)
 
-        Enn.Skeleton(self.canvas, 0, 225, heros)
-        Enn.Skeleton(self.canvas, -100, 225, heros)
-        Enn.Skeleton(self.canvas, -50, 225, heros)
-        Enn.Skeleton(self.canvas, -150, 225, heros)
-        Enn.Skeleton(self.canvas, -200, 225, heros)
-        Enn.Skeleton(self.canvas, 50, 225, heros)
+        Enn.Skeleton(self, 0, 225, heros)
+        Enn.Skeleton(self, -100, 225, heros)
+        Enn.Skeleton(self, -50, 225, heros)
+        Enn.Skeleton(self, -150, 225, heros)
+        Enn.Skeleton(self, -200, 225, heros)
+        Enn.Skeleton(self, 50, 225, heros)
 
         self.canvas.bind("<Button-3>", heros.mouseMove)
         # Tow.Mortier(canvas, 400, 170)
@@ -67,7 +67,7 @@ class Lvl1(tk.Frame):
 
         # Début de l'interface
         self.interface = View.Interface(self)
-        self.canvas.bind("<Button-2>", self.interface.buildTower)
+        self.canvas.bind("<Button-1>", self.interface.selectSpot)
 
         self.interface.pack(side="right", fill="y")
         

@@ -39,21 +39,37 @@ class Interface(tk.Frame):
         self.mortierPrice = tk.Label(self.interface, text="50", bg="#eeeeee", fg="black", font=("Arial",8))
         self.mortierPrice.place(x=75,y=250)
 
-    def buildTower(self, event):
+    def selectSpot(self, event):
         area = 25
         for spot in self.parent.spots:
             if spot.x-area < event.x < spot.x+area and spot.y-area < event.y < spot.y+area:
-                if spot.state != "None":
-                    self.canvas.delete(spot.last_img)
-                    spot.tower.upgrade()
-                    return
-                else:
-                    spot.state = "Mortier"
-                    self.canvas.delete(spot.last_img)
-                    spot.tower = Tow.Mortier(self.canvas, spot.x, spot.y)
-                    return
+                self.selected = spot
+                self.buildTower()
+                return
+
+    def buildTower(self):
+        if self.selected :
+            if self.selected.state != "None":
+                self.canvas.delete(self.selected.last_img)
+                self.selected.tower.upgrade()
+                return
+            else:
+                self.selected.state = "Mortier"
+                self.canvas.delete(self.selected.last_img)
+                self.selected.tower = Tow.Mortier(self.canvas, self.selected.x, self.selected.y)
+                return
 
     def emplacementMake(self):
         for spot in self.parent.spots:
             if spot.state == "None":
                 spot.last_img = self.canvas.create_image(spot.x, spot.y, image=self.hammerSign, anchor="s")
+
+# if spot.state != "None":
+#     self.canvas.delete(spot.last_img)
+#     spot.tower.upgrade()
+#     return
+# else:
+#     spot.state = "Mortier"
+#     self.canvas.delete(spot.last_img)
+#     spot.tower = Tow.Mortier(self.canvas, spot.x, spot.y)
+#     return
