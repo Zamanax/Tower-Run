@@ -24,11 +24,12 @@ class Emplacement():
         if bonus: 
             self.bonus = bonus
 
+    
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
     canvas = None
     def __init__(self, parent, *args, **kwargs):
-        self.selectedHeros = "Ichigo"
+        self.selectedHeros = "Goku"
         self.spots = []
         self.spotsImage = []
         self.fillspots(self.spots)
@@ -47,23 +48,23 @@ class Lvl1(tk.Frame):
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
         if self.selectedHeros == "Ichigo" :
-            heros = He.Ichigo(self, 900, 250, 260, 160)
+            self.heros = He.Ichigo(self, 900, 250, 260, 160)
         elif self.selectedHeros == "Goku":
-            heros = He.Goku(self, 900, 250, 260, 160)
+            self.heros = He.Goku(self, 900, 250, 260, 160)
         else:
-            heros = He.Adventurer(self, 900, 250, 260, 160)
+            self.heros = He.Adventurer(self, 900, 250, 260, 160)
 
-        Enn.Skeleton(self, 0, 225, heros)
-        Enn.Skeleton(self, -100, 225, heros)
-        Enn.Skeleton(self, -50, 225, heros)
-        Enn.Skeleton(self, -150, 225, heros)
-        Enn.Skeleton(self, -200, 225, heros)
-        Enn.Skeleton(self, 50, 225, heros)
+        Enn.Skeleton(self, 0, 225, self.heros)
+        Enn.Skeleton(self, -100, 225, self.heros)
+        Enn.Skeleton(self, -50, 225, self.heros)
+        Enn.Skeleton(self, -150, 225, self.heros)
+        Enn.Skeleton(self, -200, 225, self.heros)
+        Enn.Skeleton(self, 50, 225, self.heros)
 
         self.gold = tk.IntVar(self.canvas,300)
         self.health = tk.IntVar(self.canvas, 20)
 
-        self.canvas.bind("<Button-3>", heros.mouseMove)
+        self.canvas.bind("<Button-3>", self.heros.mouseMove)
         # Tow.Mortier(canvas, 400, 170)
         # Tow.Archer(canvas, 400, 350)
         # refresh(canvas, arc1.last_img)
@@ -71,7 +72,7 @@ class Lvl1(tk.Frame):
         # Début de l'interface
         self.interface = View.Interface(self)
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
-        self.canvas.bind("<Button-2>", heros.transform)
+        #self.canvas.bind("<Button-2>", self.heros.transform, )
 
         self.interface.pack(side="right", fill="y")
         self.canvas.pack(side="right", fill='both', expand=True)
