@@ -61,7 +61,7 @@ class Tower(Thread):
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
 
                 self.target = ennemy
-                self.tir_p(self.projectile)
+                self.tir_p()
                 return
         self.canvas.after(250, self.seek)
     
@@ -98,7 +98,7 @@ class Tower(Thread):
         self.canvas.after(1000000, self.construction, self)
 
     
-    def tir_p(self, projectile):
+    def tir_p(self):
         if self.target :
             self.projectile(self.canvas, self.x, self.y, self.target, self.damage)
             if self.target.hp <= 0:
@@ -110,7 +110,7 @@ class Tower(Thread):
                 self.seek()
                 return
             else :
-                self.canvas.after(1000, self.tir_p, projectile)
+                self.canvas.after(1000, self.tir_p)
         else :
             self.seek()
     
@@ -222,7 +222,6 @@ class Mage(Tower):
         self.speed = 2
         self.zone = 1
 
-
 class FireM(Mage):
     
     coordsLvl1 = [3, 72, 69, 129]
@@ -238,10 +237,10 @@ class FireM(Mage):
         self.projectile=BouleDeFeu
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "fire"
+        self.projectile=BouleDeFeu
         # self.spritesheet=tk.PhotoImage(file="Mage2.png")
 
         # self.root.mainloop()
-
 
 class WaterM(Mage):
     coordsLvl1=[3,72,82,139]
@@ -255,9 +254,9 @@ class WaterM(Mage):
         self.lv3=load(self.coordsLvl3, self.image)
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "water"
+        self.projectile=LameDEau
 
         # self.root.mainloop()
-
 
 class EarthM(Mage):
     image="view/src/Mage1.png"
@@ -272,6 +271,7 @@ class EarthM(Mage):
         self.lv3=load(self.coordsLvl3, self.image)
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "earth"
+        self.projectile=Caillou
         
         # self.root.mainloop()
 
@@ -282,10 +282,24 @@ class BouleDeFeu(Projectile):
         self.y=y-70
         self.target = target
         self.damage=damage
-        Projectile.__init__(self,canvas, "view.src.falmèche.png", "cercle noir.png")
+        Projectile.__init__(self,canvas, "view/src/falmèche.png", "cercle noir.png")
 
 class LameDEau(Projectile):
-    pass
+    def __init__(self, canvas, x, y, target, damage):
+        self.x=x-5
+        self.y=y-70
+        self.target= target
+        self.damage=damage
+        Projectile.__init__(self, canvas, "view/src/petit shuriken eau.png", "view/src/petit shuriken eau.png")
+
+class Caillou(Projectile):
+    def __init__(self, canvas, x,y, target, damage):
+        self.x=x-5
+        self.y=y-70
+        self.target=target
+        self.damage=damage
+        Projectile.__init__(self, canvas, "view/src/caillou.png", "view/src/caillou.png")
+
 
 class Archer(Tower):
     image="view/src/Archer.png"
@@ -299,13 +313,21 @@ class Archer(Tower):
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
         Tower.__init__(self, canvas, x, y,0)
+        self.projectile=Fleche
         self.damage = 4
         self.speed = 4
         self.zone = 1
         self.damagetype = "shot"
         # self.root.mainloop()
 
+class Fleche(Projectile):
+    def __init__(self, canvas, x,y, target, damage):
+        self.x=x-5
+        self.y=y-70
+        self.target=target
+        self.damage=damage
+        Projectile.__init__(self, canvas, "view/src/flèche.png", "")
+
 
 def distance(tower, ennemy):
     return ((ennemy.x-tower.x)**2+(ennemy.y-tower.y)**2)**0.5
-
