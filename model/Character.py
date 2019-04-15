@@ -148,6 +148,7 @@ class Character (Thread):
         else :
             self.canvas.delete(self.healthBar)
             self.canvas.delete(self.damageBar)
+            self.parent.gold.set(self.parent.gold.get()+self.purse)
             self.canvas.after_cancel(self.move)
             self.canvas.after_cancel(self.seeking)
             if self.attacking:
@@ -204,7 +205,7 @@ class Character (Thread):
     def idleAnim(self):
         self.show()
         if self.state == "transform":
-            time = 350
+            time = 200
         else : 
             time = 250
         self.afterIdle = self.canvas.after(time, self.idleAnim)
@@ -216,8 +217,16 @@ class Character (Thread):
                 self.state = "idle"
                 if self.lvl == 1:
                     self.transformAnim = self.transformAnim1
+                    self.num_sprintes = self.lv1["num_sprintes"]
+
                 elif self.lvl == 2:
                     self.transformAnim = self.transformAnim2
+                    self.num_sprintes = self.lv2["num_sprintes"]
+
+                elif self.lvl == 3:
+                    self.num_sprintes = self.lv3["num_sprintes"]
+
+                
                     
 
 
@@ -231,7 +240,7 @@ class Character (Thread):
         elif self.state == "attackRight" or self.state == "attackLeft":
             time = int(500/self.attackSpeed)
         elif self.state == "transform" :
-            time = 350
+            time = 200
         elif self.state == "die":
             time = 400
         else :

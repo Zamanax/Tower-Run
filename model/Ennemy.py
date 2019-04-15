@@ -5,12 +5,13 @@ import model.Heros as He
 ennemies=[]
 
 class Ennemy (Character):
+    purse = 0
     team = "ennemy"
     state = "idle"
  
-    def __init__ (self, master, x, y, heros) :
+    def __init__ (self, parent, x, y, heros) :
         global ennemies
-        Character.__init__(self,master,x,y)
+        Character.__init__(self,parent,x,y)
         self.heros = heros
         ennemies.append(self)
         # self.index = len(ennemies)-1
@@ -32,10 +33,8 @@ class Ennemy (Character):
         if self.move == None:
             self.moveTo(1200,self.y)
 
-    # def die(self, delete):
-    #     global ennemies
-    #     super().die(delete)
-    #     ennemies.pop(self.index)
+    def die(self, delete):
+        super().die(delete)
 
 
 class Skeleton (Ennemy) :
@@ -45,6 +44,8 @@ class Skeleton (Ennemy) :
     attackSpeed = 1
     speed = 1
     damage = 2
+    purse = 10
+
     barOffsetx = -20
 
     spriteSize = 32

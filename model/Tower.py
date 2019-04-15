@@ -212,7 +212,7 @@ class Boulet(Projectile):
         self.y=y-70
         self.target = target
         self.damage=damage
-        Projectile.__init__(self,canvas, "view/src/bouletDeCanon.png", "view/src/cercle noir.png")
+        Projectile.__init__(self,canvas, "view/src/bouletDeCanon.png", "view/src/bouletDeCanon.png")
     
 
 class Mage(Tower):
