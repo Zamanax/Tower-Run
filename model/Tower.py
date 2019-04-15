@@ -3,7 +3,7 @@ from threading import Thread
 from model.Heros import Heros
 from model.Ennemy import ennemies
 #@UnusedWildImport 
-from model.fonctions_utiles import *
+from model.fonctions_utiles import * 
 
 
 
@@ -21,16 +21,16 @@ class Tower(Thread):
     last_img=None
     seeking=None
     range=0
-    d_up=20
+    d_up=50
     r_up=25
     damage=1
 
     # Chargement et attribution des différentes propriétés
 
-    def __init__(self, canvas, x, y):
+    def __init__(self, canvas, x, y, projectile):
         Thread.__init__(self)
         self.start()
-        
+        self.projectile=projectile
         self.canvas = canvas
         self.x = x
         self.y = y
@@ -61,7 +61,7 @@ class Tower(Thread):
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
 
                 self.target = ennemy
-                self.tir_p()
+                self.tir_p(self.projectile)
                 return
         self.canvas.after(250, self.seek)
     
@@ -98,19 +98,19 @@ class Tower(Thread):
         self.canvas.after(1000000, self.construction, self)
 
     
-    def tir_p(self):
+    def tir_p(self, projectile):
         if self.target :
-            Boulet(self.canvas, self.x, self.y, self.target)
+            self.projectile(self.canvas, self.x, self.y, self.target, self.damage)
             if self.target.hp <= 0:
                 self.target.die(False)
                 self.target = None
-                self.seek()
+                self.canvas.after(1000, self.seek)
                 return
             elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range:
                 self.seek()
                 return
             else :
-                self.canvas.after(1000, self.tir_p)
+                self.canvas.after(1000, self.tir_p, projectile)
         else :
             self.seek()
     
@@ -132,8 +132,8 @@ class Projectile(Tower):
 
     # Méthode chargée de l'apparition du projectile
     def __init__(self,canvas, image,boom):
-            self.img=tk.PhotoImage(image)
-            self.boom=tk.PhotoImage(boom)
+            self.img=tk.PhotoImage(file=image)
+            self.boom=tk.PhotoImage(file=boom)
             self.canvas=canvas
             self.tx=self.target.x
             self.ty=self.target.y
@@ -151,7 +151,8 @@ class Projectile(Tower):
 
         if self.x==self.tx and self.y==self.ty:
             self.canvas.delete(self.corps)
-            self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+            # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+            self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
             self.target.hp-=self.damage
             self.seek()
             self.canvas.after(5, self.canvas.delete, self.corps)
@@ -164,8 +165,8 @@ class Projectile(Tower):
         self.x+=self.inc_abs
         self.y+=self.inc_ord
     
-
-        self.corps=self.canvas.create_oval(self.x-5, self.y-5, self.x+5, self.y+5, fill="black")
+        # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+        self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
         self.canvas.after(20,self.tir)
 
         
@@ -186,9 +187,9 @@ class Mortier(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y)
+        Tower.__init__(self, canvas, x, y,0)
+        self.projectile=Boulet
         self.range = 150
-       
         self.damage = 1
         self.speed = 2
         self.zone = 3
@@ -206,17 +207,17 @@ class Mortier(Tower):
     #     Boulet(self.canvas, self.x, self.y+30, self.target)
 
 class Boulet(Projectile):
-    damage = 3
-    def __init__(self,canvas, x, y, target):
+    def __init__(self,canvas, x, y, target, damage):
         self.x=x-5
         self.y=y-70
         self.target = target
-        Projectile.__init__(self,canvas, "cercle noir.png", "cercle noir.png")
+        self.damage=damage
+        Projectile.__init__(self,canvas, "view/src/bouletDeCanon.png", "view/src/cercle noir.png")
     
 
 class Mage(Tower):
     def __init__(self, canvas, x, y):
-        Tower.__init__(self, canvas, x, y)
+        Tower.__init__(self, canvas, x, y,0)
         self.damage = 4
         self.speed = 2
         self.zone = 1
@@ -234,6 +235,7 @@ class FireM(Mage):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
+        self.projectile=BouleDeFeu
         Mage.__init__(self, canvas, x, y)
         self.damagetype = "fire"
         # self.spritesheet=tk.PhotoImage(file="Mage2.png")
@@ -274,6 +276,17 @@ class EarthM(Mage):
         # self.root.mainloop()
 
 
+class BouleDeFeu(Projectile):
+    def __init__(self,canvas, x, y, target, damage):
+        self.x=x-5
+        self.y=y-70
+        self.target = target
+        self.damage=damage
+        Projectile.__init__(self,canvas, "view.src.falmèche.png", "cercle noir.png")
+
+class LameDEau(Projectile):
+    pass
+
 class Archer(Tower):
     image="view/src/Archer.png"
     coordsLvl1 = [3,51,82,138]
@@ -285,7 +298,7 @@ class Archer(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y)
+        Tower.__init__(self, canvas, x, y,0)
         self.damage = 4
         self.speed = 4
         self.zone = 1

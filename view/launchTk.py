@@ -60,6 +60,9 @@ class Lvl1(tk.Frame):
         Enn.Skeleton(self, -200, 225, heros)
         Enn.Skeleton(self, 50, 225, heros)
 
+        self.gold = tk.IntVar(self.canvas,300)
+        self.health = tk.IntVar(self.canvas, 20)
+
         self.canvas.bind("<Button-3>", heros.mouseMove)
         # Tow.Mortier(canvas, 400, 170)
         # Tow.Archer(canvas, 400, 350)
@@ -68,9 +71,9 @@ class Lvl1(tk.Frame):
         # Début de l'interface
         self.interface = View.Interface(self)
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
+        self.canvas.bind("<Button-2>", heros.transform)
 
         self.interface.pack(side="right", fill="y")
-        
         self.canvas.pack(side="right", fill='both', expand=True)
 
     @staticmethod

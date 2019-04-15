@@ -18,10 +18,10 @@ class Interface(tk.Frame):
         self.interface.pack()
 
     def makeLabel(self):
-        self.wallet = tk.Label(self.interface, text="0", bg="#743A3A", fg="white")
+        self.wallet = tk.Label(self.interface, textvariable=self.parent.gold, bg="#743A3A", fg="white")
         self.wallet.place(x=31,y=617)
 
-        self.life = tk.Label(self.interface, text="20", bg="#743A3A", fg="white", font=("Arial",8))
+        self.life = tk.Label(self.interface, textvariable=self.parent.health, bg="#743A3A", fg="white", font=("Arial",8))
         self.life.place(x=150,y=617)
 
         self.mageWPrice = tk.Label(self.interface, text="50", bg="#1ea7e1", fg="black", font=("Arial",8))
