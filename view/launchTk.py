@@ -29,7 +29,7 @@ class Emplacement():
 class Lvl1(tk.Frame):
     canvas = None
     def __init__(self, parent, *args, **kwargs):
-        self.selectedHeros = "Goku"
+        self.selectedHeros = "Aventurier"
         self.spots = []
         self.spotsImage = []
         self.fillspots(self.spots)
