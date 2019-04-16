@@ -189,17 +189,11 @@ class Mortier(Tower):
         self.speed = 2
         self.zone = 3
         self.damagetype = "fire"
-        # print("le dico des Tours mon seigneur Ragy contient: "+str(Tower.__dict__))
-        # print("le dico des projectiles mon seigneur Ragy contient: "+str(Projectile.__dict__))
-        # print("le dico des Mortiers mon seigneur Ragy contient: "+str(Mortier.__dict__))
-        # print("le dico des boulets mon seigneur Ragy contient: "+str(Boulet.__dict__))
-        
-        # self.spritesheet=tk.PhotoImage(file="towers.png")
-        # self.root.mainloop()
+
     
-    # def tir_p(self):
-    #     # print("TIR!")
-    #     Boulet(self.canvas, self.x, self.y+30, self.target)
+
+    def __str__(self):
+        return "Mortier"
 
 class Boulet(Projectile):
     def __init__(self,canvas, x, y, target, damage):
@@ -212,12 +206,12 @@ class Boulet(Projectile):
 
 class Mage(Tower):
     def __init__(self, canvas, x, y):
-        Tower.__init__(self, canvas, x, y,0)
         self.damage = 4
         self.speed = 2
         self.zone = 1
+        Tower.__init__(self, canvas, x, y,0)
 
-class FireM(Mage):
+class FireM(Tower):
     
     coordsLvl1 = [3, 72, 69, 129]
     coordsLvl2 = [91, 49, 191, 139]
@@ -229,15 +223,21 @@ class FireM(Mage):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        self.projectile=BouleDeFeu
-        Mage.__init__(self, canvas, x, y)
+        Tower.__init__(self, canvas, x, y,0)
+        self.damage = 4
+        self.speed = 2
+        self.zone = 1
+        self.range = 150
         self.damagetype = "fire"
         self.projectile=BouleDeFeu
         # self.spritesheet=tk.PhotoImage(file="Mage2.png")
 
         # self.root.mainloop()
+    
+    def __str__(self):
+        return "FireM"
 
-class WaterM(Mage):
+class WaterM(Tower):
     coordsLvl1=[3,72,82,139]
     coordsLvl2=[91,47,195,139]
     coordsLvl3=[203,0,323,139]
@@ -247,13 +247,20 @@ class WaterM(Mage):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Mage.__init__(self, canvas, x, y)
+        Tower.__init__(self, canvas, x, y,0)
+        self.damage = 4
+        self.speed = 2
+        self.zone = 1
+        self.range = 150
         self.damagetype = "water"
         self.projectile=LameDEau
 
         # self.root.mainloop()
+    
+    def __str__(self):
+        return "WaterM"
 
-class EarthM(Mage):
+class EarthM(Tower):
     image="view/src/Mage1.png"
     coordsLvl1 = [3, 62, 82, 132]
     coordsLvl2= [91, 47, 195, 132]
@@ -264,12 +271,17 @@ class EarthM(Mage):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Mage.__init__(self, canvas, x, y)
+        Tower.__init__(self, canvas, x, y,0)
+        self.damage = 4
+        self.speed = 2
+        self.zone = 1
+        self.range = 150
         self.damagetype = "earth"
         self.projectile=Caillou
         
         # self.root.mainloop()
-
+    def __str__(self):
+        return "EarthM"
 
 class BouleDeFeu(Projectile):
     def __init__(self,canvas, x, y, target, damage):
@@ -277,7 +289,7 @@ class BouleDeFeu(Projectile):
         self.y=y-70
         self.target = target
         self.damage=damage
-        Projectile.__init__(self,canvas, "view/src/falmèche.png", "cercle noir.png")
+        Projectile.__init__(self,canvas, "view/src/flamèche.png", "view/src/flamèche.png")
 
 class LameDEau(Projectile):
     def __init__(self, canvas, x, y, target, damage):
@@ -315,6 +327,9 @@ class Archer(Tower):
         self.zone = 1
         self.damagetype = "shot"
         #self.root.mainloop()
+
+    def __str__(self):
+        return "Archer"
 
 class Fleche(Projectile):
     def __init__(self, canvas, x,y, target, damage):
@@ -366,6 +381,52 @@ class Forgeron(Tower):
         self.canvas.tag_raise(self.last_img)
         self.canvas.after(1000000, self.construction, self)
 
+
+
+class Forgeron(Tower):
+    
+    coordsLvl1 = [0,0,120,115]
+    coordsLvl2 = [125,0,250,115]
+    coordsLvl3 = [250,0,380,115]
+    image= 'view/src/Forgeron.png'
+    def __init__(self, canvas, x,y, heros):
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
+        self.hero=heros
+        Tower.__init__(self, canvas, x, y,0)
+    
+
+    def seek(self):
+        pass
+
+    def tir_p(self):
+        pass
+    
+    def construction(self): 
+        Tower.construction(self)
+        self.hero.transform(self)
+
+    def upgrade1(self):
+        self.lvl = 2
+        self.canvas.delete(self.last_img)
+        self.last_img = self.canvas.create_image(
+                    self.x, self.y, image=self.lv2, anchor="s")
+        self.canvas.tag_raise(self.last_img)
+        self.canvas.after(1000000, self.construction, self)
+        self.hero.transform(self)
+    
+    def upgrade2(self):
+        self.lvl=3
+        self.canvas.delete(self.last_img)
+        self.last_img = self.canvas.create_image(
+                    self.x, self.y, image=self.lv3, anchor="s")
+        self.canvas.tag_raise(self.last_img)
+        self.canvas.after(1000000, self.construction, self)
+        self.hero.transform(self)
+    
+    def __str__(self):
+        return "Forgeron"
 
 
 def distance(tower, ennemy):
