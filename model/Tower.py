@@ -320,12 +320,13 @@ class Archer(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y,0)
         self.projectile=Fleche
         self.damage = 4
         self.speed = 4
         self.zone = 1
         self.damagetype = "shot"
+        Tower.__init__(self, canvas, x, y,Fleche)
+        
         #self.root.mainloop()
 
     def __str__(self):
@@ -337,51 +338,91 @@ class Fleche(Projectile):
         self.y=y-70
         self.target=target
         self.damage=damage
-        Projectile.__init__(self, canvas, "view/src/flèche.png", "")
+        
+        self.canvas=canvas
+        self.tx=self.target.x
+        self.ty=self.target.y
+        if self.tx<=self.x and self.ty<= self.y:
+            self.img=tk.PhotoImage(file = "view/src/flèche gh.png")
+        elif self.tx>=self.x and self.ty>=self.y:
+            self.img=tk.PhotoImage(file= "view/src/flèche db.png")
+        elif target.x>=self.x and self.ty<= self.y:
+            self.img=tk.PhotoImage(file = "view/src/flèche dh.png")
+        elif self.tx<=self.x and self.ty>=self.y:
+            self.img=tk.PhotoImage(file ="view/src/flèche gb.png")
+        self.boom=self.img
+        self.v=1
+        self.tir()
 
-class Forgeron(Tower):
-    image="view/src/Forgeron.png"
-    coordsLvl1 = [0,0,120,115]
-    coordsLvl2 = [125,0,250,115]
-    coordsLvl3 = [250,0,350,115]
+
+    # def tir(self):
+
+    #     if type(self.corps)!=None:
+    #         self.canvas.delete(self.corps)
+
+    #     if self.x==self.tx and self.y==self.ty:
+    #         self.canvas.delete(self.corps)
+    #         # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+    #         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
+    #         self.target.hp-=self.damage
+    #         self.seek()
+    #         self.canvas.after(5, self.canvas.delete, self.corps)
+    #         return
+        
+
+    #     n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/2)
+    #     self.inc_abs=-(self.x-self.tx)/n_coups
+    #     self.inc_ord=-(self.y-self.ty)/n_coups
+    #     self.x+=self.inc_abs
+    #     self.y+=self.inc_ord
     
-    def __init__(self, canvas, x,y, heros):
-        self.lv1=load(self.coordsLvl1, self.image)
-        self.lv2=load(self.coordsLvl2, self.image)
-        self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y,0)
-        self.projectile=Fleche
-        self.damage = 4
-        self.speed = 4
-        self.zone = 1
-        self.hero=heros
-        self.damagetype = "shot"
+    #     # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+    #     self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
+    #     self.canvas.after(20,self.tir)
+        
     
-    def construction(self):
-        pass
+
+# class Forgeron(Tower):
+#     image="view/src/Forgeron.png"
+#     coordsLvl1 = [0,0,120,115]
+#     coordsLvl2 = [125,0,250,115]
+#     coordsLvl3 = [250,0,350,115]
     
-    def seek(self):
-        pass
+#     def __init__(self, canvas, x,y, heros):
+#         self.lv1=load(self.coordsLvl1, self.image)
+#         self.lv2=load(self.coordsLvl2, self.image)
+#         self.lv3=load(self.coordsLvl3, self.image)
+#         Tower.__init__(self, canvas, x, y,0)
+#         self.projectile=Fleche
+#         self.damage = 4
+#         self.speed = 4
+#         self.zone = 1
+#         self.hero=heros
+#         self.damagetype = "shot"
+    
+#     def construction(self):
+#         pass
+    
+#     def seek(self):
+#         pass
 
-    def upgrade1(self):
-        self.hero.upgrade()
-        self.lvl = 2
-        self.canvas.delete(self.last_img)
-        self.last_img = self.canvas.create_image(
-                    self.x, self.y, image=self.lv2, anchor="s")
-        self.canvas.tag_raise(self.last_img)
-        self.canvas.after(1000000, self.construction, self)
+#     def upgrade1(self):
+#         self.hero.upgrade()
+#         self.lvl = 2
+#         self.canvas.delete(self.last_img)
+#         self.last_img = self.canvas.create_image(
+#                     self.x, self.y, image=self.lv2, anchor="s")
+#         self.canvas.tag_raise(self.last_img)
+#         self.canvas.after(1000000, self.construction, self)
 
-    def upgrade2(self):
-        self.hero.upgrade()
-        self.lvl = 3
-        self.canvas.delete(self.last_img)
-        self.last_img = self.canvas.create_image(
-                    self.x, self.y, image=self.lv3, anchor="s")
-        self.canvas.tag_raise(self.last_img)
-        self.canvas.after(1000000, self.construction, self)
-
-
+#     def upgrade2(self):
+#         self.hero.upgrade()
+#         self.lvl = 3
+#         self.canvas.delete(self.last_img)
+#         self.last_img = self.canvas.create_image(
+#                     self.x, self.y, image=self.lv3, anchor="s")
+#         self.canvas.tag_raise(self.last_img)
+#         self.canvas.after(1000000, self.construction, self)
 
 class Forgeron(Tower):
     

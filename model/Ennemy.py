@@ -39,7 +39,7 @@ class Ennemy (Character):
 
 class Skeleton (Ennemy) :
     __slot__=("__dict__", "idle", "runRight", "runLeft", "attackRight", "attackLeft", "die")
-    hp = 30
+    hp = 80
     name = "Skeleton"
     attackSpeed = 1
     speed = 1

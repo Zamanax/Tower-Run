@@ -19,15 +19,15 @@ class Interface(tk.Frame):
         self.emplacementMake()
         self.interface.pack()
 #___________________________On va faire les check buttons ici max/yann ______________
-        self.waterchb= tk.Radiobutton(self.interface,value=Tow.WaterM, variable=self.v, bg="#1ea7e1")
+        self.waterchb= tk.Radiobutton(self.interface,value=Tow.WaterM, variable=self.v, bg="#1ea7e1", activebackground="#1ea7e1", highlightthickness=0)
         self.waterchb.place(x=160, y=23)
-        self.earthchb=tk.Radiobutton(self.interface,value=Tow.EarthM, variable=self.v, bg="#73cd4b")
+        self.earthchb=tk.Radiobutton(self.interface,value=Tow.EarthM, variable=self.v, bg="#73cd4b", activebackground="#73cd4b", highlightthickness=0)
         self.earthchb.place(x=160, y=81)
-        self.firechb=tk.Radiobutton(self.interface,value=Tow.FireM, variable=self.v, bg="#e86a17")
+        self.firechb=tk.Radiobutton(self.interface,value=Tow.FireM, variable=self.v, bg="#e86a17", activebackground="#e86a17", highlightthickness=0)
         self.firechb.place(x=160, y=135)
-        self.archerchb=tk.Radiobutton(self.interface,value=Tow.Archer, variable=self.v, bg="#ffcc00")
+        self.archerchb=tk.Radiobutton(self.interface,value=Tow.Archer, variable=self.v, bg="#ffcc00", activebackground="#ffcc00", highlightthickness=0)
         self.archerchb.place(x=160, y=191)
-        self.mortierchb=tk.Radiobutton(self.interface,value=Tow.Mortier, variable=self.v, bg="#eeeeee")
+        self.mortierchb=tk.Radiobutton(self.interface,value=Tow.Mortier, variable=self.v, bg="#eeeeee", activebackground="#eeeeee", highlightthickness=0)
         self.mortierchb.place(x=160, y=246)
         self.forgeronchb=tk.Radiobutton(self.interface, value=Tow.Forgeron, text="F", variable=self.v)
         self.forgeronchb.place(x=160, y=300)
@@ -68,9 +68,8 @@ class Interface(tk.Frame):
                 return
 
     def buildTower(self):
-        l=len(self.v.get())
-        state=self.v.get()[8:l]
-        #print(state)
+        state = ''.join([i for i in self.v.get() if not i.isdigit()])
+
         if self.selected :
             if self.selected.state != "None":
                 self.canvas.delete(self.selected.last_img)
