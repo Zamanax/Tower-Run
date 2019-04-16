@@ -22,6 +22,7 @@ class Character (Thread):
     barOffsety  = 0
     lv1 = []
     lv2 = []
+    lv3 = []
     zoom = 1
     last_img = None
     idle = []
@@ -212,19 +213,19 @@ class Character (Thread):
 
     # Méthode d'incrémentation de l'image à afficher
     def incrementSprite(self):
-        if "transform" in self.num_sprintes:
-            if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
-                self.state = "idle"
-                if self.lvl == 1:
-                    self.transformAnim = self.transformAnim1
-                    self.num_sprintes = self.lv1["num_sprintes"]
+        # if "transform" in self.num_sprintes:
+        #     if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
+        #         self.state = "idle"
+        #         if self.lvl == 1:
+        #             self.transformAnim = self.transformAnim1
+        #             self.num_sprintes = self.lv1["num_sprintes"]
 
-                elif self.lvl == 2:
-                    self.transformAnim = self.transformAnim2
-                    self.num_sprintes = self.lv2["num_sprintes"]
+        #         elif self.lvl == 2:
+        #             self.transformAnim = self.transformAnim2
+        #             self.num_sprintes = self.lv2["num_sprintes"]
 
-                elif self.lvl == 3:
-                    self.num_sprintes = self.lv3["num_sprintes"]
+        #         elif self.lvl == 3:
+        #             self.num_sprintes = self.lv3["num_sprintes"]
 
                 
                     

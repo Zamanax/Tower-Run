@@ -8,9 +8,6 @@ from model.fonctions_utiles import *
 
 
 #____________________________________________________________________________________________________________
-
-
-
 class Tower(Thread):
     # Coords de la tour
     # Image de la tour
@@ -169,8 +166,6 @@ class Projectile(Tower):
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
         self.canvas.after(20,self.tir)
 
-        
-
 #________________________________________________________________________________________________________________________
                 
 # Classe des mortiers basés sur le même template que les autres
@@ -308,7 +303,8 @@ class Archer(Tower):
     coordsLvl3 = [203,0,295,144]
     range=200
     def __init__(self, canvas, x, y):
-        # self.root=tk.Tk()
+        #self.root=tk.Tk()
+        #test_subimage(self.image, 3, 51, 82, 138, self.root)
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
@@ -318,7 +314,7 @@ class Archer(Tower):
         self.speed = 4
         self.zone = 1
         self.damagetype = "shot"
-        # self.root.mainloop()
+        #self.root.mainloop()
 
 class Fleche(Projectile):
     def __init__(self, canvas, x,y, target, damage):
@@ -327,6 +323,49 @@ class Fleche(Projectile):
         self.target=target
         self.damage=damage
         Projectile.__init__(self, canvas, "view/src/flèche.png", "")
+
+class Forgeron(Tower):
+    image="view/src/Forgeron.png"
+    coordsLvl1 = [0,0,120,115]
+    coordsLvl2 = [125,0,250,115]
+    coordsLvl3 = [250,0,350,115]
+    
+    def __init__(self, canvas, x,y, heros):
+        self.lv1=load(self.coordsLvl1, self.image)
+        self.lv2=load(self.coordsLvl2, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)
+        Tower.__init__(self, canvas, x, y,0)
+        self.projectile=Fleche
+        self.damage = 4
+        self.speed = 4
+        self.zone = 1
+        self.hero=heros
+        self.damagetype = "shot"
+    
+    def construction(self):
+        pass
+    
+    def seek(self):
+        pass
+
+    def upgrade1(self):
+        self.hero.upgrade()
+        self.lvl = 2
+        self.canvas.delete(self.last_img)
+        self.last_img = self.canvas.create_image(
+                    self.x, self.y, image=self.lv2, anchor="s")
+        self.canvas.tag_raise(self.last_img)
+        self.canvas.after(1000000, self.construction, self)
+
+    def upgrade2(self):
+        self.hero.upgrade()
+        self.lvl = 3
+        self.canvas.delete(self.last_img)
+        self.last_img = self.canvas.create_image(
+                    self.x, self.y, image=self.lv3, anchor="s")
+        self.canvas.tag_raise(self.last_img)
+        self.canvas.after(1000000, self.construction, self)
+
 
 
 def distance(tower, ennemy):

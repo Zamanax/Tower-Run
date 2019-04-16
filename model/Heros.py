@@ -174,6 +174,7 @@ class Heros(Character, metaclass=Singleton):
 
             self.lvl = 1
             self.hp = self.lv1["hp"]
+            self.baseHp = self.hp
             self.damage = self.lv1["damage"]
             self.damagingSprite = self.lv1["damagingSprite"]
             self.speed = self.lv1["speed"]
@@ -196,6 +197,7 @@ class Heros(Character, metaclass=Singleton):
             self.state = "transform"
 
             self.hp = self.lv2["hp"]
+            self.baseHp = self.hp
             self.damage = self.lv2["damage"]
             self.damagingSprite = self.lv2["damagingSprite"]
             self.speed = self.lv2["speed"]
@@ -218,6 +220,7 @@ class Heros(Character, metaclass=Singleton):
             self.state = "transform"
 
             self.hp = self.lv3["hp"]
+            self.baseHp = self.hp
             self.damage = self.lv3["damage"]
             self.damagingSprite = self.lv3["damagingSprite"]
             self.speed = self.lv3["speed"]
@@ -244,6 +247,22 @@ class Heros(Character, metaclass=Singleton):
         self.spritesheet = dict["spritesheet"]
         self.spriteSize = dict["spriteSize"]
         self.y_Anim = dict["y_Anim"]
+
+    def incrementSprite(self):
+        if "transform" in self.num_sprintes:
+            if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
+                self.state = "idle"
+                if self.lvl == 1:
+                    self.transformAnim = self.transformAnim1
+                    self.num_sprintes = self.lv1["num_sprintes"]
+
+                elif self.lvl == 2:
+                    self.transformAnim = self.transformAnim2
+                    self.num_sprintes = self.lv2["num_sprintes"]
+
+                elif self.lvl == 3:
+                    self.num_sprintes = self.lv3["num_sprintes"]
+        super().incrementSprite()
 
     # def show(self):
     #     super().show()
@@ -323,29 +342,13 @@ class Ichigo(Heros):
         "attackSpeed": 6,
 
         # Spritesheet du Heros
-        "damagingSprite" : [2,3,5,12,13],
+        "damagingSprite" : [2,3,7,8,9,13,14,17,18],
         "num_sprintes": {"idle": 2, "runRight": 8,
-                         "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 20},
+                         "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7},
         "spritesheet": "view/src/Ichigo1.png",
         "spriteSize": 200,
         "y_Anim": {"idle": 0, "runRight": 400, "runLeft": 600,
-                   "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1200}
-    }
-
-    lv1 = {
-        "hp": 50,
-        "damage": 2,
-        "speed": 8,
-        "attackSpeed": 6,
-
-        # Spritesheet du Heros
-        "damagingSprite" : [2,3,5,12,13],
-        "num_sprintes": {"idle": 2, "runRight": 8,
-                         "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 7},
-        "spritesheet": "view/src/Ichigo1.png",
-        "spriteSize": 200,
-        "y_Anim": {"idle": 0, "runRight": 400, "runLeft": 600,
-                   "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1200}
+                   "attackRight": 1200, "attackLeft": 1400, "die": 0, "transform": 2200}
     }
 
     lv2 = {
@@ -355,31 +358,14 @@ class Ichigo(Heros):
         "attackSpeed": 6,
 
         # Spritesheet du Heros
-        "damagingSprite" : [2,3,5,12,13],
+        "damagingSprite" : [1,2,6,7,11,12,13,14],
         "num_sprintes": {"idle": 2, "runRight": 8,
-                         "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 7},
-        "spritesheet": "view/src/Ichigo1.png",
+                         "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 7},
+        "spritesheet": "view/src/Ichigo2.png",
         "spriteSize": 200,
-        "y_Anim": {"idle": 0, "runRight": 400, "runLeft": 600,
-                   "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1200}
-    }    
-# class Ichigo(Heros):
-#     # Stats du Héros
-#     name = "Ichigo"
-
-#     hp = 50
-#     damage = 2
-#     speed = 8
-#     attackSpeed = 4
-
-#     # Spritesheet du Heros
-#     num_sprintes = {"idle": 2, "runRight": 8,
-#                     "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 3}
-#     spritesheet = "view/src/Ichigo0.png"
-#     spriteSize = 200
-#     y_Anim = {"idle": 0, "runRight": 400, "runLeft": 600,
-#               "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1200}
-
+        "y_Anim": {"idle": 0, "runRight": 800, "runLeft": 1000,
+                   "attackRight": 1200, "attackLeft": 1400, "die": 0, "transform": 1200}
+    }
 
 class Goku(Heros):
     name = "Son Goku"

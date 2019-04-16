@@ -6,6 +6,7 @@ class Interface(tk.Frame):
         self.hammerSign = tk.PhotoImage(file="view/src/HammerSign.png")
         self.parent = parent
         self.canvas = parent.canvas
+        self.lochoice=tk.PhotoImage(file="lochoice.png")
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
@@ -44,6 +45,7 @@ class Interface(tk.Frame):
         for spot in self.parent.spots:
             if spot.x-area < event.x < spot.x+area and spot.y-area < event.y < spot.y+area:
                 self.selected = spot
+                self.canvas.create_image(spot.x, spot.y-20, image=self.lochoice)
                 self.buildTower()
                 return
 

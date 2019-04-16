@@ -16,7 +16,7 @@ def subimage(spritesheet, l, t, r, b):
 
 def test_subimage(spritesheet, l, t, r, b, root):
 
-    # root=tk.Tk()
+    #root=tk.Tk()
     canvas = tk.Canvas(root)
     sprite = tk.PhotoImage()
     spritesheet = tk.PhotoImage(file=spritesheet)
@@ -24,7 +24,7 @@ def test_subimage(spritesheet, l, t, r, b, root):
                     '-from', l, t, r, b, '-to', 0, 0)
     canvas.create_image(100, 100, image=sprite)
     canvas.pack()
-    # root.mainloop()
+    #root.mainloop()
     return sprite
 
 def coeffdirecteur(object1x,object1y, object2):
