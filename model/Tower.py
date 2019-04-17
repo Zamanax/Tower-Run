@@ -166,8 +166,6 @@ class Projectile(Tower):
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
         self.canvas.after(20,self.tir)
 
-        def __name__(self):
-            return self.__str__()
 
 #________________________________________________________________________________________________________________________
                 

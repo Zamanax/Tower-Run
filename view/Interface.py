@@ -62,7 +62,7 @@ class Interface(tk.Frame):
         self.forgeronchb.place(x=160, y=300)
         self.waterchb.select()  # on choisit les mages d'eaux par défaut au début
         self.buildButton = tk.Button(
-            self.interface, command=self.buildTower, text="Construire", width=24)
+            self.interface, command=self.buildTower, text="Construire", width=24, state = "disabled")
         self.buildButton.place(x=12, y=585)
 
     def makeLabel(self):
@@ -95,18 +95,20 @@ class Interface(tk.Frame):
         self.mortierPrice.place(x=75, y=250)
 
     def selectSpot(self, event):
-        state = ''.join([i for i in self.v.get() if not i.isdigit()])
+        # state = ''.join([i for i in self.v.get() if not i.isdigit()])
         area = 45
+        found = False
         for spot in self.parent.spots:
             if spot.x-area < event.x < spot.x+area and spot.y-area < event.y < spot.y+area:
-                self.canvas.delete(self.range_preview)
-                self.half_range = self.dico[state].range
-                self.range_preview = self.canvas.create_oval(spot.x+self.half_range, spot.y+self.half_range, spot.x - self.half_range, spot.y - self.half_range,
-                                                             outline="blue")
-                self.canvas.delete(self.last_lochoice)
+                # self.canvas.delete(self.range_preview)
+                # self.half_range = self.dico[state].range
+                # self.range_preview = self.canvas.create_oval(spot.x+self.half_range, spot.y+self.half_range, spot.x - self.half_range, spot.y - self.half_range,
+                #                                              outline="blue")
+                # self.canvas.delete(self.last_lochoice)
+                # self.last_lochoice = self.canvas.create_image(
+                #     spot.x, spot.y, image=self.lochoice)
+
                 self.selected = spot
-                self.last_lochoice = self.canvas.create_image(
-                    spot.x, spot.y, image=self.lochoice)
                 found = True
                 break
         if found != True:
@@ -114,22 +116,37 @@ class Interface(tk.Frame):
         self.preView()
 
     def preView(self):
+        state = ''.join([i for i in self.v.get() if not i.isdigit()])
+
+        if self.spotName:
+            self.spotName.destroy()
+        if self.spotDamage:
+            self.spotDamage.destroy()
+        if self.spotSpeed:
+            self.spotSpeed.destroy()
+        if self.spotZone:
+            self.spotZone.destroy()
+        if self.spotDamagetype:
+            self.spotDamagetype.destroy()
+
+        self.canvas.delete(self.last_lochoice)
+        self.canvas.delete(self.range_preview)
+
+
+        self.interface.delete(self.last_preview)
+
         if self.selected:
-            if self.spotName:
-                self.spotName.destroy()
-            if self.spotDamage:
-                self.spotDamage.destroy()
-            if self.spotSpeed:
-                self.spotSpeed.destroy()
-            if self.spotZone:
-                self.spotZone.destroy()
-            if self.spotDamagetype:
-                self.spotDamagetype.destroy()
+            self.buildButton["state"] = "normal"
+
 
             self.spotName = tk.Label(self.interface, text="Nom: ", bg="#743A3A", fg="white")
             self.spotName.place(x=10, y=300)
-            
-            self.interface.delete(self.last_preview)
+
+            self.half_range = self.dico[state].range
+            self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                                                            outline="blue")
+            self.last_lochoice = self.canvas.create_image(
+                self.selected.x, self.selected.y, image=self.lochoice)
             
             if self.selected.tower:
 
@@ -163,6 +180,9 @@ class Interface(tk.Frame):
                 self.last_preview = self.interface.create_image(
                     100, 450, image=self.hammerSign)
                 self.spotName["text"] += "Emplacement Vide"
+                
+        else:
+            self.buildButton["state"] = "disabled"
 
     def buildTower(self):
         state = ''.join([i for i in str(self.v.get()) if not i.isdigit()])
