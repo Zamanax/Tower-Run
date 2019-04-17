@@ -19,6 +19,7 @@ class Interface(tk.Frame):
     spotDamage = None
     spotDamagetype = None
 
+
     def __init__(self, parent, *args, **kwargs):
         self.lochoice = tk.PhotoImage(file="view/src/lochoice.png")
         self.hammerSign = tk.PhotoImage(file="view/src/HammerSign.png")
@@ -28,11 +29,17 @@ class Interface(tk.Frame):
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
         self.v = tk.StringVar()
-        # self.v.set("00000000Archer")
 
         self.backImg = tk.PhotoImage(file="view/src/Interface.png")
         self.interface = tk.Canvas(
             self, width=200, height=650, highlightthickness=0)
+
+        self.priceMageW = tk.IntVar(self.interface, 50)
+        self.priceMageE = tk.IntVar(self.interface, 50)
+        self.priceMageF = tk.IntVar(self.interface, 50)
+        self.priceArcher = tk.IntVar(self.interface, 50)
+        self.priceMortier = tk.IntVar(self.interface, 50)
+
         self.interface.create_image(0, 0, image=self.backImg, anchor="nw")
         self.makeLabel()
         self.emplacementMake()
@@ -43,26 +50,27 @@ class Interface(tk.Frame):
 # ___________________________On va faire les check buttons ici max/yann ______________
     def makeButton(self):
         self.waterchb = tk.Radiobutton(self.interface, value="Mage d'Eau", variable=self.v,
-                                       bg="#1ea7e1", activebackground="#1ea7e1", highlightthickness=0)
+                                       bg="#1ea7e1", activebackground="#1ea7e1", highlightthickness=0, command=self.preView)
         self.waterchb.place(x=160, y=23)
         self.earthchb = tk.Radiobutton(self.interface, value="Mage de Terre", variable=self.v,
-                                       bg="#73cd4b", activebackground="#73cd4b", highlightthickness=0)
+                                       bg="#73cd4b", activebackground="#73cd4b", highlightthickness=0, command=self.preView)
         self.earthchb.place(x=160, y=81)
         self.firechb = tk.Radiobutton(self.interface, value="Mage de Feu", variable=self.v,
-                                      bg="#e86a17", activebackground="#e86a17", highlightthickness=0)
+                                      bg="#e86a17", activebackground="#e86a17", highlightthickness=0, command=self.preView)
         self.firechb.place(x=160, y=135)
         self.archerchb = tk.Radiobutton(self.interface, value="Archer", variable=self.v,
-                                        bg="#ffcc00", activebackground="#ffcc00", highlightthickness=0)
+                                        bg="#ffcc00", activebackground="#ffcc00", highlightthickness=0, command=self.preView)
         self.archerchb.place(x=160, y=191)
         self.mortierchb = tk.Radiobutton(self.interface, value="Mortier", variable=self.v,
-                                         bg="#eeeeee", activebackground="#eeeeee", highlightthickness=0)
+                                         bg="#eeeeee", activebackground="#eeeeee", highlightthickness=0, command=self.preView)
         self.mortierchb.place(x=160, y=246)
         self.forgeronchb = tk.Radiobutton(
-            self.interface, value=Tow.Forgeron, text="F", variable=self.v)
+            self.interface, value=Tow.Forgeron, text="F", variable=self.v, command=self.preView)
         self.forgeronchb.place(x=160, y=300)
         self.waterchb.select()  # on choisit les mages d'eaux par défaut au début
         self.buildButton = tk.Button(
             self.interface, command=self.buildTower, text="Construire", width=24, state = "disabled")
+            # self.interface, command=self.buildTower, text="Construire", image=self.buttonImage, state = "disabled")
         self.buildButton.place(x=12, y=585)
 
     def makeLabel(self):
@@ -74,43 +82,36 @@ class Interface(tk.Frame):
                              bg="#743A3A", fg="white", font=("Arial", 8))
         self.life.place(x=150, y=617)
 
-        self.mageWPrice = tk.Label(
-            self.interface, text="50", bg="#1ea7e1", fg="black", font=("Arial", 8))
-        self.mageWPrice.place(x=75, y=26)
+        self.mageWLabel = tk.Label(
+            self.interface, textvariable=self.priceMageW, bg="#1ea7e1", fg="black", font=("Arial", 8))
+        self.mageWLabel.place(x=75, y=26)
 
-        self.mageEPrice = tk.Label(
-            self.interface, text="50", bg="#73cd4b", fg="black", font=("Arial", 8))
-        self.mageEPrice.place(x=75, y=82)
+        self.mageELabel = tk.Label(
+            self.interface, textvariable=self.priceMageE, bg="#73cd4b", fg="black", font=("Arial", 8))
+        self.mageELabel.place(x=75, y=82)
 
-        self.mageFPrice = tk.Label(
-            self.interface, text="50", bg="#e86a17", fg="black", font=("Arial", 8))
-        self.mageFPrice.place(x=75, y=137)
+        self.mageFLabel = tk.Label(
+            self.interface, textvariable=self.priceMageF, bg="#e86a17", fg="black", font=("Arial", 8))
+        self.mageFLabel.place(x=75, y=137)
 
-        self.archerPrice = tk.Label(
-            self.interface, text="50", bg="#ffcc00", fg="black", font=("Arial", 8))
-        self.archerPrice.place(x=75, y=192)
+        self.archerLabel = tk.Label(
+            self.interface, textvariable=self.priceArcher, bg="#ffcc00", fg="black", font=("Arial", 8))
+        self.archerLabel.place(x=75, y=192)
 
-        self.mortierPrice = tk.Label(
-            self.interface, text="50", bg="#eeeeee", fg="black", font=("Arial", 8))
-        self.mortierPrice.place(x=75, y=250)
+        self.mortierLabel = tk.Label(
+            self.interface, textvariable=self.priceMortier, bg="#eeeeee", fg="black", font=("Arial", 8))
+        self.mortierLabel.place(x=75, y=250)
 
     def selectSpot(self, event):
-        # state = ''.join([i for i in self.v.get() if not i.isdigit()])
         area = 45
         found = False
         for spot in self.parent.spots:
             if spot.x-area < event.x < spot.x+area and spot.y-area < event.y < spot.y+area:
-                # self.canvas.delete(self.range_preview)
-                # self.half_range = self.dico[state].range
-                # self.range_preview = self.canvas.create_oval(spot.x+self.half_range, spot.y+self.half_range, spot.x - self.half_range, spot.y - self.half_range,
-                #                                              outline="blue")
-                # self.canvas.delete(self.last_lochoice)
-                # self.last_lochoice = self.canvas.create_image(
-                #     spot.x, spot.y, image=self.lochoice)
 
                 self.selected = spot
                 found = True
                 break
+
         if found != True:
             self.selected = None
         self.preView()
@@ -142,13 +143,18 @@ class Interface(tk.Frame):
             self.spotName = tk.Label(self.interface, text="Nom: ", bg="#743A3A", fg="white")
             self.spotName.place(x=10, y=300)
 
-            self.half_range = self.dico[state].range
-            self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-                                                            outline="blue")
+            # self.half_range = self.dico[state].range
+            # self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+            #                                                 outline="blue")
             self.last_lochoice = self.canvas.create_image(
                 self.selected.x, self.selected.y, image=self.lochoice)
             
             if self.selected.tower:
+
+                self.buildButton["text"] = "Améliorer"
+
+                self.half_range = self.selected.tower.range
+                
 
                 self.spotDamage = tk.Label(self.interface, text="Dégâts: ", bg="#743A3A", fg="white")
                 self.spotZone = tk.Label(self.interface, text="Zone de dégâts: ", bg="#743A3A", fg="white")
@@ -162,13 +168,15 @@ class Interface(tk.Frame):
 
                 if self.selected.tower.lvl == 1:
                     self.last_preview = self.interface.create_image(
-                        100, 450, image=self.selected.tower.lv1)
+                        100, 475, image=self.selected.tower.lv1)
+
                 elif self.selected.tower.lvl == 2:
                     self.last_preview = self.interface.create_image(
-                        100, 450, image=self.selected.tower.lv2)
+                        100, 475, image=self.selected.tower.lv2)
+
                 elif self.selected.tower.lvl == 3:
                     self.last_preview = self.interface.create_image(
-                        100, 450, image=self.selected.tower.lv3)
+                        100, 475, image=self.selected.tower.lv3)
                         
                 self.spotName["text"] += str(self.selected.tower)
                 self.spotDamage["text"] += str(self.selected.tower.damage)
@@ -178,30 +186,34 @@ class Interface(tk.Frame):
                 
             else:
                 self.last_preview = self.interface.create_image(
-                    100, 450, image=self.hammerSign)
+                    100, 475, image=self.hammerSign)
+
+                self.half_range = self.dico[state].range
+                
                 self.spotName["text"] += "Emplacement Vide"
+                self.buildButton["text"] = "Construire"
+        
+            self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                                                            outline="blue")
                 
         else:
             self.buildButton["state"] = "disabled"
-
+            self.buildButton["text"] = "Construire"
+            
     def buildTower(self):
         state = ''.join([i for i in str(self.v.get()) if not i.isdigit()])
 
         if self.selected:
+            self.canvas.delete(self.selected.last_img)
             if self.selected.state != "None":
-                self.canvas.delete(self.selected.last_img)
                 self.selected.tower.upgrade()
 
             else:
+                self.selected.state = state
                 if state == "Forgeron":
-                    self.selected.state = state
-                    self.canvas.delete(self.selected.last_img)
                     self.selected.tower = self.dico[state](
                         self.canvas, self.selected.x, self.selected.y, self.parent.heros)
-
                 else:
-                    self.selected.state = state
-                    self.canvas.delete(self.selected.last_img)
                     self.selected.tower = self.dico[state](
                         self.canvas, self.selected.x, self.selected.y)
 
