@@ -21,16 +21,23 @@ class Tower(Thread):
     d_up=50
     r_up=25
     damage=1
-
+    speed=2
+    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    range_evo=[range, range+r_up, range+r_up*2] 
+    speed_evo=[speed, speed+2, speed+6]
     # Chargement et attribution des différentes propriétés
 
     def __init__(self, canvas, x, y, projectile):
         Thread.__init__(self)
         self.start()
+        
         self.projectile=projectile
         self.canvas = canvas
         self.x = x
         self.y = y
+        self.ndamage=self.damage_evo[1]
+        self.nrange=self.range_evo[1]
+        self.nspeed=self.speed_evo[1]
         self.construction()
         self.seek()
         # self.canvas.after(5000, self.upgrade1)
@@ -42,13 +49,15 @@ class Tower(Thread):
     def construction(self):
         #On supprime l'ancienne image
         self.canvas.delete(self.last_img)
+
+        # self.ndamage = self.damage + self.d_up       
         #On place la nouvelle
         self.last_img = self.canvas.create_image(
             self.x, self.y, image=self.lv1, anchor="s")
         #On la place au dessus
         self.canvas.tag_raise(self.last_img)
 
-        self.canvas.after(1000000, self.construction, self)
+        # self.canvas.after(1000000, self.construction, self)
 
     #Attribution des variables pour chaque instance de la classe
     __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
@@ -70,8 +79,12 @@ class Tower(Thread):
 
     def upgrade1(self):
         self.lvl = 2
-        self.damage+=self.d_up
-        self.range+=self.r_up
+        self.damage=self.damage_evo[1]
+        self.ndamage=self.damage_evo[2]
+        self.range=self.range_evo[1]
+        self.nrange=self.range_evo[2]
+        self.speed=self.speed_evo[1]
+        self.nspeed=self.speed_evo[2]
         self.canvas.delete(self.last_img)
         #On place la nouvelle
         self.last_img = self.canvas.create_image(
@@ -79,20 +92,25 @@ class Tower(Thread):
         #On la place au dessus
         self.canvas.tag_raise(self.last_img)
 
-        self.canvas.after(1000000, self.construction, self)
+        # self.canvas.after(1000000, self.construction, self)
     
     def upgrade2(self):
         self.lvl = 3
-        self.damage*=1.25
-        self.range+=self.r_up
+        self.damage=self.damage_evo[2]
+        self.ndamage="Max"
+        self.range=self.range_evo[2]
+        self.nrange="Max"
+        self.speed=self.speed_evo[2]
+        self.nspeed="Max"
         self.canvas.delete(self.last_img)
             #On place la nouvelle
         self.last_img = self.canvas.create_image(
             self.x, self.y, image=self.lv3, anchor="s")
         #On la place au dessus
         self.canvas.tag_raise(self.last_img)
+       
 
-        self.canvas.after(1000000, self.construction, self)
+        # self.canvas.after(1000000, self.construction, self)
 
     
     def tir_p(self):
@@ -101,13 +119,13 @@ class Tower(Thread):
             if self.target.hp <= 0:
                 self.target.die(False)
                 self.target = None
-                self.canvas.after(1000, self.seek)
+                self.canvas.after(int(6000/self.speed), self.seek)
                 return
             elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range:
                 self.seek()
                 return
             else :
-                self.canvas.after(1000, self.tir_p)
+                self.canvas.after(int(6000/self.speed), self.tir_p)
         else :
             self.seek()
     
@@ -117,11 +135,11 @@ class Tower(Thread):
     #     self.canvas.tag_raise(self.last_img)
     #     self.canvas.after(1,self.refresh)
 
-    
 # Classe projectile permattant de leur affecter des méthodes
-class Projectile(Tower):
+class Projectile(Thread):
     __slot__=('__dict__', "boom", "img")
-    
+    x=0
+    y=0
     damage = 0
     target = None
     seeking = None
@@ -129,13 +147,16 @@ class Projectile(Tower):
 
     # Méthode chargée de l'apparition du projectile
     def __init__(self,canvas, image,boom):
-            self.img=tk.PhotoImage(file=image)
-            self.boom=tk.PhotoImage(file=boom)
-            self.canvas=canvas
-            self.tx=self.target.x
-            self.ty=self.target.y
-            self.v=1
-            self.tir()   
+        Thread.__init__(self)
+        self.start()
+
+        self.img=tk.PhotoImage(file=image)
+        self.boom=tk.PhotoImage(file=boom)
+        self.canvas=canvas
+        self.tx=self.target.x
+        self.ty=self.target.y
+        self.v=1
+        self.tir()   
 
     # def calctraj(self):  
         
@@ -151,7 +172,6 @@ class Projectile(Tower):
             # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
             self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
             self.target.hp-=self.damage
-            self.seek()
             self.canvas.after(5, self.canvas.delete, self.corps)
             return
         
@@ -166,7 +186,6 @@ class Projectile(Tower):
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
         self.canvas.after(20,self.tir)
 
-
 #________________________________________________________________________________________________________________________
                 
 # Classe des mortiers basés sur le même template que les autres
@@ -178,9 +197,14 @@ class Mortier(Tower):
     image="view/src/Mortier.png"
     range = 120
     damage = 1
-    speed = 2
+    speed = 1
     zone = 3
+    r_up=25
     damagetype = "explosion"
+    d_up=50
+    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    range_evo=[range, range+r_up, range+r_up*2]
+    speed_evo=[speed, speed+1, speed+2]
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
@@ -203,7 +227,12 @@ class FireM(Tower):
     speed = 2
     zone = 1
     range = 150
+    r_up=25
+    d_up=50
     damagetype = "fire"
+    
+    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    range_evo=[range, range+r_up, range+r_up*2]
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
@@ -229,6 +258,10 @@ class WaterM(Tower):
     zone = 1
     range = 150
     damagetype = "water"
+    d_up=50
+    r_up=25
+    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    range_evo=[range, range+r_up, range+r_up*2]
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
@@ -253,6 +286,11 @@ class EarthM(Tower):
     zone = 1
     range = 150
     damagetype = "earth"
+    d_up=50
+    d_up=50
+    r_up=25
+    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    range_evo=[range, range+r_up, range+r_up*2]
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
@@ -274,6 +312,13 @@ class Archer(Tower):
     speed = 4
     zone = 1
     damagetype = "shot"
+    d_up=50
+    r_up=25
+    speed=4
+    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    range_evo=[range, range+r_up, range+r_up*2]
+    speed_evo=[speed, speed+4, speed+8]
+
     def __init__(self, canvas, x, y):
         #self.root=tk.Tk()
         #test_subimage(self.image, 3, 51, 82, 138, self.root)

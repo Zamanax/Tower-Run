@@ -179,10 +179,10 @@ class Interface(tk.Frame):
                         100, 475, image=self.selected.tower.lv3)
                         
                 self.spotName["text"] += str(self.selected.tower)
-                self.spotDamage["text"] += str(self.selected.tower.damage)
-                self.spotZone["text"] += str(self.selected.tower.zone)
+                self.spotDamage["text"] += str(self.selected.tower.damage) + " ⇢ " + str(self.selected.tower.ndamage)
+                self.spotZone["text"] += str(self.selected.tower.zone) 
                 self.spotDamagetype["text"] += str(self.selected.tower.damagetype)
-                self.spotSpeed["text"] += str(self.selected.tower.speed)
+                self.spotSpeed["text"] += str(self.selected.tower.speed) + " ⇢ " + str(self.selected.tower.nspeed)
                 
             else:
                 self.last_preview = self.interface.create_image(
