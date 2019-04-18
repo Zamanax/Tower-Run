@@ -92,7 +92,7 @@ class Lvl1(tk.Frame):
         dict.append(Emplacement(791,350))
         dict.append(Emplacement(538,350))
         dict.append(Emplacement(323,350))
-        dict.append(Emplacement(143,350))
+        dict.append(Emplacement(143,350, tower=Tow.Mine))
 
     def makeLigns(self):
         #---------------Définition des lignes---------------
