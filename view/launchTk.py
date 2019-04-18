@@ -1,5 +1,5 @@
 import tkinter as tk
-import view.Interface as View
+import controller.Interface as View
 import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
@@ -27,8 +27,9 @@ class Emplacement():
     
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(tk.Frame):
-    canvas = None
+
     def __init__(self, parent, *args, **kwargs):
+
         self.selectedHeros = "Aventurier"
         self.spots = []
         self.spotsImage = []
@@ -40,12 +41,17 @@ class Lvl1(tk.Frame):
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
+        
         self.parent = parent
 
         # Reste du GUI
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                            height=self.rootHeight, highlightthickness=0)
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+
+        self.cursImg = tk.PhotoImage(file="view/src/cursors.png")
+        # self["cursor"]=self.cursImg
+        # self.config(cursor=self.cursImg)
 
         if self.selectedHeros == "Ichigo" :
             self.heros = He.Ichigo(self, 900, 250, 260, 160)

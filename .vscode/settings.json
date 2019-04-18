@@ -1,5 +1,9 @@
 {
     "python.pythonPath": "C:\\Users\\zamax\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
     "code-runner.saveAllFilesBeforeRun": true,
-    "code-runner.customCommand": "python main.pyw"
+    "code-runner.customCommand": "python main.pyw",
+    "python.unitTest.promptToConfigure": false,
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.unittestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false
 }

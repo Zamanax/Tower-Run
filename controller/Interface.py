@@ -143,6 +143,15 @@ class Interface(tk.Frame):
             self.spotName = tk.Label(self.interface, text="Nom: ", bg="#743A3A", fg="white")
             self.spotName.place(x=10, y=300)
 
+            self.spotDamage = tk.Label(self.interface, text="Dégâts: ", bg="#743A3A", fg="white")
+            self.spotZone = tk.Label(self.interface, text="Zone de dégâts: ", bg="#743A3A", fg="white")
+            self.spotDamagetype = tk.Label(self.interface, text="Type: ", bg="#743A3A", fg="white")
+            self.spotSpeed = tk.Label(self.interface, text="Cadence de tir: ", bg="#743A3A", fg="white")
+
+            self.spotDamage.place(x=10, y=320)
+            self.spotZone.place(x=10, y=340)
+            self.spotDamagetype.place(x=10, y=360)
+            self.spotSpeed.place(x=10, y=380)
             # self.half_range = self.dico[state].range
             # self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
             #                                                 outline="blue")
@@ -177,6 +186,8 @@ class Interface(tk.Frame):
                 elif self.selected.tower.lvl == 3:
                     self.last_preview = self.interface.create_image(
                         100, 475, image=self.selected.tower.lv3)
+                    self.buildButton["text"] = "MAX"
+                    self.buildButton["state"] = "disabled"
                         
                 self.spotName["text"] += str(self.selected.tower)
                 self.spotDamage["text"] += str(self.selected.tower.damage) + " ⇢ " + str(self.selected.tower.ndamage)
@@ -189,10 +200,15 @@ class Interface(tk.Frame):
                     100, 475, image=self.hammerSign)
 
                 self.half_range = self.dico[state].range
-                
-                self.spotName["text"] += "Emplacement Vide"
                 self.buildButton["text"] = "Construire"
-        
+
+                self.spotName["text"] += "Vide ⇢ " + str(state)
+
+                self.spotDamage["text"] += "0 ⇢ " + str(self.dico[state].damage)
+                self.spotZone["text"] += "Aucun ⇢ " + str(self.dico[state].zone) 
+                self.spotDamagetype["text"] += "Aucun ⇢ " + str(self.dico[state].damagetype)
+                self.spotSpeed["text"] += "0 ⇢ " + str(self.dico[state].speed)
+
             self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
                                                             outline="blue")
                 
