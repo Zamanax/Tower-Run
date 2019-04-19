@@ -169,7 +169,7 @@ class Interface(tk.Frame):
 
             self.spotPrice.place(x=105, y=535)
             self.moneyCallback = self.interface.create_image(175, 550, image=self.moneyIcon)
-            
+
             if self.selected.tower:
                 for btn in self.buttonList:
                     btn["state"]="disabled"
@@ -206,6 +206,9 @@ class Interface(tk.Frame):
                     self.selected.tower.damagetype)
                 self.spotSpeed["text"] += str(self.selected.tower.speed) + \
                     " ⇢ " + str(self.selected.tower.nspeed)
+                if self.selected.tower.price > self.parent.gold.get():
+                    self.buildButton["state"] = "disabled"
+                    self.buildButton["text"] = "Pas Assez d'Or"
 
             else:
                 self.last_preview = self.interface.create_image(
@@ -225,6 +228,10 @@ class Interface(tk.Frame):
                     str(self.dico[state].damagetype)
                 self.spotSpeed["text"] += "0 ⇢ " + str(self.dico[state].speed)
 
+                if self.dico[state].price > self.parent.gold.get():
+                    self.buildButton["state"] = "disabled"
+                    self.buildButton["text"] = "Pas Assez d'Or"
+
             self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
                                                          outline="blue")
 
@@ -239,7 +246,7 @@ class Interface(tk.Frame):
             self.canvas.delete(self.selected.last_img)
             if self.selected.state != "None":
                 self.selected.tower.upgrade()
-
+                self.parent.gold.set(self.parent.gold.get()-self.selected.tower.price)
             else:
                 self.selected.state = state
                 if state == "Forgeron":
@@ -248,6 +255,7 @@ class Interface(tk.Frame):
                 else:
                     self.selected.tower = self.dico[state](
                         self.canvas, self.selected.x, self.selected.y)
+                self.parent.gold.set(self.parent.gold.get()-self.dico[state].price)
 
             self.preView()
 

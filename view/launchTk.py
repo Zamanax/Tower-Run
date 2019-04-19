@@ -64,7 +64,6 @@ class Lvl1(tk.Frame):
         Enn.Skeleton(self, -100, 225, self.heros)
         Enn.Skeleton(self, -50, 225, self.heros)
         Enn.Skeleton(self, -150, 225, self.heros)
-        Enn.Skeleton(self, -200, 225, self.heros)
         Enn.Skeleton(self, 50, 225, self.heros)
         
         self.gold = tk.IntVar(self.canvas,300)

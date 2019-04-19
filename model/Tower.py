@@ -100,7 +100,7 @@ class Tower(Thread):
         self.nrange="Max"
         self.speed=self.speed_evo[2]
         self.nspeed="Max"
-        self.price="Max"
+        self.price=""
         self.canvas.delete(self.last_img)
             #On place la nouvelle
         self.last_img = self.canvas.create_image(

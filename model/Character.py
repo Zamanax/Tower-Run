@@ -147,9 +147,11 @@ class Character (Thread):
             self.dying = self.canvas.after(150, self.die, delete)
             
         else :
+            self.parent.gold.set(self.parent.gold.get()+self.purse)
+            self.parent.interface.preView()
+
             self.canvas.delete(self.healthBar)
             self.canvas.delete(self.damageBar)
-            self.parent.gold.set(self.parent.gold.get()+self.purse)
             self.canvas.after_cancel(self.move)
             self.canvas.after_cancel(self.seeking)
             if self.attacking:
