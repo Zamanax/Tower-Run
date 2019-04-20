@@ -103,8 +103,29 @@ class Lvl1(Lvl):
     image = "view/src/Lvl1Background.png"
     gold = 1000
 
-    # def __init__(self, parent, *args, **kwargs):
-    #     super().__init__(parent, self.heros, self.image, self.gold)
+    def launchWaves(self):
+        Enn.Skeleton(self, 0, 225, self.heros)
+        Enn.Skeleton(self, -100, 225, self.heros)
+        Enn.Skeleton(self, -50, 225, self.heros)
+        Enn.Skeleton(self, -150, 225, self.heros)
+        Enn.Skeleton(self, 50, 225, self.heros)        
+
+    def fillspots(self, dict):
+        dict.append(Emplacement(180,175))
+        dict.append(Emplacement(358,175))
+        dict.append(Emplacement(574,175))
+        dict.append(Emplacement(755,175))
+        dict.append(Emplacement(791,355))
+        dict.append(Emplacement(538,355))
+        dict.append(Emplacement(323,355))
+        dict.append(Emplacement(143,355, parent=self, state="Mine"))
+
+# -----------------Chargement de la Frame LVL 2 ----------------------
+class Lvl2(Lvl):
+    heros = "Aventurier"
+    image = "view/src/Lvl2Background.png"
+    gold = 1000
+    
 
     def launchWaves(self):
         Enn.Skeleton(self, 0, 225, self.heros)
@@ -137,6 +158,7 @@ class MainApplication(tk.Frame):
     def switchFrame(self, nframe):
         if self.currentFrame :
             self.currentFrame.destroy()
+            del self.currentFrame
 
         self.currentFrame = nframe(self, self.parent)
         self.currentFrame.pack(side="top", fill="both", expand=True)

@@ -14,7 +14,7 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class Heros(Character, metaclass=Singleton):
+class Heros(Character):
     # Stats du Héros
     team = "ally"
     state = "idle"
