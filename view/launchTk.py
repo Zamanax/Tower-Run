@@ -17,12 +17,15 @@ class Emplacement():
     def __init__(self, x, y, *args, **kwargs):
         state = kwargs.get('state', None)
         bonus = kwargs.get('bonus', None)
+        tower = kwargs.get('tower', None)
         self.x = x
         self.y = y
         if state:
             self.state = state
         if bonus: 
             self.bonus = bonus
+        if tower:
+            self.tower = tower
 
     
 # -----------------Chargement de la Frame LVL 1 ----------------------
@@ -33,7 +36,6 @@ class Lvl1(tk.Frame):
         self.selectedHeros = "Aventurier"
         self.spots = []
         self.spotsImage = []
-        self.fillspots(self.spots)
         # Définiton des variables
         self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
         self.rootWidth = self.backImg.width()
@@ -44,9 +46,16 @@ class Lvl1(tk.Frame):
         
         self.parent = parent
 
+
         # Reste du GUI
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                            height=self.rootHeight, highlightthickness=0)
+        
+        self.gold = tk.IntVar(self.canvas,300)
+        self.health = tk.IntVar(self.canvas, 20)
+
+        self.fillspots(self.spots)
+        
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
         self.cursImg = tk.PhotoImage(file="view/src/cursors.png")
@@ -66,8 +75,6 @@ class Lvl1(tk.Frame):
         Enn.Skeleton(self, -150, 225, self.heros)
         Enn.Skeleton(self, 50, 225, self.heros)
         
-        self.gold = tk.IntVar(self.canvas,300)
-        self.health = tk.IntVar(self.canvas, 20)
 
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
         # Tow.Mortier(canvas, 400, 170)
@@ -82,8 +89,7 @@ class Lvl1(tk.Frame):
         self.interface.pack(side="right", fill="y")
         self.canvas.pack(side="right", fill='both', expand=True)
 
-    @staticmethod
-    def fillspots(dict):
+    def fillspots(self, dict):
         dict.append(Emplacement(180,170))
         dict.append(Emplacement(358,170))
         dict.append(Emplacement(574,170))
@@ -91,7 +97,7 @@ class Lvl1(tk.Frame):
         dict.append(Emplacement(791,350))
         dict.append(Emplacement(538,350))
         dict.append(Emplacement(323,350))
-        dict.append(Emplacement(143,350, tower=Tow.Mine))
+        dict.append(Emplacement(143,350, tower=Tow.Mine(self, 143,350), state="Mine"))
 
     def makeLigns(self):
         #---------------Définition des lignes---------------

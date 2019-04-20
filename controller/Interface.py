@@ -7,7 +7,7 @@ class Interface(tk.Frame):
 
     # ____________________________Dico avec pour clé le nom de la tour (méthode spé __str__) et pour valeur elle même______
     dico = {"Mage d'Eau": Tow.WaterM, "Mage de Terre": Tow.EarthM, "Mage de Feu": Tow.FireM, "Archer": Tow.Archer,
-            "Mortier": Tow.Mortier, "Forgeron": Tow.Forgeron}
+            "Mortier": Tow.Mortier, "Forgeron": Tow.Forgeron, "Mine": Tow.Mine}
 
     selected = None
     last_preview = None
@@ -63,7 +63,8 @@ class Interface(tk.Frame):
             self.interface, value=Tow.Forgeron, text="F", variable=self.v, command=self.preView)
         self.forgeronchb.place(x=160, y=300)
 
-        self.buttonList = [self.forgeronchb, self.waterchb, self.earthchb, self.firechb, self.archerchb, self.mortierchb]
+        self.buttonList = [self.forgeronchb, self.waterchb,
+                           self.earthchb, self.firechb, self.archerchb, self.mortierchb]
 
         self.waterchb.select()  # on choisit les mages d'eaux par défaut au début
         self.buildButton = tk.Button(
@@ -117,7 +118,7 @@ class Interface(tk.Frame):
     def preView(self):
         state = ''.join([i for i in self.v.get() if not i.isdigit()])
         for btn in self.buttonList:
-                    btn["state"]="normal"
+            btn["state"] = "normal"
         if self.spotName:
             self.spotName.destroy()
         if self.spotDamage:
@@ -138,7 +139,7 @@ class Interface(tk.Frame):
         self.interface.delete(self.last_preview)
 
         if self.selected:
-            
+
             self.buildButton["state"] = "normal"
 
             self.spotName = tk.Label(
@@ -165,14 +166,16 @@ class Interface(tk.Frame):
 
             self.last_lochoice = self.canvas.create_image(
                 self.selected.x, self.selected.y-12, image=self.lochoice)
-            self.spotPrice = tk.Label(self.interface, bg="#743A3A", fg="white", font=("Arial", 18), justify="left")
+            self.spotPrice = tk.Label(
+                self.interface, bg="#743A3A", fg="white", font=("Arial", 18), justify="left")
 
             self.spotPrice.place(x=105, y=535)
-            self.moneyCallback = self.interface.create_image(175, 550, image=self.moneyIcon)
+            self.moneyCallback = self.interface.create_image(
+                175, 550, image=self.moneyIcon)
 
             if self.selected.tower:
                 for btn in self.buttonList:
-                    btn["state"]="disabled"
+                    btn["state"] = "disabled"
 
                 self.buildButton["text"] = "Améliorer"
 
@@ -206,6 +209,7 @@ class Interface(tk.Frame):
                     self.selected.tower.damagetype)
                 self.spotSpeed["text"] += str(self.selected.tower.speed) + \
                     " ⇢ " + str(self.selected.tower.nspeed)
+
                 if self.selected.tower.price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
                     self.buildButton["text"] = "Pas Assez d'Or"
@@ -246,16 +250,18 @@ class Interface(tk.Frame):
             self.canvas.delete(self.selected.last_img)
             if self.selected.state != "None":
                 self.selected.tower.upgrade()
-                self.parent.gold.set(self.parent.gold.get()-self.selected.tower.price)
+                self.parent.gold.set(
+                    self.parent.gold.get()-self.selected.tower.price)
             else:
                 self.selected.state = state
                 if state == "Forgeron":
                     self.selected.tower = self.dico[state](
-                        self.canvas, self.selected.x, self.selected.y, self.parent.heros)
+                        self.parent, self.selected.x, self.selected.y, self.parent.heros)
                 else:
                     self.selected.tower = self.dico[state](
-                        self.canvas, self.selected.x, self.selected.y)
-                self.parent.gold.set(self.parent.gold.get()-self.dico[state].price)
+                        self.parent, self.selected.x, self.selected.y)
+                self.parent.gold.set(
+                    self.parent.gold.get()-self.dico[state].price)
 
             self.preView()
 
@@ -264,5 +270,5 @@ class Interface(tk.Frame):
             if spot.state == "None":
                 spot.last_img = self.canvas.create_image(
                     spot.x, spot.y, image=self.hammerSign, anchor="s")
-            else :
+            else:
                 spot.tower.construction()

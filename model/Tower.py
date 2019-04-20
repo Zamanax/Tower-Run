@@ -25,12 +25,12 @@ class Tower(Thread):
     price_evo=[0,0,0]
     # Chargement et attribution des différentes propriétés
 
-    def __init__(self, canvas, x, y, projectile):
+    def __init__(self, parent, x, y, projectile):
         Thread.__init__(self)
         self.start()
         self.price=self.price_evo[1]
         self.projectile=projectile
-        self.canvas = canvas
+        self.canvas = parent.canvas
         self.x = x
         self.y = y
         self.ndamage=self.damage_evo[1]
@@ -326,13 +326,13 @@ class Archer(Tower):
     price_evo=[50, 125, 250]
     price=price_evo[0]
 
-    def __init__(self, canvas, x, y):
+    def __init__(self, parent, x, y):
         #self.root=tk.Tk()
         #test_subimage(self.image, 3, 51, 82, 138, self.root)
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y,Fleche)
+        Tower.__init__(self, parent, x, y,Fleche)
         
         #self.root.mainloop()
         
@@ -344,12 +344,12 @@ class Forgeron(Tower):
     image= 'view/src/Forgeron.png'
     price_evo=[200, 500, 750]
     price=price_evo[0]
-    def __init__(self, canvas, x,y, heros):
+    def __init__(self, parent, x,y, heros):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
         self.hero=heros
-        Tower.__init__(self, canvas, x, y,0)
+        Tower.__init__(self, parent, x, y,0)
     
     def seek(self):
         pass
@@ -385,22 +385,24 @@ class Forgeron(Tower):
         return "Forgeron"
 
 class Mine(Tower):
-    coordsLvl1 = [0,0,140,135]
-    coordsLvl2 = [150,0,300,135]
+    coordsLvl1 = [13,13,148,110]
+    coordsLvl2 = [165,8,289,120]
+    coordsLvl3 = [334,5,486,125]
     image= 'view/src/Mine.png'
     price_evo=[200, 500, 750]
     production=30
-    def __init__(self, canvas, x, y, parent):
+    def __init__(self, parent, x, y):
         #self.root=tk.Tk()
         #test_subimage(self.image, 3, 51, 82, 138, self.root)
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
-        Tower.__init__(self, canvas, x, y,0)
+        self.lv3=load(self.coordsLvl3, self.image)
         self.parent=parent
+        Tower.__init__(self, parent, x, y,0)
     
     def produce(self): 
         self.parent.gold.set(self.parent.gold.get()+self.production)
-        self.canvas.after(100, self.produce)
+        self.canvas.after(1000, self.produce)
     
     def seek(self):
         pass
@@ -416,6 +418,7 @@ class Mine(Tower):
 
     def upgrade(self):
         self.production=60
+        self.produce()
         self.canvas.delete(self.last_img)
         #On place la nouvelle
         self.last_img = self.canvas.create_image(
@@ -423,6 +426,11 @@ class Mine(Tower):
         #On la place au dessus
         self.canvas.tag_raise(self.last_img)
 
+    def __str__(self):
+        return "Mine"
+    
+    def __name__(self):
+        return self.__str__()
 
 
 class Boulet(Projectile):
@@ -483,7 +491,6 @@ class Fleche(Projectile):
         self.boom=self.img
         self.v=1
         self.tir()
-
 
 
 def distance(tower, ennemy):

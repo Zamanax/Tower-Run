@@ -166,7 +166,7 @@ class Heros(Character, metaclass=Singleton):
             else:
                 self.moveTo(event.x, event.y)
 
-    def transform(self, event):
+    def transform(self):
         self.sprite = 0
         if self.lvl == 0:
             self.sprite = 0
