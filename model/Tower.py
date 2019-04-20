@@ -359,7 +359,7 @@ class Forgeron(Tower):
     
     def construction(self): 
         Tower.construction(self)
-        self.hero.transform(self)
+        self.hero.transform()
 
     def upgrade1(self):
         self.lvl = 2
@@ -368,8 +368,7 @@ class Forgeron(Tower):
         self.last_img = self.canvas.create_image(
                     self.x, self.y, image=self.lv2, anchor="s")
         self.canvas.tag_raise(self.last_img)
-        self.canvas.after(1000000, self.construction, self)
-        self.hero.transform(self)
+        self.hero.transform()
     
     def upgrade2(self):
         self.lvl=3
@@ -378,8 +377,7 @@ class Forgeron(Tower):
         self.last_img = self.canvas.create_image(
                     self.x, self.y, image=self.lv3, anchor="s")
         self.canvas.tag_raise(self.last_img)
-        self.canvas.after(1000000, self.construction, self)
-        self.hero.transform(self)
+        self.hero.transform()
     
     def __str__(self):
         return "Forgeron"

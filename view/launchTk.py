@@ -11,7 +11,7 @@ def refresh(canvas, img):
 
 class Emplacement():
     bonus = {}
-    state = "None"
+    state = None
     last_img = None
     tower = None
     def __init__(self, x, y, *args, **kwargs):
@@ -51,7 +51,7 @@ class Lvl1(tk.Frame):
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                            height=self.rootHeight, highlightthickness=0)
         
-        self.gold = tk.IntVar(self.canvas,300)
+        self.gold = tk.IntVar(self.canvas,1000)
         self.health = tk.IntVar(self.canvas, 20)
 
         self.fillspots(self.spots)

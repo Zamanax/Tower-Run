@@ -200,15 +200,16 @@ class Interface(tk.Frame):
                         100, 475, image=self.selected.tower.lv3)
                     self.buildButton["text"] = "MAX"
                     self.buildButton["state"] = "disabled"
-
                 self.spotName["text"] += str(self.selected.tower)
-                self.spotDamage["text"] += str(self.selected.tower.damage) + \
-                    " ⇢ " + str(self.selected.tower.ndamage)
-                self.spotZone["text"] += str(self.selected.tower.zone)
-                self.spotDamagetype["text"] += str(
-                    self.selected.tower.damagetype)
-                self.spotSpeed["text"] += str(self.selected.tower.speed) + \
-                    " ⇢ " + str(self.selected.tower.nspeed)
+
+                if hasattr(self.selected.tower, "zone"):
+                    self.spotDamage["text"] += str(self.selected.tower.damage) + \
+                        " ⇢ " + str(self.selected.tower.ndamage)
+                    self.spotZone["text"] += str(self.selected.tower.zone)
+                    self.spotDamagetype["text"] += str(
+                        self.selected.tower.damagetype)
+                    self.spotSpeed["text"] += str(self.selected.tower.speed) + \
+                        " ⇢ " + str(self.selected.tower.nspeed)
 
                 if self.selected.tower.price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
@@ -223,14 +224,14 @@ class Interface(tk.Frame):
 
                 self.spotName["text"] += "Vide ⇢ " + str(state)
                 self.spotPrice["text"] = self.dico[state].price
-
-                self.spotDamage["text"] += "0 ⇢ " + \
-                    str(self.dico[state].damage)
-                self.spotZone["text"] += "Aucun ⇢ " + \
-                    str(self.dico[state].zone)
-                self.spotDamagetype["text"] += "Aucun ⇢ " + \
-                    str(self.dico[state].damagetype)
-                self.spotSpeed["text"] += "0 ⇢ " + str(self.dico[state].speed)
+                if hasattr(self.dico[state], "zone"):
+                    self.spotDamage["text"] += "0 ⇢ " + \
+                        str(self.dico[state].damage)
+                    self.spotZone["text"] += "Aucun ⇢ " + \
+                        str(self.dico[state].zone)
+                    self.spotDamagetype["text"] += "Aucun ⇢ " + \
+                        str(self.dico[state].damagetype)
+                    self.spotSpeed["text"] += "0 ⇢ " + str(self.dico[state].speed)
 
                 if self.dico[state].price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
@@ -248,11 +249,8 @@ class Interface(tk.Frame):
 
         if self.selected:
             self.canvas.delete(self.selected.last_img)
-            if self.selected.state != "None":
-                self.selected.tower.upgrade()
-                self.parent.gold.set(
-                    self.parent.gold.get()-self.selected.tower.price)
-            else:
+            if self.selected.state is None:
+                
                 self.selected.state = state
                 if state == "Forgeron":
                     self.selected.tower = self.dico[state](
@@ -262,12 +260,17 @@ class Interface(tk.Frame):
                         self.parent, self.selected.x, self.selected.y)
                 self.parent.gold.set(
                     self.parent.gold.get()-self.dico[state].price)
+                
+            else:
+                self.selected.tower.upgrade()
+                self.parent.gold.set(
+                    self.parent.gold.get()-self.selected.tower.price)
 
             self.preView()
 
     def emplacementMake(self):
         for spot in self.parent.spots:
-            if spot.state == "None":
+            if spot.state == None:
                 spot.last_img = self.canvas.create_image(
                     spot.x, spot.y, image=self.hammerSign, anchor="s")
             else:
