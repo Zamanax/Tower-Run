@@ -100,7 +100,7 @@ class Tower(Thread):
         self.nrange="Max"
         self.speed=self.speed_evo[2]
         self.nspeed="Max"
-        self.price=""
+        self.price="Max"
         self.canvas.delete(self.last_img)
             #On place la nouvelle
         self.last_img = self.canvas.create_image(
@@ -409,20 +409,25 @@ class Mine(Tower):
         pass
 
     def upgrade2(self):
-        pass
+        self.lvl = 3
+        self.production=100
+        self.canvas.delete(self.last_img)
+        #On place la nouvelle
+        self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.lv3, anchor="s")
+        #On la place au dessus
+        self.canvas.tag_raise(self.last_img)
     
     def upgrade1(self):
-        pass 
-
-    def upgrade(self):
-        self.production=60
+        self.lvl = 2
+        self.production=50
         self.produce()
         self.canvas.delete(self.last_img)
         #On place la nouvelle
         self.last_img = self.canvas.create_image(
             self.x, self.y, image=self.lv2, anchor="s")
         #On la place au dessus
-        self.canvas.tag_raise(self.last_img)
+        self.canvas.tag_raise(self.last_img) 
 
     def __str__(self):
         return "Mine"

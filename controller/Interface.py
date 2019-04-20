@@ -210,8 +210,13 @@ class Interface(tk.Frame):
                         self.selected.tower.damagetype)
                     self.spotSpeed["text"] += str(self.selected.tower.speed) + \
                         " ⇢ " + str(self.selected.tower.nspeed)
+                else :
+                    self.spotDamage.destroy()
+                    self.spotZone.destroy()
+                    self.spotDamagetype.destroy()
+                    self.spotSpeed.destroy()
 
-                if self.selected.tower.price > self.parent.gold.get():
+                if type(self.selected.tower.price) is "int" and self.selected.tower.price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
                     self.buildButton["text"] = "Pas Assez d'Or"
 
@@ -262,9 +267,9 @@ class Interface(tk.Frame):
                     self.parent.gold.get()-self.dico[state].price)
                 
             else:
-                self.selected.tower.upgrade()
                 self.parent.gold.set(
                     self.parent.gold.get()-self.selected.tower.price)
+                self.selected.tower.upgrade()
 
             self.preView()
 

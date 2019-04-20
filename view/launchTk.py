@@ -18,10 +18,14 @@ class Emplacement():
         state = kwargs.get('state', None)
         bonus = kwargs.get('bonus', None)
         tower = kwargs.get('tower', None)
+        parent = kwargs.get('parent', None)
         self.x = x
         self.y = y
         if state:
             self.state = state
+            dico = {"Mage d'Eau": Tow.WaterM, "Mage de Terre": Tow.EarthM, "Mage de Feu": Tow.FireM, "Archer": Tow.Archer,
+            "Mortier": Tow.Mortier, "Forgeron": Tow.Forgeron, "Mine": Tow.Mine}
+            self.tower = dico[state](parent, x, y)
         if bonus: 
             self.bonus = bonus
         if tower:
@@ -76,28 +80,26 @@ class Lvl1(tk.Frame):
         Enn.Skeleton(self, 50, 225, self.heros)
         
 
-        self.canvas.bind("<Button-3>", self.heros.mouseMove)
-        # Tow.Mortier(canvas, 400, 170)
-        # Tow.Archer(canvas, 400, 350)
-        # refresh(canvas, arc1.last_img)
 
         # Début de l'interface
         self.interface = View.Interface(self)
+
+        # Bind du clic gauche et droit pour l'interface et les déplacements du héros
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
-        #self.canvas.bind("<Button-2>", self.heros.transform, )
+        self.canvas.bind("<Button-3>", self.heros.mouseMove)
 
         self.interface.pack(side="right", fill="y")
         self.canvas.pack(side="right", fill='both', expand=True)
 
     def fillspots(self, dict):
-        dict.append(Emplacement(180,170))
-        dict.append(Emplacement(358,170))
-        dict.append(Emplacement(574,170))
-        dict.append(Emplacement(755,170))
-        dict.append(Emplacement(791,350))
-        dict.append(Emplacement(538,350))
-        dict.append(Emplacement(323,350))
-        dict.append(Emplacement(143,350, tower=Tow.Mine(self, 143,350), state="Mine"))
+        dict.append(Emplacement(180,175))
+        dict.append(Emplacement(358,175))
+        dict.append(Emplacement(574,175))
+        dict.append(Emplacement(755,175))
+        dict.append(Emplacement(791,355))
+        dict.append(Emplacement(538,355))
+        dict.append(Emplacement(323,355))
+        dict.append(Emplacement(143,355, parent=self, state="Mine"))
 
     def makeLigns(self):
         #---------------Définition des lignes---------------
