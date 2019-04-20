@@ -31,56 +31,39 @@ class Emplacement():
         if tower:
             self.tower = tower
 
-    
-# -----------------Chargement de la Frame LVL 1 ----------------------
-class Lvl1(tk.Frame):
-
-    def __init__(self, parent, *args, **kwargs):
-
-        self.selectedHeros = "Aventurier"
+class Lvl(tk.Frame):
+    heros = None
+    image = None
+    def __init__(self, parent,*args, **kwargs):
+        self.selectedHeros = self.heros
         self.spots = []
         self.spotsImage = []
         # Définiton des variables
-        self.backImg = tk.PhotoImage(file="view/src/Lvl1Background.png")
+        self.backImg = tk.PhotoImage(file=self.image)
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
         
-        self.parent = parent
-
 
         # Reste du GUI
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                            height=self.rootHeight, highlightthickness=0)
-        
-        self.gold = tk.IntVar(self.canvas,1000)
+        self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+        self.gold = tk.IntVar(self.canvas, self.gold)
         self.health = tk.IntVar(self.canvas, 20)
 
         self.fillspots(self.spots)
         
-        self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
-
-        self.cursImg = tk.PhotoImage(file="view/src/cursors.png")
-        # self["cursor"]=self.cursImg
-        # self.config(cursor=self.cursImg)
-
-        if self.selectedHeros == "Ichigo" :
+        if self.selectedHeros == "Ichigo":
             self.heros = He.Ichigo(self, 900, 250, 260, 160)
         elif self.selectedHeros == "Goku":
             self.heros = He.Goku(self, 900, 250, 260, 160)
         else:
             self.heros = He.Adventurer(self, 900, 250, 260, 160)
 
-        Enn.Skeleton(self, 0, 225, self.heros)
-        Enn.Skeleton(self, -100, 225, self.heros)
-        Enn.Skeleton(self, -50, 225, self.heros)
-        Enn.Skeleton(self, -150, 225, self.heros)
-        Enn.Skeleton(self, 50, 225, self.heros)
-        
-
-
+        self.launchWaves()
         # Début de l'interface
         self.interface = View.Interface(self)
 
@@ -90,16 +73,6 @@ class Lvl1(tk.Frame):
 
         self.interface.pack(side="right", fill="y")
         self.canvas.pack(side="right", fill='both', expand=True)
-
-    def fillspots(self, dict):
-        dict.append(Emplacement(180,175))
-        dict.append(Emplacement(358,175))
-        dict.append(Emplacement(574,175))
-        dict.append(Emplacement(755,175))
-        dict.append(Emplacement(791,355))
-        dict.append(Emplacement(538,355))
-        dict.append(Emplacement(323,355))
-        dict.append(Emplacement(143,355, parent=self, state="Mine"))
 
     def makeLigns(self):
         #---------------Définition des lignes---------------
@@ -118,18 +91,55 @@ class Lvl1(tk.Frame):
                 self.canvas.create_line(0, (i+1)*self.rootHeight/squareWidth, self.rootWidth,
                                (i+1)*self.rootHeight/squareWidth, stipple="gray50")
 
+    def fillspots(self, dict):
+        pass
+
+    def launchWaves(self):
+        pass
+
+# -----------------Chargement de la Frame LVL 1 ----------------------
+class Lvl1(Lvl):
+    heros = "Aventurier"
+    image = "view/src/Lvl1Background.png"
+    gold = 1000
+
+    # def __init__(self, parent, *args, **kwargs):
+    #     super().__init__(parent, self.heros, self.image, self.gold)
+
+    def launchWaves(self):
+        Enn.Skeleton(self, 0, 225, self.heros)
+        Enn.Skeleton(self, -100, 225, self.heros)
+        Enn.Skeleton(self, -50, 225, self.heros)
+        Enn.Skeleton(self, -150, 225, self.heros)
+        Enn.Skeleton(self, 50, 225, self.heros)        
+
+    def fillspots(self, dict):
+        dict.append(Emplacement(180,175))
+        dict.append(Emplacement(358,175))
+        dict.append(Emplacement(574,175))
+        dict.append(Emplacement(755,175))
+        dict.append(Emplacement(791,355))
+        dict.append(Emplacement(538,355))
+        dict.append(Emplacement(323,355))
+        dict.append(Emplacement(143,355, parent=self, state="Mine"))
+
 # -----------------Chargement de la vue principale--------------------
 class MainApplication(tk.Frame):
+    currentFrame = None
+
     def __init__(self, parent, *args, **kwargs):
         # Instance de la Frame
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        # Chargement des Frames voulues
-        self.lvl1 = Lvl1(self, parent)
+        self.switchFrame(Lvl1)
 
-        # Mise en vue principale des vues voulues
-        self.lvl1.pack(side="top", fill="both", expand=True)
+    def switchFrame(self, nframe):
+        if self.currentFrame :
+            self.currentFrame.destroy()
+
+        self.currentFrame = nframe(self, self.parent)
+        self.currentFrame.pack(side="top", fill="both", expand=True)
 
 
 # -----------------Fonction à executer pour lancer le jeu-------------
