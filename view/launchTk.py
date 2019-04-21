@@ -33,12 +33,12 @@ class Emplacement():
 
 class Lvl(tk.Frame):
     heros = None
+    spots = []
     image = None
     def __init__(self, parent,*args, **kwargs):
         self.selectedHeros = self.heros
-        self.spots = []
-        self.spotsImage = []
         # Définiton des variables
+
         self.backImg = tk.PhotoImage(file=self.image)
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
@@ -51,6 +51,7 @@ class Lvl(tk.Frame):
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                            height=self.rootHeight, highlightthickness=0)
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+
         self.gold = tk.IntVar(self.canvas, self.gold)
         self.health = tk.IntVar(self.canvas, 20)
 
@@ -126,7 +127,6 @@ class Lvl2(Lvl):
     image = "view/src/Lvl2Background.png"
     gold = 1000
     
-
     def launchWaves(self):
         Enn.Skeleton(self, 0, 225, self.heros)
         Enn.Skeleton(self, -100, 225, self.heros)

@@ -28,6 +28,7 @@ class Tower(Thread):
     def __init__(self, parent, x, y, projectile):
         Thread.__init__(self)
         self.start()
+        self.parent = parent
         self.price=self.price_evo[1]
         self.projectile=projectile
         self.canvas = parent.canvas
@@ -344,11 +345,11 @@ class Forgeron(Tower):
     image= 'view/src/Forgeron.png'
     price_evo=[200, 500, 750]
     price=price_evo[0]
-    def __init__(self, parent, x,y, heros):
+    def __init__(self, parent, x,y):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        self.hero=heros
+        self.hero=parent.heros
         Tower.__init__(self, parent, x, y,0)
     
     def seek(self):

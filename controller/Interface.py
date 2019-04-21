@@ -215,10 +215,10 @@ class Interface(tk.Frame):
                     self.spotZone.destroy()
                     self.spotDamagetype.destroy()
                     self.spotSpeed.destroy()
-
-                if type(self.selected.tower.price) is "int" and self.selected.tower.price > self.parent.gold.get():
-                    self.buildButton["state"] = "disabled"
-                    self.buildButton["text"] = "Pas Assez d'Or"
+                if self.selected.tower.price is "int":
+                    if self.selected.tower.price > self.parent.gold.get():
+                        self.buildButton["state"] = "disabled"
+                        self.buildButton["text"] = "Pas Assez d'Or"
 
             else:
                 self.last_preview = self.interface.create_image(
@@ -237,6 +237,7 @@ class Interface(tk.Frame):
                     self.spotDamagetype["text"] += "Aucun ⇢ " + \
                         str(self.dico[state].damagetype)
                     self.spotSpeed["text"] += "0 ⇢ " + str(self.dico[state].speed)
+                
 
                 if self.dico[state].price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
@@ -257,12 +258,8 @@ class Interface(tk.Frame):
             if self.selected.state is None:
                 
                 self.selected.state = state
-                if state == "Forgeron":
-                    self.selected.tower = self.dico[state](
-                        self.parent, self.selected.x, self.selected.y, self.parent.heros)
-                else:
-                    self.selected.tower = self.dico[state](
-                        self.parent, self.selected.x, self.selected.y)
+                self.selected.tower = self.dico[state](
+                    self.parent, self.selected.x, self.selected.y)
                 self.parent.gold.set(
                     self.parent.gold.get()-self.dico[state].price)
                 
