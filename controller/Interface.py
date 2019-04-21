@@ -1,7 +1,7 @@
 import tkinter as tk
 import model.Tower as Tow
 import tkinter.ttk as ttk
-
+from model.fonctions_utiles import subimage
 
 class Interface(tk.Frame):
 
@@ -215,6 +215,7 @@ class Interface(tk.Frame):
                     self.spotZone.destroy()
                     self.spotDamagetype.destroy()
                     self.spotSpeed.destroy()
+                    
                 if self.selected.tower.price is "int":
                     if self.selected.tower.price > self.parent.gold.get():
                         self.buildButton["state"] = "disabled"

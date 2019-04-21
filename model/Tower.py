@@ -2,7 +2,7 @@ import tkinter as tk
 from threading import Thread
 from model.Heros import Heros
 from model.Ennemy import ennemies
-from model.fonctions_utiles import * #@UnusedWildImport 
+from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 
 #____________________________________________________________________________________________________________
 class Tower(Thread):
@@ -12,18 +12,28 @@ class Tower(Thread):
     lv1 = None
     lv2 = None
     lv3 = None
+
     last_img=None
     seeking=None
     range=0
     d_up=50
     r_up=25
+    indice=0
+    
     damage=1
     speed=3
     damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
     range_evo=[range, range+r_up, range+r_up*2] 
     speed_evo=[speed, speed+2, speed+6]
     price_evo=[0,0,0]
+    last_storm=None
     # Chargement et attribution des différentes propriétés
+
+    
+    def __del__(self):
+        for el in self.__dict__:
+            del el
+
 
     def __init__(self, parent, x, y, projectile):
         Thread.__init__(self)
@@ -39,24 +49,37 @@ class Tower(Thread):
         self.nspeed=self.speed_evo[1]
         self.construction()
         self.seek()
-        # self.canvas.after(5000, self.upgrade1)
-        
-        # self.refresh()
+    
+    def show_evol(self):
+        spritenum=len(self.parent.upAnim)
+        self.canvas.delete(self.last_storm)
+        self.last_storm=self.canvas.create_image(self.x, self.y-50, image=self.parent.upAnim[self.indice])
+        if self.indice==2:
+            if not self.lvl==1:
+                self.canvas.delete(self.last_img)             
+        if self.indice==3: 
+        #On place la nouvelle
+            if self.lvl==1:
+                self.last_img = self.canvas.create_image(
+                    self.x, self.y, image=self.lv1, anchor="s")
+            elif self.lvl==2:
+                self.last_img=self.canvas.create_image(
+            self.x, self.y, image=self.lv2, anchor="s")
+            else:
+                self.last_img=self.canvas.create_image(
+            self.x, self.y, image=self.lv3, anchor="s")
+            #On la place au dessus
+                self.canvas.tag_raise(self.last_img)
+        self.indice+=1
+        if self.indice==spritenum:
+            self.indice=0
+            self.canvas.delete(self.last_storm)
+            return
+        self.canvas.after(150, self.show_evol)
 
-    #Fonction chargée de l'apparition de la tour
 
     def construction(self):
-        #On supprime l'ancienne image
-        self.canvas.delete(self.last_img)
-
-        # self.ndamage = self.damage + self.d_up       
-        #On place la nouvelle
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv1, anchor="s")
-        #On la place au dessus
-        self.canvas.tag_raise(self.last_img)
-
-        # self.canvas.after(1000000, self.construction, self)
+        self.show_evol()
 
     #Attribution des variables pour chaque instance de la classe
     __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
@@ -84,12 +107,7 @@ class Tower(Thread):
         self.speed=self.speed_evo[1]
         self.nspeed=self.speed_evo[2]
         self.price=self.price_evo[2]
-        self.canvas.delete(self.last_img)
-        #On place la nouvelle
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv2, anchor="s")
-        #On la place au dessus
-        self.canvas.tag_raise(self.last_img)
+        self.show_evol()
 
         # self.canvas.after(1000000, self.construction, self)
     
@@ -102,13 +120,7 @@ class Tower(Thread):
         self.speed=self.speed_evo[2]
         self.nspeed="Max"
         self.price="Max"
-        self.canvas.delete(self.last_img)
-            #On place la nouvelle
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv3, anchor="s")
-        #On la place au dessus
-        self.canvas.tag_raise(self.last_img)
-       
+        self.show_evol()
 
         # self.canvas.after(1000000, self.construction, self)
 
@@ -365,19 +377,13 @@ class Forgeron(Tower):
     def upgrade1(self):
         self.lvl = 2
         self.price=self.price_evo[1]
-        self.canvas.delete(self.last_img)
-        self.last_img = self.canvas.create_image(
-                    self.x, self.y, image=self.lv2, anchor="s")
-        self.canvas.tag_raise(self.last_img)
+        self.show_evol()
         self.hero.transform()
     
     def upgrade2(self):
         self.lvl=3
         self.price=self.price_evo[2]
-        self.canvas.delete(self.last_img)
-        self.last_img = self.canvas.create_image(
-                    self.x, self.y, image=self.lv3, anchor="s")
-        self.canvas.tag_raise(self.last_img)
+        self.show_evol()
         self.hero.transform()
     
     def __str__(self):
@@ -412,30 +418,20 @@ class Mine(Tower):
     def upgrade2(self):
         self.lvl = 3
         self.production=100
-        self.canvas.delete(self.last_img)
-        #On place la nouvelle
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv3, anchor="s")
-        #On la place au dessus
-        self.canvas.tag_raise(self.last_img)
+        self.show_evol()
+
     
     def upgrade1(self):
         self.lvl = 2
         self.production=50
         self.produce()
-        self.canvas.delete(self.last_img)
-        #On place la nouvelle
-        self.last_img = self.canvas.create_image(
-            self.x, self.y, image=self.lv2, anchor="s")
-        #On la place au dessus
-        self.canvas.tag_raise(self.last_img) 
+        self.show_evol()
 
     def __str__(self):
         return "Mine"
     
     def __name__(self):
         return self.__str__()
-
 
 class Boulet(Projectile):
     def __init__(self,canvas, x, y, target, damage):

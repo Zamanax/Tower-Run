@@ -3,7 +3,7 @@ import controller.Interface as View
 import model.Tower as Tow
 import model.Heros as He
 import model.Ennemy as Enn
-
+from model.fonctions_utiles import subimage
 
 def refresh(canvas, img):
         canvas.tag_raise(img)
@@ -45,7 +45,10 @@ class Lvl(tk.Frame):
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
-        
+    
+        self.upImage = "view/src/Storm_evolution.png"
+        self.upAnim = [subimage(self.upImage, 200*i, 0, 200*(i+1), 200)
+                     for i in range(6)]
 
         # Reste du GUI
         self.canvas = tk.Canvas(self, width=self.rootWidth,
@@ -97,6 +100,31 @@ class Lvl(tk.Frame):
 
     def launchWaves(self):
         pass
+
+    def __del__(self):
+        for ennemy in Enn.ennemies:
+            del ennemy
+        del Enn.ennemies
+        for el in self.__dict__:
+            del el
+
+class MainMenu(tk.Frame):
+    def __init__(self, parent, *args, **kwargs):
+        # Définiton des variables
+
+        self.backImg = tk.PhotoImage(file="view/src/MainMenu.png")
+        self.rootWidth = self.backImg.width()
+        self.rootHeight = self.backImg.height()
+
+        # Instance de la Frame
+        tk.Frame.__init__(self, parent)
+        
+
+        # Reste du GUI
+        self.canvas = tk.Canvas(self, width=self.rootWidth,
+                           height=self.rootHeight, highlightthickness=0)
+        self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
@@ -155,13 +183,19 @@ class MainApplication(tk.Frame):
 
         self.switchFrame(Lvl1)
 
+        # tk.Button(self, text="pass", command=self.launchLvl2).place(x=200,y=200)
+
     def switchFrame(self, nframe):
+        nlevel = nframe(self, self.parent)
         if self.currentFrame :
             self.currentFrame.destroy()
             del self.currentFrame
 
-        self.currentFrame = nframe(self, self.parent)
+        self.currentFrame = nlevel
         self.currentFrame.pack(side="top", fill="both", expand=True)
+
+    # def launchLvl2(self):
+    #     self.switchFrame(Lvl2)
 
 
 # -----------------Fonction à executer pour lancer le jeu-------------

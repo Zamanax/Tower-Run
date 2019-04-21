@@ -56,6 +56,10 @@ class Character (Thread):
     canvas = None
     v = 2
 
+    def __del__(self):
+        for el in self.__dict__:
+            del el
+
     def seek(self):
         pass
 
@@ -214,23 +218,7 @@ class Character (Thread):
         self.afterIdle = self.canvas.after(time, self.idleAnim)
 
     # Méthode d'incrémentation de l'image à afficher
-    def incrementSprite(self):
-        # if "transform" in self.num_sprintes:
-        #     if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
-        #         self.state = "idle"
-        #         if self.lvl == 1:
-        #             self.transformAnim = self.transformAnim1
-        #             self.num_sprintes = self.lv1["num_sprintes"]
-
-        #         elif self.lvl == 2:
-        #             self.transformAnim = self.transformAnim2
-        #             self.num_sprintes = self.lv2["num_sprintes"]
-
-        #         elif self.lvl == 3:
-        #             self.num_sprintes = self.lv3["num_sprintes"]
-
-                
-                    
+    def incrementSprite(self):               
 
 
         # On incrémente le sprite et/ou on reset (en fonction de l'état)
