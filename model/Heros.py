@@ -2,7 +2,7 @@ import tkinter as tk
 from model.Character import Character
 from model.Ennemy import ennemies
 import asyncio
-# from multiprocessing import Porces, current_process
+from functools import lru_cache
 from threading import Thread
 class Singleton(type):
     _instances = {}
@@ -32,13 +32,13 @@ class Heros(Character):
         self.min_y = min_y
         self.seek()
 
+    @lru_cache(128)    
     def getSprite(self):
         super().getSprite()
         if self.lv1 != {}:
-            if "num_sprintes" in self.lv0:
-                self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
-                                    for i in range(self.lv0["num_sprintes"]["transform"])]
-                self.transformAnim.reverse()
+            self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
+                                for i in range(self.lv0["num_sprintes"]["transform"])]
+            self.transformAnim.reverse()
 
             self.getLvlSprite(self.lv1)
             self.getLvlSprite(self.lv2)
@@ -113,7 +113,7 @@ class Heros(Character):
         sprite.tk.call(sprite, 'copy', image,
                        '-from', x1, y1, x2, y2, '-to', 0, 0)
         return sprite
-
+    @lru_cache(128)
     def seek(self):
         if self.target:
             self.attack()
@@ -127,8 +127,7 @@ class Heros(Character):
                     self.sprite = 0
                     self.attack()
                     return self.target
-            # if self.hp < self.baseHp:
-            #     self.hp += 1
+        
         self.seeking = self.canvas.after(50, self.seek)
 
     def mouseMove(self, event):
@@ -263,14 +262,10 @@ class Heros(Character):
                     self.num_sprintes = self.lv3["num_sprintes"]
         super().incrementSprite()
 
-    # def show(self):
-    #     super().show()
-    #     for ennemy in ennemies:
-    #         if ennemy.state == "die":
-    #             if ennemy.y < self.y:
-    #                 self.canvas.tag_raise(self.last_img, ennemy.last_img)
-    #             else :
-    #                 self.canvas.tag_lower(self.last_img, ennemy.last_img)
+    # def idleAnim(self):
+    #     super().idleAnim()
+    #     if self.hp < self.baseHp:
+    #         self.hp += 0.5
 
 
 class Adventurer(Heros):

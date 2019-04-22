@@ -138,7 +138,19 @@ class Lvl1(Lvl):
         Enn.Skeleton(self, -100, 225, self.heros)
         Enn.Skeleton(self, -50, 225, self.heros)
         Enn.Skeleton(self, -150, 225, self.heros)
-        Enn.Skeleton(self, 50, 225, self.heros)        
+        Enn.Skeleton(self, 50, 225, self.heros)
+        
+        Enn.Skeleton(self, 0, 225, self.heros)
+        Enn.Skeleton(self, -100, 225, self.heros)
+        Enn.Skeleton(self, -50, 225, self.heros)
+        Enn.Skeleton(self, -150, 225, self.heros)
+        Enn.Skeleton(self, 50, 225, self.heros)   
+        
+        Enn.Skeleton(self, 0, 225, self.heros)
+        Enn.Skeleton(self, -100, 225, self.heros)
+        Enn.Skeleton(self, -50, 225, self.heros)
+        Enn.Skeleton(self, -150, 225, self.heros)
+        Enn.Skeleton(self, 50, 225, self.heros)         
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):

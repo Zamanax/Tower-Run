@@ -37,11 +37,12 @@ class Interface(tk.Frame):
         self.interface = tk.Canvas(
             self, width=200, height=650, highlightthickness=0)
         self.interface.create_image(0, 0, image=self.backImg, anchor="nw")
+
         self.makeLabel()
         self.emplacementMake()
-        self.interface.pack()
-
         self.makeButton()
+        
+        self.interface.pack()
 
 # ___________________________On va faire les check buttons ici max/yann ______________
     def makeButton(self):
@@ -120,6 +121,7 @@ class Interface(tk.Frame):
         state = ''.join([i for i in self.v.get() if not i.isdigit()])
         for btn in self.buttonList:
             btn["state"] = "normal"
+            
         if self.spotName:
             self.spotName.destroy()
         if self.spotDamage:
@@ -211,6 +213,9 @@ class Interface(tk.Frame):
                         self.selected.tower.damagetype)
                     self.spotSpeed["text"] += str(self.selected.tower.speed) + \
                         " ⇢ " + str(self.selected.tower.nspeed)
+                        
+                    self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                                                         outline="blue")
                 else:
                     self.spotDamage.destroy()
                     self.spotZone.destroy()
@@ -231,6 +236,7 @@ class Interface(tk.Frame):
 
                 self.spotName["text"] += "Vide ⇢ " + str(state)
                 self.spotPrice["text"] = self.dico[state].price
+
                 if hasattr(self.dico[state], "zone"):
                     self.spotDamage["text"] += "0 ⇢ " + \
                         str(self.dico[state].damage)
@@ -241,12 +247,13 @@ class Interface(tk.Frame):
                     self.spotSpeed["text"] += "0 ⇢ " + \
                         str(self.dico[state].speed)
 
+                    self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                                                         outline="blue")
+
                 if self.dico[state].price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
                     self.buildButton["text"] = "Pas Assez d'Or"
 
-            self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-                                                         outline="blue")
 
         else:
             self.buildButton["state"] = "disabled"
