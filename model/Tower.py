@@ -167,7 +167,7 @@ class Projectile(Thread):
         self.canvas=canvas
         self.tx=self.target.x
         self.ty=self.target.y
-        self.v=1
+        self.v=3
         self.tir()   
 
     # def calctraj(self):  
@@ -179,7 +179,7 @@ class Projectile(Thread):
         if type(self.corps)!=None:
             self.canvas.delete(self.corps)
 
-        if self.tx-10<=self.x<=self.tx+10 and self.ty-5<=self.y<=self.ty+5:
+        if self.tx-10<=self.x<=self.tx+10 and self.ty-6<=self.y<=self.ty+6:
             self.canvas.delete(self.corps)
             # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
             self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
@@ -493,47 +493,46 @@ class Fleche(Projectile):
         self.tir()
 
 class Kamehameha(Projectile):
-    milieu=[ 0,0,100, 100]
-    droite=[ 100,0,200, 100]
-    gauche=[ 0, 100, 100, 200]
+    milieu=[0,0,100,100]
+    droite=[100,0,200,100]
+    gauche=[0,100,100,200]
+    tete=None
 
-    def __init__(self, canvas, hero):
+
+    def __init__(self, hero):
+        Thread.__init__(self)
+        self.start()
+        self.longueur=0
         self.hero=hero
-        self.x=hero.x
+        self.x=hero.x-60
         self.y=hero.y
         self.target=hero.target
         self.damage=hero.damage
         self.canvas=hero.canvas
-        self.v=1
+        self.v=30
         self.img="view/src/kamehameha_1.png"
         self.d=load(self.droite, self.img)
         self.g=load(self.gauche, self.img)
         self.m=load(self.milieu, self.img)
+        self.canvas.after(2800, self.tir)
+ 
         # if self.hero.state="specialMove"
        
     def tir(self):
-        
-        if type(self.corps)!=None:
-            self.canvas.delete(self.corps)
+        self.longueur+=1
+        if type(self.tete)!=None:
+            self.canvas.delete(self.tete)
+            self.canvas.create_image(self.x, self.y, image=self.m)
 
-        if self.tx-10<=self.x<=self.tx+10 and self.ty-5<=self.y<=self.ty+5:
-            self.canvas.delete(self.corps)
-            # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
-            self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
-            self.target.hp-=self.damage
-            self.canvas.after(5, self.canvas.delete, self.corps)
-            return
-        
+        for ennemy in ennemies:
+            if ennemy.x-15<=self.x<=ennemy.x+15 and ennemy.y-10<=self.y<=ennemy.y+10:
+                ennemy.target.hp-=self.damage
 
-        n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/2)
-        self.inc_abs=-(self.x-self.tx)/n_coups
-        self.inc_ord=-(self.y-self.ty)/n_coups
-        self.x+=self.inc_abs
-        self.y+=self.inc_ord
+        self.x-=self.v
     
-        # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
-        self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
-        self.canvas.after(20,self.tir)
+        self.tete=self.canvas.create_image(self.x, self.y, image=self.g)
+        if not self.longueur==20:
+            self.canvas.after(150,self.tir)
 
 
 def distance(tower, ennemy):
