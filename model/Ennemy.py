@@ -11,23 +11,22 @@ class Ennemy (Character):
  
     def __init__ (self, parent, x, y, heros) :
         global ennemies
-        Character.__init__(self,parent,x,y)
+        ennemies.insert(0,self)
         self.heros = heros
-        ennemies.append(self)
+        Character.__init__(self,parent,x,y)
         # self.index = len(ennemies)-1
-        self.seek()
         self.goToObjective()
 
-    def seek(self):
-        if self.target:
-            self.attack()
-        elif (((self.heros.x-self.x)**2)+((self.heros.y-self.y)**2))**0.5 < self.range:
-            self.target = self.heros
-            self.canvas.after_cancel(self.seeking)
-            self.attack()
-            return self.target
+    # def seek(self):
+    #     if self.target:
+    #         self.attack()
+    #     elif (((self.heros.x-self.x)**2)+((self.heros.y-self.y)**2))**0.5 < self.range:
+    #         self.target = self.heros
+    #         self.canvas.after_cancel(self.seeking)
+    #         self.attack()
+    #         return self.target
                 
-        self.seeking = self.canvas.after(100, self.seek)
+    #     self.seeking = self.canvas.after(100, self.seek)
 
     def goToObjective(self):
         if self.move == None:

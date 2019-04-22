@@ -492,6 +492,49 @@ class Fleche(Projectile):
         self.v=1
         self.tir()
 
+class Kamehameha(Projectile):
+    milieu=[ 0,0,100, 100]
+    droite=[ 100,0,200, 100]
+    gauche=[ 0, 100, 100, 200]
+
+    def __init__(self, canvas, hero):
+        self.hero=hero
+        self.x=hero.x
+        self.y=hero.y
+        self.target=hero.target
+        self.damage=hero.damage
+        self.canvas=hero.canvas
+        self.v=1
+        self.img="view/src/kamehameha_1.png"
+        self.d=load(self.droite, self.img)
+        self.g=load(self.gauche, self.img)
+        self.m=load(self.milieu, self.img)
+        # if self.hero.state="specialMove"
+       
+    def tir(self):
+        
+        if type(self.corps)!=None:
+            self.canvas.delete(self.corps)
+
+        if self.tx-10<=self.x<=self.tx+10 and self.ty-5<=self.y<=self.ty+5:
+            self.canvas.delete(self.corps)
+            # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+            self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
+            self.target.hp-=self.damage
+            self.canvas.after(5, self.canvas.delete, self.corps)
+            return
+        
+
+        n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/2)
+        self.inc_abs=-(self.x-self.tx)/n_coups
+        self.inc_ord=-(self.y-self.ty)/n_coups
+        self.x+=self.inc_abs
+        self.y+=self.inc_ord
+    
+        # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+        self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
+        self.canvas.after(20,self.tir)
+
 
 def distance(tower, ennemy):
     return ((ennemy.x-tower.x)**2+(ennemy.y-tower.y)**2)**0.5

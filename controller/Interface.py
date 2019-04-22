@@ -104,17 +104,15 @@ class Interface(tk.Frame):
         self.mortierLabel.place(x=75, y=250)
 
     def selectSpot(self, event):
-        area = 45
-        found = False
+        area = 50
+        self.selected = None
+
         for spot in self.parent.spots:
             if spot.x-area < event.x < spot.x+area and spot.y-area < event.y < spot.y+area:
 
                 self.selected = spot
-                found = True
                 break
 
-        if found != True:
-            self.selected = None
         self.preView()
 
     def preView(self):

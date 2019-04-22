@@ -31,6 +31,7 @@ class Character (Thread):
     idle1 = []
     runRight = []
     runLeft = []
+    specialMove = []
 
     damagingSprite = []
     attackRight = []
@@ -102,7 +103,8 @@ class Character (Thread):
                     self.canvas.after_cancel(self.target.move)
                 if self.target.target == None :
                     self.target.target = self
-                    self.canvas.after_cancel(self.target.seeking)
+                    if self.target.seeking:
+                        self.canvas.after_cancel(self.target.seeking)
                     self.target.attack()
                 if self.afterIdle:
                     self.canvas.after_cancel(self.afterIdle)
@@ -159,7 +161,8 @@ class Character (Thread):
             self.canvas.delete(self.healthBar)
             self.canvas.delete(self.damageBar)
             self.canvas.after_cancel(self.move)
-            self.canvas.after_cancel(self.seeking)
+            if self.seeking:
+                self.canvas.after_cancel(self.seeking)
             if self.attacking:
                 self.canvas.after_cancel(self.attacking)
             self.state = "die"
@@ -176,20 +179,6 @@ class Character (Thread):
 
         tasks = self.getIdleAnim(), self.getRunRightAnim(), self.getRunLeftAnim(), self.getAttackRightAnim(), self.getAttackLeftAnim(), self.getDeathAnim()
         (self.idle, self.runRight, self.runLeft, self.attackRight, self.attackLeft, self.death) = loop.run_until_complete(asyncio.gather(*tasks))
-
-        # self.idle = self.getIdleAnim()
-
-        # self.runRight = self.getRunRightAnim()
-
-        # self.runLeft = self.getRunLeftAnim()
-        
-
-        # self.attackRight = self.getAttackRightAnim()
-
-        # self.attackLeft = self.getAttackLeftAnim()
-        
-
-        # self.death = self.getDeathAnim()
 
         # Lancement de l'animation
         self.idleAnim()
@@ -232,98 +221,6 @@ class Character (Thread):
                     for i in range(self.num_sprintes["die"])]
 
         return death
-        
-    # def getSprite(self):
-    #     self.spritesheet = tk.PhotoImage(file=self.spritesheet)
-    #     q=Queue()
-
-    #     proc1 = Process(target=getIdleAnim, args=(self.spriteSize, self.y_Anim["idle"], self.spritesheet, self.num_sprintes["idle"]) )
-        
-    #     #procs.append(proc1)
-    #     proc2 = Process(target=self.getRunRightAnim)
-    #     #procs.append(proc2)
- 
-    #     proc3 = Process(target=self.getRunLeftAnim)
-    #     #procs.append(proc3)
-
-    #     proc4 = Process(target=self.getAttackRightAnim)
-    #     #procs.append(proc4)
-
-    #     proc5 = Process(target=self.getAttackLeftAnim)
-    #     #procs.append(proc5)
-
-    #     proc6 = Process(target=self.getDeathAnim)
-    #     #procs.append(proc6)
-
-        
-
-    #     # loop = asyncio.get_event_loop()
-    #     # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
-
-    #     # tasks = proc1.start(), proc2.start(), proc3.start(), proc4.start(), proc5.start(), proc6.start()
-        
-    #     self.idle=proc1.start() 
-    #     # proc2.start()
-    #     # , self.runLeft, self.attackRight, self.attackLeft, self.death = proc1.start(), proc2.start(), proc3.start(), proc4.start(), proc5.start(), proc6.start()
-
-    #     # self.idle = self.getIdleAnim()
-
-    #     # self.runRight = self.getRunRightAnim()
-
-    #     # self.runLeft = self.getRunLeftAnim()
-        
-
-    #     # self.attackRight = self.getAttackRightAnim()
-
-    #     # self.attackLeft = self.getAttackLeftAnim()
-        
-
-    #     # self.death = self.getDeathAnim()
-
-    #     # Lancement de l'animation
-    #     self.idleAnim()
-    #     self.incrementSprite()
-    #     # loop.close()
-
-
-    # def getIdleAnim(self, q):
-    #     idle=([self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
-    #                     for i in range(self.num_sprintes["idle"])])
-    #     return idle
-        
-    # async def getRunRightAnim(self):
-
-    #     runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
-    #                     for i in range(self.num_sprintes["runRight"])]
-    #     return runRight
-    
-    # async def getRunLeftAnim(self):
-
-    #     runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
-    #                 for i in range(self.num_sprintes["runLeft"])]
-    #     runLeft.reverse()
-
-    #     return runLeft
-    # async def getAttackRightAnim(self):
-
-    #     attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
-    #                 for i in range(self.num_sprintes["attackRight"])]
-
-    #     return attackRight
-    # async def getAttackLeftAnim(self):
-
-    #     attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
-    #                 for i in range(self.num_sprintes["attackLeft"])]
-    #     attackLeft.reverse()
-
-    #     return attackLeft
-    # async def getDeathAnim(self):
-
-    #     death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
-    #                 for i in range(self.num_sprintes["die"])]
-
-    #     return death
-
 
     # Méthode chargée du découpage du spritesheet
     # x1 = abscisse du point en haut à gauche
@@ -343,6 +240,8 @@ class Character (Thread):
     def idleAnim(self):
         self.show()
         if self.state == "transform":
+            time = 200
+        elif self.state == "specialMove":
             time = 200
         else : 
             time = 250
@@ -411,7 +310,7 @@ class Character (Thread):
                 self.state = "runRight"
         
         
-        self.move = self.canvas.after(int(100/self.speed), self.moveTo, x, y)
+        self.move = self.canvas.after(int(200/self.speed), self.moveTo, x, y)
         return
 
     def show(self) :
@@ -434,6 +333,9 @@ class Character (Thread):
         elif self.state == "transform":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.transformAnim[self.sprite])
+        elif self.state == "specialMove":
+            self.last_img = self.canvas.create_image(
+                self.x, self.y, image=self.specialMove[self.sprite])
         elif self.state == "idle" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.idle[self.sprite])

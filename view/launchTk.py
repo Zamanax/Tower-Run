@@ -70,6 +70,7 @@ class Lvl(tk.Frame):
         # Bind du clic gauche et droit pour l'interface et les déplacements du héros
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
+        self.canvas.bind_all("t", self.heros.specialAttack)
 
         self.interface.pack(side="right", fill="y")
         self.canvas.pack(side="right", fill='both', expand=True)
@@ -121,17 +122,17 @@ class MainMenu(tk.Frame):
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
-    heros = "Aventurier"
+    heros = "Goku"
     image = "view/src/Lvl1Background.png"
     gold = 1000
     spots = [Emplacement(180,175),
-        Emplacement(358,175),
-        Emplacement(574,175),
-        Emplacement(755,175),
-        Emplacement(791,355),
-        Emplacement(538,355),
-        Emplacement(323,355),
-        Emplacement(143,355, state="Mine")]
+             Emplacement(358,175),
+             Emplacement(574,175),
+             Emplacement(755,175),
+             Emplacement(791,355),
+             Emplacement(538,355),
+             Emplacement(323,355),
+             Emplacement(143,355, state="Mine")]
 
     def launchWaves(self):
         Enn.Skeleton(self, 0, 225, self.heros)
@@ -140,17 +141,17 @@ class Lvl1(Lvl):
         Enn.Skeleton(self, -150, 225, self.heros)
         Enn.Skeleton(self, 50, 225, self.heros)
         
-        Enn.Skeleton(self, 0, 225, self.heros)
-        Enn.Skeleton(self, -100, 225, self.heros)
-        Enn.Skeleton(self, -50, 225, self.heros)
-        Enn.Skeleton(self, -150, 225, self.heros)
-        Enn.Skeleton(self, 50, 225, self.heros)   
+        # Enn.Skeleton(self, 0, 225, self.heros)
+        # Enn.Skeleton(self, -100, 225, self.heros)
+        # Enn.Skeleton(self, -50, 225, self.heros)
+        # Enn.Skeleton(self, -150, 225, self.heros)
+        # Enn.Skeleton(self, 50, 225, self.heros)   
         
-        Enn.Skeleton(self, 0, 225, self.heros)
-        Enn.Skeleton(self, -100, 225, self.heros)
-        Enn.Skeleton(self, -50, 225, self.heros)
-        Enn.Skeleton(self, -150, 225, self.heros)
-        Enn.Skeleton(self, 50, 225, self.heros)         
+        # Enn.Skeleton(self, 0, 225, self.heros)
+        # Enn.Skeleton(self, -100, 225, self.heros)
+        # Enn.Skeleton(self, -50, 225, self.heros)
+        # Enn.Skeleton(self, -150, 225, self.heros)
+        # Enn.Skeleton(self, 50, 225, self.heros)         
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):
