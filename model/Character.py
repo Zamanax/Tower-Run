@@ -2,6 +2,8 @@ import tkinter as tk
 from functools import lru_cache
 from threading import Thread
 from model.fonctions_utiles import coeffdirecteur
+import asyncio
+from multiprocessing import Process, Queue
 
 class Character (Thread):
     team = ""
@@ -169,30 +171,159 @@ class Character (Thread):
     def getSprite(self):
         self.spritesheet = tk.PhotoImage(file=self.spritesheet)
 
+        loop = asyncio.get_event_loop()
         # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
-        self.idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
-                     for i in range(self.num_sprintes["idle"])]
 
-        self.runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
-                         for i in range(self.num_sprintes["runRight"])]
+        tasks = self.getIdleAnim(), self.getRunRightAnim(), self.getRunLeftAnim(), self.getAttackRightAnim(), self.getAttackLeftAnim(), self.getDeathAnim()
+        (self.idle, self.runRight, self.runLeft, self.attackRight, self.attackLeft, self.death) = loop.run_until_complete(asyncio.gather(*tasks))
 
-        self.runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
-                        for i in range(self.num_sprintes["runLeft"])]
-        self.runLeft.reverse()
+        # self.idle = self.getIdleAnim()
 
-        self.attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
-                        for i in range(self.num_sprintes["attackRight"])]
+        # self.runRight = self.getRunRightAnim()
 
-        self.attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
-                        for i in range(self.num_sprintes["attackLeft"])]
-        self.attackLeft.reverse()
-
-        self.death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
-                        for i in range(self.num_sprintes["die"])]
+        # self.runLeft = self.getRunLeftAnim()
         
+
+        # self.attackRight = self.getAttackRightAnim()
+
+        # self.attackLeft = self.getAttackLeftAnim()
+        
+
+        # self.death = self.getDeathAnim()
+
         # Lancement de l'animation
         self.idleAnim()
         self.incrementSprite()
+        # loop.close()
+
+
+    async def getIdleAnim(self):
+        idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
+                     for i in range(self.num_sprintes["idle"])]
+        return idle
+    async def getRunRightAnim(self):
+
+        runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
+                        for i in range(self.num_sprintes["runRight"])]
+        return runRight
+    async def getRunLeftAnim(self):
+
+        runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
+                    for i in range(self.num_sprintes["runLeft"])]
+        runLeft.reverse()
+
+        return runLeft
+    async def getAttackRightAnim(self):
+
+        attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
+                    for i in range(self.num_sprintes["attackRight"])]
+
+        return attackRight
+    async def getAttackLeftAnim(self):
+
+        attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
+                    for i in range(self.num_sprintes["attackLeft"])]
+        attackLeft.reverse()
+
+        return attackLeft
+    async def getDeathAnim(self):
+
+        death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
+                    for i in range(self.num_sprintes["die"])]
+
+        return death
+        
+    # def getSprite(self):
+    #     self.spritesheet = tk.PhotoImage(file=self.spritesheet)
+    #     q=Queue()
+
+    #     proc1 = Process(target=getIdleAnim, args=(self.spriteSize, self.y_Anim["idle"], self.spritesheet, self.num_sprintes["idle"]) )
+        
+    #     #procs.append(proc1)
+    #     proc2 = Process(target=self.getRunRightAnim)
+    #     #procs.append(proc2)
+ 
+    #     proc3 = Process(target=self.getRunLeftAnim)
+    #     #procs.append(proc3)
+
+    #     proc4 = Process(target=self.getAttackRightAnim)
+    #     #procs.append(proc4)
+
+    #     proc5 = Process(target=self.getAttackLeftAnim)
+    #     #procs.append(proc5)
+
+    #     proc6 = Process(target=self.getDeathAnim)
+    #     #procs.append(proc6)
+
+        
+
+    #     # loop = asyncio.get_event_loop()
+    #     # Mise en place des découpages de l'image et zoom sur les images (sinon trop petites)
+
+    #     # tasks = proc1.start(), proc2.start(), proc3.start(), proc4.start(), proc5.start(), proc6.start()
+        
+    #     self.idle=proc1.start() 
+    #     # proc2.start()
+    #     # , self.runLeft, self.attackRight, self.attackLeft, self.death = proc1.start(), proc2.start(), proc3.start(), proc4.start(), proc5.start(), proc6.start()
+
+    #     # self.idle = self.getIdleAnim()
+
+    #     # self.runRight = self.getRunRightAnim()
+
+    #     # self.runLeft = self.getRunLeftAnim()
+        
+
+    #     # self.attackRight = self.getAttackRightAnim()
+
+    #     # self.attackLeft = self.getAttackLeftAnim()
+        
+
+    #     # self.death = self.getDeathAnim()
+
+    #     # Lancement de l'animation
+    #     self.idleAnim()
+    #     self.incrementSprite()
+    #     # loop.close()
+
+
+    # def getIdleAnim(self, q):
+    #     idle=([self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
+    #                     for i in range(self.num_sprintes["idle"])])
+    #     return idle
+        
+    # async def getRunRightAnim(self):
+
+    #     runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
+    #                     for i in range(self.num_sprintes["runRight"])]
+    #     return runRight
+    
+    # async def getRunLeftAnim(self):
+
+    #     runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
+    #                 for i in range(self.num_sprintes["runLeft"])]
+    #     runLeft.reverse()
+
+    #     return runLeft
+    # async def getAttackRightAnim(self):
+
+    #     attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
+    #                 for i in range(self.num_sprintes["attackRight"])]
+
+    #     return attackRight
+    # async def getAttackLeftAnim(self):
+
+    #     attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
+    #                 for i in range(self.num_sprintes["attackLeft"])]
+    #     attackLeft.reverse()
+
+    #     return attackLeft
+    # async def getDeathAnim(self):
+
+    #     death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
+    #                 for i in range(self.num_sprintes["die"])]
+
+    #     return death
+
 
     # Méthode chargée du découpage du spritesheet
     # x1 = abscisse du point en haut à gauche
@@ -323,3 +454,24 @@ class Character (Thread):
             self.damageBar = self.canvas.create_line(self.x+missingHealth-15+self.barOffsetx,self.y+25+self.barOffsety,self.x+25+self.barOffsetx,self.y+25+self.barOffsety, width= 5, fill="red")
         else :
             self.damageBar = self.canvas.create_line(self.x-15+self.barOffsetx,self.y+25+self.barOffsety,self.x+25+self.barOffsetx,self.y+25+self.barOffsety, width= 5, fill="red")
+
+
+#_________________________________mon workshop touche pas _______________________________________________
+
+# def subimage( x1, y1, x2, y2, spritesheet):
+#     # Création de la variable à retourner
+#     sprite = tk.PhotoImage()
+
+#     # Décupage de l'image en Tcl
+#     sprite.tk.call(sprite, 'copy', spritesheet,
+#                     '-from', x1, y1, x2, y2, '-to', 0, 0)
+#     return sprite
+    
+# def getIdleAnim(size,y_anim, spritesheet, num):
+#     idle=([subimage(size*i, y_anim, size*(i+1), y_anim+size, spritesheet).zoom(self.zoom)
+#                     for i in range(num)])
+#     return idle
+
+
+# # (self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
+# #                     for i in range(self.num_sprintes["idle"])])

@@ -12,29 +12,27 @@ def refresh(canvas, img):
 class Emplacement():
     bonus = {}
     state = None
-    last_img = None
     tower = None
+    last_img = None
+
     def __init__(self, x, y, *args, **kwargs):
         state = kwargs.get('state', None)
         bonus = kwargs.get('bonus', None)
-        tower = kwargs.get('tower', None)
-        parent = kwargs.get('parent', None)
+
         self.x = x
         self.y = y
+
         if state:
             self.state = state
-            dico = {"Mage d'Eau": Tow.WaterM, "Mage de Terre": Tow.EarthM, "Mage de Feu": Tow.FireM, "Archer": Tow.Archer,
-            "Mortier": Tow.Mortier, "Forgeron": Tow.Forgeron, "Mine": Tow.Mine}
-            self.tower = dico[state](parent, x, y)
         if bonus: 
             self.bonus = bonus
-        if tower:
-            self.tower = tower
+            
 
 class Lvl(tk.Frame):
     heros = None
     spots = []
     image = None
+
     def __init__(self, parent,*args, **kwargs):
         self.selectedHeros = self.heros
         # Définiton des variables
@@ -57,8 +55,6 @@ class Lvl(tk.Frame):
 
         self.gold = tk.IntVar(self.canvas, self.gold)
         self.health = tk.IntVar(self.canvas, 20)
-
-        self.fillspots(self.spots)
         
         if self.selectedHeros == "Ichigo":
             self.heros = He.Ichigo(self, 900, 250, 260, 160)
@@ -95,9 +91,6 @@ class Lvl(tk.Frame):
                 self.canvas.create_line(0, (i+1)*self.rootHeight/squareWidth, self.rootWidth,
                                (i+1)*self.rootHeight/squareWidth, stipple="gray50")
 
-    def fillspots(self, dict):
-        pass
-
     def launchWaves(self):
         pass
 
@@ -131,6 +124,14 @@ class Lvl1(Lvl):
     heros = "Aventurier"
     image = "view/src/Lvl1Background.png"
     gold = 1000
+    spots = [Emplacement(180,175),
+        Emplacement(358,175),
+        Emplacement(574,175),
+        Emplacement(755,175),
+        Emplacement(791,355),
+        Emplacement(538,355),
+        Emplacement(323,355),
+        Emplacement(143,355, state="Mine")]
 
     def launchWaves(self):
         Enn.Skeleton(self, 0, 225, self.heros)
@@ -138,39 +139,27 @@ class Lvl1(Lvl):
         Enn.Skeleton(self, -50, 225, self.heros)
         Enn.Skeleton(self, -150, 225, self.heros)
         Enn.Skeleton(self, 50, 225, self.heros)        
-
-    def fillspots(self, dict):
-        dict.append(Emplacement(180,175))
-        dict.append(Emplacement(358,175))
-        dict.append(Emplacement(574,175))
-        dict.append(Emplacement(755,175))
-        dict.append(Emplacement(791,355))
-        dict.append(Emplacement(538,355))
-        dict.append(Emplacement(323,355))
-        dict.append(Emplacement(143,355, parent=self, state="Mine"))
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):
     heros = "Aventurier"
     image = "view/src/Lvl2Background.png"
     gold = 1000
-    
+    spots = [Emplacement(180,175),
+        Emplacement(358,175),
+        Emplacement(574,175),
+        Emplacement(755,175),
+        Emplacement(791,355),
+        Emplacement(538,355),
+        Emplacement(323,355),
+        Emplacement(143,355, state="Mine")]
+
     def launchWaves(self):
         Enn.Skeleton(self, 0, 225, self.heros)
         Enn.Skeleton(self, -100, 225, self.heros)
         Enn.Skeleton(self, -50, 225, self.heros)
         Enn.Skeleton(self, -150, 225, self.heros)
         Enn.Skeleton(self, 50, 225, self.heros)        
-
-    def fillspots(self, dict):
-        dict.append(Emplacement(180,175))
-        dict.append(Emplacement(358,175))
-        dict.append(Emplacement(574,175))
-        dict.append(Emplacement(755,175))
-        dict.append(Emplacement(791,355))
-        dict.append(Emplacement(538,355))
-        dict.append(Emplacement(323,355))
-        dict.append(Emplacement(143,355, parent=self, state="Mine"))
 
 # -----------------Chargement de la vue principale--------------------
 class MainApplication(tk.Frame):

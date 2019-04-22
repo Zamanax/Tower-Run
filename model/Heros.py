@@ -1,9 +1,9 @@
 import tkinter as tk
 from model.Character import Character
 from model.Ennemy import ennemies
-from functools import lru_cache
-
-
+import asyncio
+# from multiprocessing import Porces, current_process
+from threading import Thread
 class Singleton(type):
     _instances = {}
 
@@ -32,88 +32,87 @@ class Heros(Character):
         self.min_y = min_y
         self.seek()
 
-    @lru_cache(512)
     def getSprite(self):
         super().getSprite()
+        if self.lv1 != {}:
+            if "num_sprintes" in self.lv0:
+                self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
+                                    for i in range(self.lv0["num_sprintes"]["transform"])]
+                self.transformAnim.reverse()
 
-        if "num_sprintes" in self.lv0:
-            self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
-                                  for i in range(self.lv0["num_sprintes"]["transform"])]
-            self.transformAnim.reverse()
+            self.getLvlSprite(self.lv1)
+            self.getLvlSprite(self.lv2)
+            self.getLvlSprite(self.lv3)
+        
 
-        if hasattr(self, 'lv1') and self.lv1 != {}:
-            self.spritesheet = tk.PhotoImage(file=self.lv1["spritesheet"])
-            self.idle1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["idle"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["idle"]+self.lv1["spriteSize"]).zoom(self.zoom)
+    def getLvlSprite(self, dict):
+        loop = asyncio.get_event_loop()
+        image = tk.PhotoImage(file=dict["spritesheet"])
+        if dict != self.lv3:
+            tasks = self.getIdleAnim1(dict, image), self.getRunRightAnim1(dict, image), self.getRunLeftAnim1(dict, image), self.getAttackRightAnim1(dict, image), self.getAttackLeftAnim1(dict, image), self.getDeathAnim1(dict, image), self.getTransformAnim1(dict, image)
+        else :
+            tasks = self.getIdleAnim1(dict, image), self.getRunRightAnim1(dict, image), self.getRunLeftAnim1(dict, image), self.getAttackRightAnim1(dict, image), self.getAttackLeftAnim1(dict, image), self.getDeathAnim1(dict, image)
+
+        if dict == self.lv1:
+            self.idle1, self.runRight1, self.runLeft1, self.attackRight1, self.attackLeft1, self.death1, self.transformAnim1 = loop.run_until_complete(asyncio.gather(*tasks))
+        elif dict == self.lv2:
+            self.idle2, self.runRight2, self.runLeft2, self.attackRight2, self.attackLeft2, self.death2, self.transformAnim2 = loop.run_until_complete(asyncio.gather(*tasks))
+        elif dict == self.lv3:
+            self.idle3, self.runRight3, self.runLeft3, self.attackRight3, self.attackLeft3, self.death3 = loop.run_until_complete(asyncio.gather(*tasks))
+        
+
+    async def getIdleAnim1(self, dict, image):
+        idle1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["idle"], dict["spriteSize"]*(i+1), dict["y_Anim"]["idle"]+dict["spriteSize"]).zoom(self.zoom)
                           for i in range(self.lv1["num_sprintes"]["idle"])]
+        return idle1
+    async def getRunRightAnim1(self, dict, image):
 
-            self.runRight1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["runRight"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["runRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+        runRight1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["runRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["runRight"]+dict["spriteSize"]).zoom(self.zoom)
                               for i in range(self.lv1["num_sprintes"]["runRight"])]
+        return runRight1
+    async def getRunLeftAnim1(self, dict, image):
 
-            self.runLeft1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["runLeft"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["runLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                             for i in range(self.lv1["num_sprintes"]["runLeft"])]
-            self.runLeft1.reverse()
+        runLeft1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["runLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["runLeft"]+dict["spriteSize"]).zoom(self.zoom)
+                             for i in range(dict["num_sprintes"]["runLeft"])]
+        runLeft1.reverse()
 
-            self.attackRight1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["attackRight"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                                 for i in range(self.lv1["num_sprintes"]["attackRight"])]
+        return runLeft1
 
-            self.attackLeft1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["attackLeft"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                                for i in range(self.lv1["num_sprintes"]["attackLeft"])]
-            self.attackLeft1.reverse()
+    async def getAttackRightAnim1(self, dict, image):
 
-            self.transformAnim1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["transform"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["transform"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                                   for i in range(self.lv1["num_sprintes"]["transform"])]
-            self.transformAnim1.reverse()
+        attackRight1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["attackRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                                 for i in range(dict["num_sprintes"]["attackRight"])]
 
-            self.death1 = [self.subimage(self.lv1["spriteSize"]*i, self.lv1["y_Anim"]["die"], self.lv1["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+self.lv1["spriteSize"]).zoom(self.zoom)
-                           for i in range(self.lv1["num_sprintes"]["die"])]
+        return attackRight1
 
-        if hasattr(self, 'lv2') and self.lv2 != {}:
-            self.spritesheet = tk.PhotoImage(file=self.lv2["spritesheet"])
-            self.idle2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["idle"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["idle"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                          for i in range(self.lv2["num_sprintes"]["idle"])]
+    async def getAttackLeftAnim1(self, dict, image):
 
-            self.runRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runRight"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["runRight"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                              for i in range(self.lv2["num_sprintes"]["runRight"])]
+        attackLeft1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["attackLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
+                                for i in range(dict["num_sprintes"]["attackLeft"])]
+        attackLeft1.reverse()
 
-            self.runLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["runLeft"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["runLeft"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                             for i in range(self.lv2["num_sprintes"]["runLeft"])]
-            self.runLeft2.reverse()
+        return attackLeft1
+    async def getDeathAnim1(self, dict, image):
 
-            self.attackRight2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackRight"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["attackRight"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                                 for i in range(self.lv2["num_sprintes"]["attackRight"])]
+        death1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["die"], dict["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+dict["spriteSize"]).zoom(self.zoom)
+                           for i in range(dict["num_sprintes"]["die"])]
 
-            self.attackLeft2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["attackLeft"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["attackLeft"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                                for i in range(self.lv2["num_sprintes"]["attackLeft"])]
-            self.attackLeft2.reverse()
+        return death1
 
-            self.transformAnim2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["transform"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["transform"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                                   for i in range(self.lv2["num_sprintes"]["transform"])]
-            self.transformAnim2.reverse()
+    async def getTransformAnim1(self, dict, image):
+        transform1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["transform"], dict["spriteSize"]*(i+1), self.lv1["y_Anim"]["transform"]+dict["spriteSize"]).zoom(self.zoom)
+                           for i in range(dict["num_sprintes"]["transform"])]
+        transform1.reverse()
+        return transform1
 
-            self.death2 = [self.subimage(self.lv2["spriteSize"]*i, self.lv2["y_Anim"]["die"], self.lv2["spriteSize"]*(i+1), self.lv2["y_Anim"]["die"]+self.lv2["spriteSize"]).zoom(self.zoom)
-                           for i in range(self.lv2["num_sprintes"]["die"])]
+    def subimage1(self,image, x1, y1, x2, y2):
+        # Création de la variable à retourner
+        sprite = tk.PhotoImage()
 
-        if hasattr(self, 'lv3') and self.lv3 != {}:
-            self.spritesheet = tk.PhotoImage(file=self.lv3["spritesheet"])
-            self.idle3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["idle"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["idle"]+self.lv3["spriteSize"]).zoom(self.zoom)
-                          for i in range(self.lv3["num_sprintes"]["idle"])]
-
-            self.runRight3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["runRight"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["runRight"]+self.lv3["spriteSize"]).zoom(self.zoom)
-                              for i in range(self.lv3["num_sprintes"]["runRight"])]
-
-            self.runLeft3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["runLeft"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["runLeft"]+self.lv3["spriteSize"]).zoom(self.zoom)
-                             for i in range(self.lv3["num_sprintes"]["runLeft"])]
-            self.runLeft3.reverse()
-
-            self.attackRight3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["attackRight"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["attackRight"]+self.lv3["spriteSize"]).zoom(self.zoom)
-                                 for i in range(self.lv3["num_sprintes"]["attackRight"])]
-
-            self.attackLeft3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["attackLeft"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["attackLeft"]+self.lv3["spriteSize"]).zoom(self.zoom)
-                                for i in range(self.lv3["num_sprintes"]["attackLeft"])]
-            self.attackLeft3.reverse()
-
-            self.death3 = [self.subimage(self.lv3["spriteSize"]*i, self.lv3["y_Anim"]["die"], self.lv3["spriteSize"]*(i+1), self.lv3["y_Anim"]["die"]+self.lv3["spriteSize"]).zoom(self.zoom)
-                           for i in range(self.lv3["num_sprintes"]["die"])]
+        # Décupage de l'image en Tcl
+        sprite.tk.call(sprite, 'copy', image,
+                       '-from', x1, y1, x2, y2, '-to', 0, 0)
+        return sprite
 
     def seek(self):
         if self.target:

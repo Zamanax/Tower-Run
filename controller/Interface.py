@@ -3,6 +3,7 @@ import model.Tower as Tow
 import tkinter.ttk as ttk
 from model.fonctions_utiles import subimage
 
+
 class Interface(tk.Frame):
 
     # ____________________________Dico avec pour clé le nom de la tour (méthode spé __str__) et pour valeur elle même______
@@ -210,12 +211,12 @@ class Interface(tk.Frame):
                         self.selected.tower.damagetype)
                     self.spotSpeed["text"] += str(self.selected.tower.speed) + \
                         " ⇢ " + str(self.selected.tower.nspeed)
-                else :
+                else:
                     self.spotDamage.destroy()
                     self.spotZone.destroy()
                     self.spotDamagetype.destroy()
                     self.spotSpeed.destroy()
-                    
+
                 if self.selected.tower.price is "int":
                     if self.selected.tower.price > self.parent.gold.get():
                         self.buildButton["state"] = "disabled"
@@ -237,8 +238,8 @@ class Interface(tk.Frame):
                         str(self.dico[state].zone)
                     self.spotDamagetype["text"] += "Aucun ⇢ " + \
                         str(self.dico[state].damagetype)
-                    self.spotSpeed["text"] += "0 ⇢ " + str(self.dico[state].speed)
-                
+                    self.spotSpeed["text"] += "0 ⇢ " + \
+                        str(self.dico[state].speed)
 
                 if self.dico[state].price > self.parent.gold.get():
                     self.buildButton["state"] = "disabled"
@@ -257,13 +258,13 @@ class Interface(tk.Frame):
         if self.selected:
             self.canvas.delete(self.selected.last_img)
             if self.selected.state is None:
-                
+
                 self.selected.state = state
                 self.selected.tower = self.dico[state](
                     self.parent, self.selected.x, self.selected.y)
                 self.parent.gold.set(
                     self.parent.gold.get()-self.dico[state].price)
-                
+
             else:
                 self.parent.gold.set(
                     self.parent.gold.get()-self.selected.tower.price)
@@ -277,4 +278,4 @@ class Interface(tk.Frame):
                 spot.last_img = self.canvas.create_image(
                     spot.x, spot.y, image=self.hammerSign, anchor="s")
             else:
-                spot.tower.construction()
+                spot.tower = self.dico[spot.state](self.parent, spot.x, spot.y)

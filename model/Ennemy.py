@@ -33,9 +33,6 @@ class Ennemy (Character):
         if self.move == None:
             self.moveTo(1200,self.y)
 
-    def die(self, delete):
-        super().die(delete)
-
 
 class Skeleton (Ennemy) :
     __slot__=("__dict__", "idle", "runRight", "runLeft", "attackRight", "attackLeft", "die")
