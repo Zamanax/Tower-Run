@@ -242,9 +242,9 @@ class Character (Thread):
         if self.state == "transform":
             time = 200
         elif self.state == "specialMove":
-            time = 150
-            if self.sprite == self.num_sprintes[self.state] - 1:
-                Tow.Kamehameha(self)
+            time = 300
+            # if self.sprite == self.num_sprintes[self.state]-1:
+                
         else : 
             time = 250
         self.show()
@@ -266,6 +266,14 @@ class Character (Thread):
             time = int(500/self.attackSpeed)
         elif self.state == "transform" :
             time = 200
+        elif self.state == "specialMove" and self.sprite== self.num_sprintes[self.state]-1:
+            Tow.Kamehameha(self)
+            time = 2000
+        elif self.state == "specialMove":
+            time = 300
+            # if self.sprite== self.num_sprintes[self.state]-1:
+            #     self.cavas.after_cancel(self.incrementing)
+            #     self.incrementing = self.canvas.after(2000, self.incrementSprite)
         elif self.state == "die":
             time = 400
         else :

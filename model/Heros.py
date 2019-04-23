@@ -279,7 +279,7 @@ class Heros(Character):
                 elif self.lvl == 3:
                     self.num_sprintes = self.lv3["num_sprintes"]
 
-            if self.sprite == self.num_sprintes["specialMove"] - 1 and self.state == "specialMove":
+            elif self.sprite == self.num_sprintes["specialMove"] - 1 and self.state == "specialMove":
                 self.state = "idle"
         super().incrementSprite()
 
