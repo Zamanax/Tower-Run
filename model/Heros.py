@@ -32,7 +32,6 @@ class Heros(Character):
         self.max_y = max_y
         self.min_y = min_y
         self.seek()
-        self.specialAttack()
 
     @lru_cache(128)    
     def getSprite(self):
@@ -178,10 +177,9 @@ class Heros(Character):
             else:
                 self.moveTo(event.x, event.y)
 
-    def specialAttack(self):
+    def specialAttack(self, event):
         self.state = "specialMove"
-        Tow.Kamehameha(self)
-
+        
     def transform(self):
         self.sprite = 0
         if self.lvl == 0:

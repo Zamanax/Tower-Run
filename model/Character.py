@@ -4,6 +4,7 @@ from threading import Thread
 from model.fonctions_utiles import coeffdirecteur
 import asyncio
 from multiprocessing import Process, Queue
+import model.Tower as Tow
 
 class Character (Thread):
     team = ""
@@ -238,13 +239,16 @@ class Character (Thread):
 
     # Méthode chargée du placement de l'image d'attente
     def idleAnim(self):
-        self.show()
         if self.state == "transform":
             time = 200
         elif self.state == "specialMove":
-            time = 200
+            time = 150
+            if self.sprite == self.num_sprintes[self.state] - 1:
+                Tow.Kamehameha(self)
         else : 
             time = 250
+        self.show()
+        
         self.afterIdle = self.canvas.after(time, self.idleAnim)
 
     # Méthode d'incrémentation de l'image à afficher

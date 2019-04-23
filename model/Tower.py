@@ -514,7 +514,7 @@ class Kamehameha(Projectile):
         self.d=load(self.droite, self.img)
         self.g=load(self.gauche, self.img)
         self.m=load(self.milieu, self.img)
-        if self.hero.num_sprintes==
+        self.tir()
  
         # if self.hero.state="specialMove"
        
@@ -526,8 +526,10 @@ class Kamehameha(Projectile):
             self.canvas.create_image(self.x, self.y, image=self.m)
 
         for ennemy in ennemies:
-            if ennemy.x-15<=self.x<=ennemy.x+15 and ennemy.y-10<=self.y<=ennemy.y+10:
-                ennemy.target.hp-=self.damage
+            if ennemy.x-15<=self.x<=ennemy.x+15 and ennemy.y-20<=self.y<=ennemy.y+20:
+                ennemy.hp-=self.damage
+                if ennemy.hp <= 0:
+                    ennemy.die(False)
 
         self.x-=self.v
     
