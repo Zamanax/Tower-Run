@@ -504,7 +504,7 @@ class Kamehameha(Projectile):
         self.start()
         self.longueur=0
         self.hero=hero
-        self.x=hero.x-60
+        self.x=hero.x-70
         self.y=hero.y
         self.target=hero.target
         self.damage=hero.damage
