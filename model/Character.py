@@ -268,7 +268,7 @@ class Character (Thread):
             time = 200
         elif self.state == "specialMove" and self.sprite== self.num_sprintes[self.state]-1:
             Tow.Kamehameha(self)
-            time = 2000
+            time = 2700
         elif self.state == "specialMove":
             time = 300
             # if self.sprite== self.num_sprintes[self.state]-1:

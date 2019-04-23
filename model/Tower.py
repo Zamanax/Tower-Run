@@ -505,7 +505,7 @@ class Kamehameha(Projectile):
         self.longueur=0
         self.hero=hero
         self.x=hero.x-100
-        self.y=hero.y-3
+        self.y=hero.y-5
         self.target=hero.target
         self.damage=hero.damage
         self.canvas=hero.canvas
@@ -526,7 +526,7 @@ class Kamehameha(Projectile):
             self.canvas.create_image(self.x, self.y, image=self.m)
 
         for ennemy in ennemies:
-            if ennemy.x-15<=self.x<=ennemy.x+15 and ennemy.y-20<=self.y<=ennemy.y+20:
+            if ennemy.x-35<=self.x<=ennemy.x+35 and ennemy.y-40<=self.y<=ennemy.y+40:
                 ennemy.hp-=self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
