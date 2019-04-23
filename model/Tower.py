@@ -519,6 +519,7 @@ class Kamehameha(Projectile):
         # if self.hero.state="specialMove"
        
     def tir(self):
+        
         self.longueur+=1
         if type(self.tete)!=None:
             self.canvas.delete(self.tete)

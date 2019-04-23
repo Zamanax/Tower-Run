@@ -4,6 +4,7 @@ from model.Ennemy import ennemies
 import asyncio
 from functools import lru_cache
 from threading import Thread
+import model.Tower as Tow
 class Singleton(type):
     _instances = {}
 
@@ -31,6 +32,7 @@ class Heros(Character):
         self.max_y = max_y
         self.min_y = min_y
         self.seek()
+        self.specialAttack()
 
     @lru_cache(128)    
     def getSprite(self):
@@ -176,8 +178,9 @@ class Heros(Character):
             else:
                 self.moveTo(event.x, event.y)
 
-    def specialAttack(self, event):
+    def specialAttack(self):
         self.state = "specialMove"
+        Tow.Kamehameha(self)
 
     def transform(self):
         self.sprite = 0
