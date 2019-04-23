@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\zamax\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
+    "python.pythonPath": "/sbin/python",
     "code-runner.saveAllFilesBeforeRun": true,
     "code-runner.customCommand": "python main.pyw",
     "python.unitTest.promptToConfigure": false,
