@@ -19,7 +19,7 @@ class Character (Thread):
     purse = 0
     
     #Coordonnées + Etats
-    state = "idle"
+    state = "idleLeft"
     x = 0
     y = 0
     target = None
@@ -35,8 +35,10 @@ class Character (Thread):
     zoom = 1
 
     last_img = None
-    idle = []
-    idle1 = []
+    idleRight = []
+    idleLeft =[]
+    idleRight1 = []
+    idleLeft1=[]
     runRight = []
     runLeft = []
     specialMove = []
@@ -121,7 +123,10 @@ class Character (Thread):
                 self.target.goToObjective()
                 self.goToObjective()
                 self.target=None
-                self.state ="idle"
+                if self.x>self.target.x:
+                    self.state ="idlLeft"
+                else:
+                    self.state="idleRight"
                 self.attacking = None
                 self.seek()
                 self.idleAnim()
@@ -155,7 +160,10 @@ class Character (Thread):
         
         else:
             # Si on n'a pas de cible alors on reprends sa route
-            self.state = "idle"
+            if self.state=="attackRight":
+                self.state = "idleRight"
+            else:
+                self.state = "idleLeft"
             self.attacking = None
             self.seek()
             self.idleAnim()
@@ -224,20 +232,28 @@ class Character (Thread):
         loop = asyncio.get_event_loop()
 
         # On utilise un tuple pour lui donner les animations à charger
-        tasks = self.getIdleAnim(), self.getRunRightAnim(), self.getRunLeftAnim(), self.getAttackRightAnim(), self.getAttackLeftAnim(), self.getDeathAnim()
+        tasks = self.getIdleRightAnim(),self.getIdleLeftAnim(), self.getRunRightAnim(), self.getRunLeftAnim(), self.getAttackRightAnim(), self.getAttackLeftAnim(), self.getDeathAnim()
         
         # On attends les résultats de chaque fonction
-        (self.idle, self.runRight, self.runLeft, self.attackRight, self.attackLeft, self.death) = loop.run_until_complete(asyncio.gather(*tasks))
+        (self.idleRight, self.idleLeft, self.runRight, self.runLeft, self.attackRight, self.attackLeft, self.death) = loop.run_until_complete(asyncio.gather(*tasks))
 
         # On lance l'animation
         self.idleAnim()
         self.incrementSprite()
 
 #-----------------------Méthode chargée du découpage de l'image en fonction de l'animation désirée---------------------
-    async def getIdleAnim(self):
-        idle = [self.subimage(self.spriteSize*i, self.y_Anim["idle"], self.spriteSize*(i+1), self.y_Anim["idle"]+self.spriteSize).zoom(self.zoom)
-                     for i in range(self.num_sprintes["idle"])]
-        return idle
+    
+    async def getIdleRightAnim(self):
+        idleRight = [self.subimage(self.spriteSize*i, self.y_Anim["idleRight"], self.spriteSize*(i+1), self.y_Anim["idleRight"]+self.spriteSize).zoom(self.zoom)
+                     for i in range(self.num_sprintes["idleRight"])]
+        return idleRight
+
+    async def getIdleLeftAnim(self):
+        idleLeft = [self.subimage(self.spriteSize*i, self.y_Anim["idleLeft"], self.spriteSize*(i+1), self.y_Anim["idleLeft"]+self.spriteSize).zoom(self.zoom)
+                     for i in range(self.num_sprintes["idleLeft"])]
+        idleLeft.reverse()
+        return idleLeft
+
     async def getRunRightAnim(self):
 
         runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
@@ -306,7 +322,7 @@ class Character (Thread):
         self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
 
         # Selon l'état on modifie le temps d'incrémentation
-        if self.state == "idle":
+        if self.state == "idleLeft" or self.state=="idleRight":
             time = 250
         elif self.state == "runRight" or self.state == "runLeft":
             time = 100
@@ -349,7 +365,10 @@ class Character (Thread):
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
                 self.sprite = 0
-                self.state = "idle"
+                if self.state=="runRight":
+                    self.state = "idleRight"
+                elif self.state=="runLeft":
+                    self.state="idleLeft"
                 self.move = None
                 return
                 
@@ -399,12 +418,12 @@ class Character (Thread):
         elif self.state == "specialMove":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.specialMove[self.sprite])
-        elif self.state == "idle" :
+        elif self.state == "idleRight" :
             self.last_img = self.canvas.create_image(
-                self.x, self.y, image=self.idle[self.sprite])
-        elif self.state == "die" :
+                self.x, self.y, image=self.idleRight[self.sprite])
+        elif self.state == "idleLeft":
             self.last_img = self.canvas.create_image(
-                self.x, self.y, image=self.death[self.sprite])
+            self.x, self.y, image=self.idleLeft[self.sprite])
 
         #  On supprime l'ancienne barre de vie
         if self.healthBar:
