@@ -2,36 +2,26 @@
 from model.Character import Character
 import model.Heros as He
 
-ennemies=[]
-
 class Ennemy (Character):
-    purse = 0
-    team = "ennemy"
-    state = "idle"
  
     def __init__ (self, parent, x, y, heros) :
-        global ennemies
-        ennemies.insert(0,self)
-        self.heros = heros
+        #Initialisation en tant que Character
         Character.__init__(self,parent,x,y)
-        # self.index = len(ennemies)-1
+        self.heros = heros
+
+        # Insertion dans le tableau
+        # Tableau contenant tous les ennemis existants
+        parent.ennemies.insert(0,self)
+
+        #Le Monstre se dirige toujours vers l'objectif dès son apparition
         self.goToObjective()
 
-    # def seek(self):
-    #     if self.target:
-    #         self.attack()
-    #     elif (((self.heros.x-self.x)**2)+((self.heros.y-self.y)**2))**0.5 < self.range:
-    #         self.target = self.heros
-    #         self.canvas.after_cancel(self.seeking)
-    #         self.attack()
-    #         return self.target
-                
-    #     self.seeking = self.canvas.after(100, self.seek)
-
+    # Fonction chargée de faire déplacer le monstre
     def goToObjective(self):
         if self.move == None:
             self.moveTo(1200,self.y)
 
+#---------------------------- Différents ennmis présents dans le jeu --------------
 
 class Skeleton (Ennemy) :
     __slots__ = ("idle", "runRight", "runLeft", "attackRight", "attackLeft", "death")

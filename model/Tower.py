@@ -1,33 +1,33 @@
 import tkinter as tk
 from threading import Thread
 from model.Heros import Heros
-from model.Ennemy import ennemies
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 
 #____________________________________________________________________________________________________________
 class Tower(Thread):
-    # Coords de la tour
-    # Image de la tour
-    lvl = 1
+    """Classe abstraite dont vont hériter les autres tours"""
+
+    lvl = 1         # niveau de la tour 
     lv1 = None
     lv2 = None
-    lv3 = None
-
+    lv3 = None      # attributs pour les images
+    last_storm=None
     last_img=None
     seeking=None
-    range=0
+    indice=0
+
+    range=0     #portée de tir
+    damage=1    #dégâts
+    speed=3     #cadence de tir
+
     d_up=50
     r_up=25
-    indice=0
-    
-    damage=1
-    speed=3
     damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
-    range_evo=[range, range+r_up, range+r_up*2] 
+    range_evo=[range, range+r_up, range+r_up*2]                 #variables pour les changement de stats en fonction des niveaux
     speed_evo=[speed, speed+2, speed+6]
     price_evo=[0,0,0]
-    last_storm=None
-    # Chargement et attribution des différentes propriétés
+    
+   
 
     
     def __del__(self):
@@ -36,184 +36,222 @@ class Tower(Thread):
 
 
     def __init__(self, parent, x, y, projectile):
-        Thread.__init__(self)
+        Thread.__init__(self)   #On thread chaque tour
         self.start()
-        self.parent = parent
-        self.price=self.price_evo[1]
-        self.projectile=projectile
-        self.canvas = parent.canvas
+
+        self.parent = parent            #le niveau
+        self.projectile=projectile      #le projectile
+        self.canvas = parent.canvas     #canvas
         self.x = x
         self.y = y
+
+        self.price=self.price_evo[1]
         self.ndamage=self.damage_evo[1]
-        self.nrange=self.range_evo[1]
+        self.nrange=self.range_evo[1]       #variables pour la prévision des valeurs des niveaux suivants
         self.nspeed=self.speed_evo[1]
+
         self.construction()
         self.seek()
     
     def show_evol(self):
+        """Méthode chargée d'afficher la tornade en construction et en upgrade sur les tours"""
+
         spritenum=len(self.parent.upAnim)
         self.canvas.delete(self.last_storm)
         self.last_storm=self.canvas.create_image(self.x, self.y-50, image=self.parent.upAnim[self.indice])
-        if self.indice==2:
-            if not self.lvl==1:
-                self.canvas.delete(self.last_img)             
-        if self.indice==3: 
-        #On place la nouvelle
+        
+        if self.indice==2:  #à la 2e image
+            if not self.lvl==1:   #si on n'est pas en train de construire; c-a-d si on est en train d'améliorer
+                self.canvas.delete(self.last_img)      #on efface  l'image de la tour du niveau inférieur     
+       
+        if self.indice==3: #à la 3e image
+                #On place la nouvelle
             if self.lvl==1:
                 self.last_img = self.canvas.create_image(
                     self.x, self.y, image=self.lv1, anchor="s")
+
             elif self.lvl==2:
                 self.last_img=self.canvas.create_image(
             self.x, self.y, image=self.lv2, anchor="s")
+
             else:
                 self.last_img=self.canvas.create_image(
             self.x, self.y, image=self.lv3, anchor="s")
-            #On la place au dessus
+
+            #On la place au dessus du canvas de niveau
                 self.canvas.tag_raise(self.last_img)
-        self.indice+=1
-        if self.indice==spritenum:
-            self.indice=0
-            self.canvas.delete(self.last_storm)
+
+        self.indice+=1 #on incrémente l'indice de l'image
+
+        if self.indice==spritenum: #à la fin de l'animation
+            self.indice=0   #on réinitialise l'indice d'animation
+
+            self.canvas.delete(self.last_storm) 
             return
-        self.canvas.after(150, self.show_evol)
+        self.canvas.after(150, self.show_evol)  #fonction récurssive
 
 
     def construction(self):
         self.show_evol()
 
-    #Attribution des variables pour chaque instance de la classe
+    #Attribution des variables partagées pour chaque instance de la classe
     __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
 
     def seek(self):
+        """Méthode chargée de rechercher les ennemis à attaquer"""
+        ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
+
         for ennemy in ennemies:
             if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
                 self.target = ennemy
                 self.tir_p()
-                return
-        self.canvas.after(250, self.seek)
+                return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
+                            #On le cible, on tir, et on arrête de chercher
+
+        self.canvas.after(250, self.seek) #sinon on recherche
     
     def upgrade(self):
+        #wrapper des fonctions d'upgrade
         if self.lvl == 1:
             self.upgrade1()
         elif self.lvl == 2:
             self.upgrade2()
 
     def upgrade1(self):
-        self.lvl = 2
+        self.lvl = 2    #changment de niveau
+
         self.damage=self.damage_evo[1]
         self.ndamage=self.damage_evo[2]
-        self.range=self.range_evo[1]
-        self.nrange=self.range_evo[2]
+        self.range=self.range_evo[1]        #chargement des nouvelles stats et des 
+        self.nrange=self.range_evo[2]       #stats du niveau d'après
         self.speed=self.speed_evo[1]
         self.nspeed=self.speed_evo[2]
         self.price=self.price_evo[2]
-        self.show_evol()
 
-        # self.canvas.after(1000000, self.construction, self)
+        self.show_evol()                    #appel à l'affichage de transformation
     
     def upgrade2(self):
         self.lvl = 3
+
         self.damage=self.damage_evo[2]
         self.ndamage="Max"
-        self.range=self.range_evo[2]
+        self.range=self.range_evo[2]            #IDEM
         self.nrange="Max"
         self.speed=self.speed_evo[2]
         self.nspeed="Max"
         self.price="Max"
+
         self.show_evol()
 
-        # self.canvas.after(1000000, self.construction, self)
 
     
     def tir_p(self):
-        if self.target :
-            self.projectile(self.canvas, self.x, self.y, self.target, self.damage)
-            if self.target.hp <= 0:
-                self.target.die(False)
-                self.target = None
-                self.canvas.after(int(6000/self.speed), self.seek)
+        """fonction qui 'tire' le projectile"""
+        
+        if self.target : #si un ennemi est ciblé
+            self.projectile(self) 
+            if self.target.hp <= 0: #si ses pv tomben à zero
+
+                self.target.die(False)  #on appelle la méthode qui provoque la mort de l'ennemi
+                self.target = None      #on n'a plus de cible
+                self.canvas.after(int(6000/self.speed), self.seek) #on recherche
                 return
-            elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range:
-                self.seek()
+
+            elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
+                self.target = None      #on n'a plus de cible
+                self.canvas.after(int(6000/self.speed), self.seek) #on recherche
                 return
+
             else :
-                self.canvas.after(int(6000/self.speed), self.tir_p)
+                self.canvas.after(int(6000/self.speed), self.tir_p) 
+
         else :
             self.seek()
     
 
 
-    # def refresh(self):
-    #     self.canvas.tag_raise(self.last_img)
-    #     self.canvas.after(1,self.refresh)
-
 # Classe projectile permattant de leur affecter des méthodes
 class Projectile(Thread):
+    """classe abstraite des projectiles lancés par les tours"""
+
     __slot__=('__dict__', "boom", "img")
-    x=0
-    y=0
-    damage = 0
+    damage = 0  
+
     target = None
-    seeking = None
+    seeking = None      #attributs de chargement d'images
     corps=None
 
     # Méthode chargée de l'apparition du projectile
-    def __init__(self,canvas, image,boom):
+    def __init__(self,tour, image,boom):
         Thread.__init__(self)
-        self.start()
+        self.start()                #Thread
 
+        self.tour = tour
+        self.x=tour.x-5
+        self.y=tour.y-70         #coordonnées
+        
         self.img=tk.PhotoImage(file=image)
-        self.boom=tk.PhotoImage(file=boom)
-        self.canvas=canvas
-        self.tx=self.target.x
-        self.ty=self.target.y
-        self.v=3
-        self.tir()   
+        self.boom=tk.PhotoImage(file=boom)      #Prép des images
 
-    # def calctraj(self):  
+        self.canvas=tour.canvas         #chargement des canvas
+        self.damage=self.tour.damage
+        self.target=tour.target
+        self.tx=self.tour.target.x           #on prend les coordonnées de la cible à un moment donné
+        self.ty=self.tour.target.y
+
+        self.v=3                        #un coefficient en pixel pour le déplacement du projectile
+
+        self.traj()                     #on fait un calcul de trajectoire
+
+    def traj(self):
+        n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/self.v)  #distance tour-ennemie divisée par le nombre de pixel de déplacement par coup
+        self.inc_abs=-(self.x-self.tx)/n_coups                 
+        self.inc_ord=-(self.y-self.ty)/n_coups
+        self.tir()                                                   #tir!
         
-    #     self.tir()
+
     # Méthode chargée du déplacement des projectiles
-    def tir(self):
-        
-        if type(self.corps)!=None:
-            self.canvas.delete(self.corps)
+    def tir(self):  
 
-        if self.tx-10<=self.x<=self.tx+10 and self.ty-6<=self.y<=self.ty+6:
-            self.canvas.delete(self.corps)
-            # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
-            self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
-            self.target.hp-=self.damage
+        if type(self.corps)!=None:      #s'il y a une image de projectile sur le canvas
+            self.canvas.delete(self.corps)  #on supprime
+
+        if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
+            
+            self.canvas.delete(self.corps)              #on efface l'image
+            self.corps=self.canvas.create_image(self.x, self.y, image=self.img)     #on met l'image d'impact
+            self.target.hp-=self.damage             #on enlève les dégâts
             self.canvas.after(5, self.canvas.delete, self.corps)
             return
         
 
-        n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/2)
-        self.inc_abs=-(self.x-self.tx)/n_coups
-        self.inc_ord=-(self.y-self.ty)/n_coups
-        self.x+=self.inc_abs
+        self.x+=self.inc_abs        #on incrémente les coordonnés du projectile
         self.y+=self.inc_ord
     
-        # self.corps=self.canvas.create_oval(self.x-5, self.y-5,self.x+5, self.y+5, fill="black")
+
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
-        self.canvas.after(20,self.tir)
+        self.canvas.after(20,self.tir)  #récurssion
 
 #________________________________________________________________________________________________________________________
                 
 # Classe des mortiers basés sur le même template que les autres
 class Mortier(Tower):
+
     
     coordsLvl1=[ 16, 54, 85, 142]
-    coordsLvl2=[ 91, 30, 191, 142]
+    coordsLvl2=[ 91, 30, 191, 142]              #coordonnées des images des différents niveaux dans la sprite sheet
     coordsLvl3=[ 203, 3, 313, 142]
     image="view/src/Mortier.png"
+
     range = 120
-    damage = 1
+    damage = 1                          #attributs
     speed = 2
     zone = 3
     r_up=25
-    damagetype = "explosion"
     d_up=50
+
+    damagetype = "explosion"        #type de dégâts
+
     damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+1, speed+2]
@@ -280,16 +318,13 @@ class WaterM(Tower):
     price_evo=[50, 125, 250]
     price=price_evo[0]
 
-    def __init__(self, canvas, x, y):
-        # self.root=tk.Tk()
+    def __init__(self, parent, x, y):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y,LameDEau)
+        Tower.__init__(self, parent, x, y,LameDEau)
 
         
-        # self.root.mainloop()
-    
     def __str__(self):
         return "Mage d'Eau"
 
@@ -311,13 +346,13 @@ class EarthM(Tower):
     price_evo=[50, 125, 250]
     price=price_evo[0]
 
-    def __init__(self, canvas, x, y):
-        # self.root=tk.Tk()
+    def __init__(self, parent, x, y):
+
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y,Caillou)
-        # self.root.mainloop()
+        Tower.__init__(self, parent, x, y,Caillou)
+
     def __str__(self):
         return "Mage de Terre"
 
@@ -346,8 +381,9 @@ class Archer(Tower):
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
         Tower.__init__(self, parent, x, y,Fleche)
-        
-        #self.root.mainloop()
+
+    def __str__(self):
+        return "Archer"
         
 class Forgeron(Tower):
     
@@ -407,7 +443,8 @@ class Mine(Tower):
     
     def produce(self): 
         self.parent.gold.set(self.parent.gold.get()+self.production)
-        self.canvas.after(1000, self.produce)
+        self.parent.interface.preView()
+        self.canvas.after(5000, self.produce)
     
     def seek(self):
         pass
@@ -434,46 +471,23 @@ class Mine(Tower):
         return self.__str__()
 
 class Boulet(Projectile):
-    def __init__(self,canvas, x, y, target, damage):
-        self.x=x-5
-        self.y=y-70
-        self.target = target
-        self.damage=damage
-        Projectile.__init__(self,canvas, "view/src/bouletDeCanon.png", "view/src/bouletDeCanon.png")
+    def __init__(self,tour):
+        Projectile.__init__(self,tour, "view/src/bouletDeCanon.png", "view/src/bouletDeCanon.png")
 
 class BouleDeFeu(Projectile):
-    def __init__(self,canvas, x, y, target, damage):
-        self.x=x-5
-        self.y=y-70
-        self.target = target
-        self.damage=damage
-        Projectile.__init__(self,canvas, "view/src/flamèche.png", "view/src/flamèche.png")
+    def __init__(self,tour):
+        Projectile.__init__(self,tour, "view/src/flamèche.png", "view/src/flamèche.png")
 
 class LameDEau(Projectile):
-    def __init__(self, canvas, x, y, target, damage):
-        self.x=x-5
-        self.y=y-70
-        self.target= target
-        self.damage=damage
-        Projectile.__init__(self, canvas, "view/src/petit shuriken eau.png", "view/src/petit shuriken eau.png")
+    def __init__(self, tour):
+        Projectile.__init__(self, tour, "view/src/petit shuriken eau.png", "view/src/petit shuriken eau.png")
 
 class Caillou(Projectile):
-    def __init__(self, canvas, x,y, target, damage):
-        self.x=x-5
-        self.y=y-70
-        self.target=target
-        self.damage=damage
-        Projectile.__init__(self, canvas, "view/src/caillou.png", "view/src/caillou.png")
-
-
-
-    def __str__(self):
-        return "Archer"
+    def __init__(self, tour):
+        Projectile.__init__(self, tour, "view/src/caillou.png", "view/src/caillou.png")
 
 class Fleche(Projectile):
-    def __init__(self, canvas, x,y, target, damage):
-        self.x=x-5
-        self.y=y-70
+    def __init__(self, tour):
         self.target=target
         self.damage=damage
         
@@ -489,10 +503,10 @@ class Fleche(Projectile):
         elif self.tx<=self.x and self.ty>=self.y:
             self.img=tk.PhotoImage(file ="view/src/flèche gb.png")
         self.boom=self.img
-        self.v=1
-        self.tir()
+        self.v=4
+        self.traj()
 
-class Kamehameha(Projectile):
+class Kamehameha(Thread):
     milieu=[0,0,100,100]
     droite=[100,0,200,100]
     gauche=[0,100,100,200]
@@ -506,6 +520,7 @@ class Kamehameha(Projectile):
         self.hero=hero
         self.x=hero.x-100
         self.y=hero.y-5
+        self.parent = hero.parent
         self.target=hero.target
         self.damage=hero.damage
         self.canvas=hero.canvas
@@ -519,7 +534,7 @@ class Kamehameha(Projectile):
         # if self.hero.state="specialMove"
        
     def tir(self):
-        
+        ennemies = self.parent.ennemies
         self.longueur+=1
         if type(self.tete)!=None:
             self.canvas.delete(self.tete)
@@ -536,7 +551,3 @@ class Kamehameha(Projectile):
         self.tete=self.canvas.create_image(self.x, self.y, image=self.g)
         if not self.longueur==20:
             self.canvas.after(150,self.tir)
-
-
-def distance(tower, ennemy):
-    return ((ennemy.x-tower.x)**2+(ennemy.y-tower.y)**2)**0.5

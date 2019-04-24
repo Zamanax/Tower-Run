@@ -1,41 +1,43 @@
 import tkinter as tk
-from model.Character import Character
-from model.Ennemy import ennemies
 import asyncio
 from functools import lru_cache
 from threading import Thread
+
+from model.Character import Character
 import model.Tower as Tow
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(
-                Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
 
 class Heros(Character):
-    # Stats du Héros
+    # Variables propres au héros
     team = "ally"
-    state = "idle"
-    lvl = 0
     lv0 = {}
-    lv1 = {}
-    lv2 = {}
-    lv3 = {}
 
-    def __init__(self, canvas, x, y, max_y, min_y):
-        Character.__init__(self, canvas, x, y)
-        if "spritesheet" in self.lv0:
-            self.spritesheet1 = tk.PhotoImage(file=self.lv1["spritesheet"])
+    def __init__(self, parent, x, y, max_y, min_y):
+
+        self.hp = self.lv0["hp"]
+        self.damage = self.lv0["damage"]
+        self.damagingSprite = self.lv0["damagingSprite"]
+        self.speed = self.lv0["speed"]
+        self.attackSpeed = self.lv0["attackSpeed"]
+        self.num_sprintes = self.lv0["num_sprintes"]
+        self.spritesheet = self.lv0["spritesheet"]
+        self.spriteSize = self.lv0["spriteSize"]
+        self.y_Anim = self.lv0["y_Anim"]
+        self.zoom = self.lv0["zoom"]
+
+        Character.__init__(self, parent, x, y)
+        
+        # On définit l'ordonnée minimale et maximale où on peut aller
         self.max_y = max_y
         self.min_y = min_y
+
+        # on cherche les ennemis
         self.seek()
 
+    # Même fonction que pour les personnages
     @lru_cache(128)    
     def getSprite(self):
         super().getSprite()
+        # Si le heros a un niveau supérieur alors on charge des animations suplémentaires 
         if self.lv1 != {}:
             self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
                                 for i in range(self.lv0["num_sprintes"]["transform"])]
@@ -48,7 +50,7 @@ class Heros(Character):
             self.getLvlSprite(self.lv2)
             self.getLvlSprite(self.lv3)
         
-
+    # Fonction chargée de charger des animations en fonctions des niveaux
     def getLvlSprite(self, dict):
         loop = asyncio.get_event_loop()
         image = tk.PhotoImage(file=dict["spritesheet"])
@@ -64,6 +66,8 @@ class Heros(Character):
         elif dict == self.lv3:
             self.idle3, self.runRight3, self.runLeft3, self.attackRight3, self.attackLeft3, self.specialMove3, self.death3 = loop.run_until_complete(asyncio.gather(*tasks))
         
+#------------------------Fonction chargée de découper les images dans les images--------
+
     async def getSpecialMove(self, dict, image):
         specialMove = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["specialMove"], dict["spriteSize"]*(i+1), dict["y_Anim"]["specialMove"]+dict["spriteSize"]).zoom(self.zoom)
                           for i in range(dict["num_sprintes"]["specialMove"])]
@@ -126,145 +130,137 @@ class Heros(Character):
                        '-from', x1, y1, x2, y2, '-to', 0, 0)
         return sprite
 
-    # @lru_cache(128)
+#----------------------------------------------------------------------------------------
+
+    # Fonction de recherche des ennemis
     def seek(self):
+        # Si on a déjà une cible on attaque
         if self.target:
             self.attack()
         else:
-            for ennemy in ennemies:
-                if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
-                    self.target = ennemy
-                    self.canvas.after_cancel(self.seeking)
-                    if self.move:
-                        self.canvas.after_cancel(self.move)
-                    self.sprite = 0
-                    self.attack()
-                    return self.target
-        
-        self.seeking = self.canvas.after(150, self.seek)
+            if self.state == "idle":
+            # Sinon on cherche une cible potentielle dans les ennemis du niveau
+                for ennemy in self.parent.ennemies:
+                    # On calcule la distance et l'état
+                    if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
+                        # Il devient la cible
+                        self.target = ennemy
 
+                        # On annule tout
+                        if self.seeking:
+                            self.canvas.after_cancel(self.seeking)
+                        if self.move:
+                            self.canvas.after_cancel(self.move)
+
+                        # On attaque
+                        self.sprite = 0
+                        self.attack()
+                        return self.target
+
+            self.seeking = self.canvas.after(150, self.seek)
+
+    # Fonction chargée du déplacement à la souris du héros
     def mouseMove(self, event):
+
+        # Si il se transforme on ne fait rien
         if self.state == "transform":
             return
+        
+        # Si on bouge déjà alors on annule l'ancien mouvement
         if self.move:
             self.state = "idle"
             self.canvas.after_cancel(self.move)
-
-            if event.y > self.max_y:
-                self.moveTo(event.x, self.max_y)
-            elif event.y < self.min_y:
-                self.moveTo(event.x, self.min_y)
-            else:
-                self.moveTo(event.x, event.y)
-
-        elif self.attacking:
+            self.move = None
+        
+        # Si on attaque alors on annule
+        if self.attacking:
             self.state = "idle"
             self.canvas.after_cancel(self.attack)
+            self.attacking = None
 
-            if event.y > self.max_y:
-                self.moveTo(event.x, self.max_y)
-            elif event.y < self.min_y:
-                self.moveTo(event.x, self.min_y)
-            else:
-                self.moveTo(event.x, event.y)
-
+        # On effectue le mouvement en restant dans les bornes
+        self.sprite = 0
+        if event.y > self.max_y:
+            self.moveTo(event.x, self.max_y)
+        elif event.y < self.min_y:
+            self.moveTo(event.x, self.min_y)
         else:
-            self.sprite = 0
-            if event.y > self.max_y:
-                self.moveTo(event.x, self.max_y)
-            elif event.y < self.min_y:
-                self.moveTo(event.x, self.min_y)
-            else:
-                self.moveTo(event.x, event.y)
+            self.moveTo(event.x, event.y)
 
+    # On effectue l'attaque spéciale lorsque l'on presse la touche
     def specialAttack(self, event):
         self.state = "specialMove"
-        
+    
+    # Fonction chargée de la transformation du heros 
     def transform(self):
+
+        # On réinitialise l'image d'animation
         self.sprite = 0
+        self.state = "transform"
+
+        # On annule le mouvement
+        if self.move:
+            self.canvas.after_cancel(self.move)
+
+        # On change les stats et les animations
         if self.lvl == 0:
-            self.sprite = 0
-            self.state = "transform"
 
             self.lvl = 1
-            self.hp = self.lv1["hp"]
-            self.baseHp = self.hp
-            self.damage = self.lv1["damage"]
-            self.damagingSprite = self.lv1["damagingSprite"]
-            self.speed = self.lv1["speed"]
-            self.attackSpeed = self.lv1["attackSpeed"]
-            self.specialMove = self.specialMove1
-            self.spritesheet = self.lv1["spritesheet"]
-            self.spriteSize = self.lv1["spriteSize"]
-            self.y_Anim = self.lv1["y_Anim"]
+            self.changeStats(self.lv1)
+
             self.idle = self.idle1
             self.runRight = self.runRight1
             self.runLeft = self.runLeft1
             self.attackLeft = self.attackLeft1
             self.attackRight = self.attackRight1
-            # self.transformAnim = self.transformAnim1
             self.death = self.death1
 
         elif self.lvl == 1:
             self.lvl = 2
-            self.sprite = 0
-            self.state = "transform"
 
-            self.hp = self.lv2["hp"]
-            self.baseHp = self.hp
-            self.damage = self.lv2["damage"]
-            self.damagingSprite = self.lv2["damagingSprite"]
-            self.speed = self.lv2["speed"]
-            self.attackSpeed = self.lv2["attackSpeed"]
-            self.specialMove = self.specialMove2
-            # self.num_sprintes = self.lv2["num_sprintes"]
-            self.spritesheet = self.lv2["spritesheet"]
-            self.spriteSize = self.lv2["spriteSize"]
-            self.y_Anim = self.lv2["y_Anim"]
+            self.changeStats(self.lv2)
+
             self.idle = self.idle2
             self.runRight = self.runRight2
             self.runLeft = self.runLeft2
             self.attackLeft = self.attackLeft2
             self.attackRight = self.attackRight2
-            # self.transformAnim = self.transformAnim2
             self.death = self.death2
 
         elif self.lvl == 2:
             self.lvl = 3
-            self.sprite = 0
-            self.state = "transform"
 
-            self.hp = self.lv3["hp"]
-            self.baseHp = self.hp
-            self.damage = self.lv3["damage"]
-            self.damagingSprite = self.lv3["damagingSprite"]
-            self.speed = self.lv3["speed"]
-            self.attackSpeed = self.lv3["attackSpeed"]
-            self.specialMove = self.specialMove3
-            # self.num_sprintes = self.lv3["num_sprintes"]
-            self.spritesheet = self.lv3["spritesheet"]
-            self.spriteSize = self.lv3["spriteSize"]
-            self.y_Anim = self.lv3["y_Anim"]
-            # self.changeStats(self.lv3)
+            self.changeStats(self.lv3)
+
             self.idle = self.idle3
             self.runRight = self.runRight3
             self.runLeft = self.runLeft3
             self.attackLeft = self.attackLeft3
             self.attackRight = self.attackRight3
             self.death = self.death3
+        
+        # On change la vie de base
+        self.baseHp = self.hp
 
+    # Fonction chargé du changement de statistiques en fonction du dictionnaire donné
     def changeStats(self, dict):
         self.hp = dict["hp"]
         self.damage = dict["damage"]
         self.damagingSprite = dict["damagingSprite"]
         self.speed = dict["speed"]
         self.attackSpeed = dict["attackSpeed"]
-        self.num_sprintes = dict["num_sprintes"]
         self.spritesheet = dict["spritesheet"]
         self.spriteSize = dict["spriteSize"]
         self.y_Anim = dict["y_Anim"]
 
+    # Incrémentation du sprite en fonction de l'état 
     def incrementSprite(self):
+        reg = 1
+        # Régénration du Héros
+        if self.sprite == self.num_sprintes["idle"] - 1 and self.state == "idle" and self.hp + reg <= self.baseHp:
+            self.hp += reg
+
+        # Si on a fini de se transformer
         if "transform" in self.num_sprintes:
             if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
                 self.state = "idle"
@@ -283,31 +279,28 @@ class Heros(Character):
                 self.state = "idle"
         super().incrementSprite()
 
-    # def idleAnim(self):
-    #     super().idleAnim()
-    #     if self.hp < self.baseHp:
-    #         self.hp += 0.5
-
-
 class Adventurer(Heros):
-    # Stats du Héros
-    name = "Aventurier"
-    hp = 100
-    damage = 4
-    damagingSprite = [1, 2, 3, 4]
-    speed = 8
-    attackSpeed = 4
 
-    # Spritesheet du Heros
-    barOffsetx = -8.5
-    barOffsety = 10
-    num_sprintes = {"idle": 13, "runRight": 8,
-                    "runLeft": 8, "attackRight": 10, "attackLeft": 10, "die": 7}
-    spritesheet = "view/src/Adventurer.png"
-    spriteSize = 32
-    zoom = 2
-    y_Anim = {"idle": 0, "runRight": 32, "runLeft": 288,
-              "attackRight": 64, "attackLeft": 324, "die": 256}
+    name = "Aventurier"
+
+    lv0 = {
+        "hp" : 100,
+        "damage" : 4,
+        "speed" : 8,
+        "attackSpeed" : 4,
+
+        # Spritesheet du Heros
+        "barOffsetx" : -8.5,
+        "barOffsety" : 10,
+        "damagingSprite" : [1, 2, 3, 4],
+        "num_sprintes" : {"idle": 13, "runRight": 8,
+                        "runLeft": 8, "attackRight": 10, "attackLeft": 10, "die": 7},
+        "spritesheet" : "view/src/Adventurer.png",
+        "spriteSize" : 32,
+        "zoom" : 2,
+        "y_Anim" : {"idle": 0, "runRight": 32, "runLeft": 288,
+                "attackRight": 64, "attackLeft": 324, "die": 256}
+    }
 
     def __init__(self, canvas, x, y, max_y, min_y):
         Heros.__init__(self, canvas, x, y, max_y, min_y)
@@ -317,22 +310,9 @@ class Adventurer(Heros):
     def transform(self):
         pass
 
-
 class Ichigo(Heros):
     # Stats du Héros
     name = "Ichigo"
-
-    def __init__(self, canvas, x, y, max_y, min_y):
-        self.hp = self.lv0["hp"]
-        self.damage = self.lv0["damage"]
-        self.damagingSprite = self.lv0["damagingSprite"]
-        self.speed = self.lv0["speed"]
-        self.attackSpeed = self.lv0["attackSpeed"]
-        self.num_sprintes = self.lv0["num_sprintes"]
-        self.spritesheet = self.lv0["spritesheet"]
-        self.spriteSize = self.lv0["spriteSize"]
-        self.y_Anim = self.lv0["y_Anim"]
-        Heros.__init__(self, canvas, x, y, max_y, min_y)
     
     lv0 = {
         "hp": 50,
@@ -346,6 +326,7 @@ class Ichigo(Heros):
                          "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 20},
         "spritesheet": "view/src/Ichigo0.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 0, "runRight": 400, "runLeft": 600,
                    "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1800}
     }
@@ -362,6 +343,7 @@ class Ichigo(Heros):
                          "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7},
         "spritesheet": "view/src/Ichigo1.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 0, "runRight": 400, "runLeft": 600,
                    "attackRight": 1200, "attackLeft": 1400, "die": 0, "transform": 2200}
     }
@@ -378,25 +360,13 @@ class Ichigo(Heros):
                          "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 7},
         "spritesheet": "view/src/Ichigo2.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 0, "runRight": 800, "runLeft": 1000,
                    "attackRight": 1200, "attackLeft": 1400, "die": 0, "transform": 1200}
     }
 
 class Goku(Heros):
     name = "Son Goku"
-
-    def __init__(self, canvas, x, y, max_y, min_y):
-        self.hp = self.lv0["hp"]
-        self.damage = self.lv0["damage"]
-        self.damagingSprite = self.lv0["damagingSprite"]
-        self.speed = self.lv0["speed"]
-        self.attackSpeed = self.lv0["attackSpeed"]
-        self.num_sprintes = self.lv0["num_sprintes"]
-        self.spritesheet = self.lv0["spritesheet"]
-        self.spriteSize = self.lv0["spriteSize"]
-        self.y_Anim = self.lv0["y_Anim"]
-        Heros.__init__(self, canvas, x, y, max_y, min_y)
-
     lv0 = {
         "hp": 50,
         "damage": 2,
@@ -407,6 +377,7 @@ class Goku(Heros):
                          "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 8, "transform": 9, "specialMove": 16},
         "spritesheet": "view/src/Goku0.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
                    "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200, "specialMove" : 1800}
     }
@@ -421,6 +392,7 @@ class Goku(Heros):
                          "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 4, "transform": 8, "specialMove": 17},
         "spritesheet": "view/src/Goku1.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
                    "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200, "specialMove": 1800}
     }
@@ -435,6 +407,7 @@ class Goku(Heros):
                          "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die": 4, "transform": 8, "specialMove": 17},
         "spritesheet": "view/src/Goku2.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
                    "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200, "specialMove": 1800}
     }
@@ -449,6 +422,7 @@ class Goku(Heros):
                          "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die": 4, "transform": 8, "specialMove":8},
         "spritesheet": "view/src/Goku3.png",
         "spriteSize": 200,
+        "zoom": 1,
         "y_Anim": {"idle": 200, "runRight": 400, "runLeft": 600,
                    "attackRight": 800, "attackLeft": 1000, "die": 200, "specialMove":1400}
     }
