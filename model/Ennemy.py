@@ -34,7 +34,7 @@ class Ennemy (Character):
 
 
 class Skeleton (Ennemy) :
-    __slot__=("__dict__", "idle", "runRight", "runLeft", "attackRight", "attackLeft", "die")
+    __slots__ = ("idle", "runRight", "runLeft", "attackRight", "attackLeft", "death")
     hp = 10
     name = "Skeleton"
     attackSpeed = 1
@@ -59,7 +59,7 @@ class miniSkeleton (Skeleton) :
     zoom = 1
 
 class Totor (Ennemy):
-    __slot__ = ("__dict__", "idle", "runRight",
+    __slots__ = ("idle", "runRight",
                 "runLeft", "attackRight", "attackLeft")
 
     hp = 200
@@ -83,7 +83,7 @@ class Fat_Totor (Totor) :
     zoom = 3
 
 class Dwarf (Ennemy) :
-    __slot__ = ('__dict__', 'idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft')
+    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft')
 
     hp = 50
     name = 'Dwarf'
