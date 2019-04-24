@@ -327,22 +327,25 @@ class Character (Thread):
 
         # On rappelle la fonction
         self.incrementing = self.canvas.after(time, self.incrementSprite)
+    
+    def moveTo(self,x,y):
+        self.n_coups=int((((self.x-x)**2+(self.y-y)**2)**0.5)/2)
+        self.inc_abs=-(self.x-x)/self.n_coups
+        self.inc_ord=-(self.y-y)/self.n_coups
+        self.Move(x,y)
 
     # Méthode chargée du déplacement de la position de base jusqu'à un point donné
-    def moveTo(self, x, y):
+    def Move(self, x,y):
         
         # On vérifie s'il on est déjà en train de courrir
         if self.state == "runRight" or self.state == "runLeft":
             # Dans ce cas on change sa position
-            if self.x == x+1:
-                self.x += 1
-            elif self.x == x-1:
-                self.x -= 1
-            if self.y-1 == y:
-                self.y += 1
-            elif self.y == y-1:
-                self.y -= 1
+            if self.n_coups==1:
+                    self.x = x
+                    self.y = y
 
+
+                
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
                 self.sprite = 0
@@ -352,11 +355,9 @@ class Character (Thread):
                 
 
             # Sinon on se déplace
-            n_coups=int((((self.x-x)**2+(self.y-y)**2)**0.5)/2)
-            self.inc_abs=-(self.x-x)/n_coups
-            self.inc_ord=-(self.y-y)/n_coups
             self.x+=self.inc_abs
             self.y+=self.inc_ord
+            self.n_coups-=1
 
             self.show()
 
@@ -369,8 +370,7 @@ class Character (Thread):
                 self.state = "runRight"
         
         # On relance la fonction en fonction de la vitesse du personnage
-        self.move = self.canvas.after(int(200/self.speed), self.moveTo, x, y)
-        return
+        self.move = self.canvas.after(int(200/self.speed), self.Move, x, y)
 
     # Fonction chargée de l'affichage du personnage en fonction de son état
     def show(self) :
