@@ -19,6 +19,7 @@ class Tower(Thread):
     range=0     #portée de tir
     damage=1    #dégâts
     speed=3     #cadence de tir
+    zone=1      #zone de dégats si explosion
 
     d_up=50
     r_up=25
@@ -186,6 +187,7 @@ class Projectile(Thread):
         Thread.__init__(self)
         self.start()                #Thread
 
+        self.zone=tour.zone
         self.tour = tour
         self.x=tour.x-5
         self.y=tour.y-70         #coordonnées
@@ -217,10 +219,19 @@ class Projectile(Thread):
             self.canvas.delete(self.corps)  #on supprime
 
         if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
-            
+            to_hit=[]
+            for ennemy in self.tour.parent.ennemies:
+                if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.zone and ennemy.state != "die":
+                    to_hit.append(ennemy)
+
             self.canvas.delete(self.corps)              #on efface l'image
+            # self.canvas.create_oval(self.x+self.zone, self.y+self.zone, self.x-self.zone, self.y-self.zone)
             self.corps=self.canvas.create_image(self.x, self.y, image=self.img)     #on met l'image d'impact
             self.target.hp-=self.damage             #on enlève les dégâts
+            for cible in to_hit:
+                cible.hp-=self.damage
+                if cible.hp<=0:
+                    cible.die()
             self.canvas.after(5, self.canvas.delete, self.corps)
             return
         
@@ -246,7 +257,7 @@ class Mortier(Tower):
     range = 120
     damage = 1                          #attributs
     speed = 2
-    zone = 3
+    zone = 80
     r_up=25
     d_up=50
 
@@ -277,7 +288,7 @@ class FireM(Tower):
     image="view/src/Mage2.png"
     damage = 4
     speed = 3
-    zone = 1
+    zone = -1
     range = 150
     r_up=25
     d_up=25
@@ -308,7 +319,7 @@ class WaterM(Tower):
     image="view/src/Mage3.png"
     damage = 4
     speed = 3
-    zone = 1
+    zone = -1
     range = 150
     damagetype = "water"
     d_up=50
@@ -335,7 +346,7 @@ class EarthM(Tower):
     coordsLvl3 = [203, 0, 323, 132]
     damage = 4
     speed = 3
-    zone = 1
+    zone = -1
     range = 150
     damagetype = "earth"
     d_up=50
@@ -364,7 +375,7 @@ class Archer(Tower):
     range=200
     damage = 4
     speed = 5
-    zone = 1
+    zone = -1
     damagetype = "shot"
     d_up=50
     r_up=25
