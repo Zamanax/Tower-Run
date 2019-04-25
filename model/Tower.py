@@ -375,8 +375,7 @@ class Archer(Tower):
     price=price_evo[0]
 
     def __init__(self, parent, x, y):
-        #self.root=tk.Tk()
-        #test_subimage(self.image, 3, 51, 82, 138, self.root)
+
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
@@ -488,6 +487,7 @@ class Caillou(Projectile):
 
 class Fleche(Projectile):
     def __init__(self, tour):
+
         self.target=target
         self.damage=damage
         
@@ -507,10 +507,10 @@ class Fleche(Projectile):
         self.traj()
 
 class Kamehameha(Thread):
-    milieu=[0,0,100,100]
-    droite=[100,0,200,100]
-    gauche=[0,100,100,200]
-    tete=None
+    gauche=[0,0,90,100]
+    milieu=[90,0,190,100]
+    droite=[190,0,290,100]
+    head=None
 
 
     def __init__(self, hero):
@@ -518,7 +518,7 @@ class Kamehameha(Thread):
         self.start()
         self.longueur=0
         self.hero=hero
-        self.x=hero.x-100
+        
         self.y=hero.y-5
         self.parent = hero.parent
         self.target=hero.target
@@ -528,16 +528,21 @@ class Kamehameha(Thread):
         self.img="view/src/kamehameha_1.png"
         self.d=load(self.droite, self.img)
         self.g=load(self.gauche, self.img)
-        self.m=load(self.milieu, self.img)
+        self.m=load(self.milieu, self.img)      
+        if self.hero.state=="specialMoveRight":
+            self.tete=self.d
+            self.x=hero.x+100
+        elif self.hero.state=="specialMoveLeft":
+            self.x=hero.x-100
+            self.tete=self.g
         self.tir()
- 
-        # if self.hero.state="specialMove"
+
        
     def tir(self):
         ennemies = self.parent.ennemies
         self.longueur+=1
-        if type(self.tete)!=None:
-            self.canvas.delete(self.tete)
+        if type(self.head)!=None:
+            self.canvas.delete(self.head)
             self.canvas.create_image(self.x, self.y, image=self.m)
 
         for ennemy in ennemies:
@@ -545,9 +550,11 @@ class Kamehameha(Thread):
                 ennemy.hp-=self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
-
-        self.x-=self.v
+        if self.hero.state=="specialMoveLeft":
+            self.x-=self.v
+        elif self.hero.state=="specialMoveRight":
+            self.x+=self.v
     
-        self.tete=self.canvas.create_image(self.x, self.y, image=self.g)
+        self.head=self.canvas.create_image(self.x, self.y, image=self.tete)
         if not self.longueur==20:
             self.canvas.after(150,self.tir)

@@ -41,7 +41,8 @@ class Character (Thread):
     idleLeft1=[]
     runRight = []
     runLeft = []
-    specialMove = []
+    specialMoveRight = []
+    specialMoveLeft = []
     damagingSprite = []
     attackRight = []
     attackLeft = []
@@ -242,18 +243,15 @@ class Character (Thread):
         self.incrementSprite()
 
 #-----------------------Méthode chargée du découpage de l'image en fonction de l'animation désirée---------------------
-    
     async def getIdleRightAnim(self):
         idleRight = [self.subimage(self.spriteSize*i, self.y_Anim["idleRight"], self.spriteSize*(i+1), self.y_Anim["idleRight"]+self.spriteSize).zoom(self.zoom)
                      for i in range(self.num_sprintes["idleRight"])]
         return idleRight
-
     async def getIdleLeftAnim(self):
         idleLeft = [self.subimage(self.spriteSize*i, self.y_Anim["idleLeft"], self.spriteSize*(i+1), self.y_Anim["idleLeft"]+self.spriteSize).zoom(self.zoom)
                      for i in range(self.num_sprintes["idleLeft"])]
         idleLeft.reverse()
         return idleLeft
-
     async def getRunRightAnim(self):
 
         runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
@@ -306,7 +304,7 @@ class Character (Thread):
         # On modifie le temps que l'on mets pour rappeler la fonction selon l'état du personnage
         if self.state == "transform":
             time = 200
-        elif self.state == "specialMove":
+        elif self.state == "specialMoveRight" or self.state == "specialMoveLeft":
             time = 300                
         else : 
             time = 250
@@ -331,10 +329,10 @@ class Character (Thread):
         elif self.state == "transform" :
             time = 200
         # Dans le cas d'un coup spécial, on tire un projectile
-        elif self.state == "specialMove" and self.sprite== self.num_sprintes[self.state]-1:
+        elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.sprite== self.num_sprintes[self.state]-1:
             Tow.Kamehameha(self)
             time = 2700
-        elif self.state == "specialMove":
+        elif self.state == "specialMoveRight" or self.state == "specialMoveRight":
             time = 300
         elif self.state == "die":
             time = 400
@@ -415,9 +413,12 @@ class Character (Thread):
         elif self.state == "transform":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.transformAnim[self.sprite])
-        elif self.state == "specialMove":
+        elif self.state == "specialMoveRight":
             self.last_img = self.canvas.create_image(
-                self.x, self.y, image=self.specialMove[self.sprite])
+                self.x, self.y, image=self.specialMoveRight[self.sprite])
+        elif self.state == "specialMoveLeft":
+            self.last_img = self.canvas.create_image(
+                self.x, self.y, image=self.specialMoveLeft[self.sprite])        
         elif self.state == "idleRight" :
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.idleRight[self.sprite])
