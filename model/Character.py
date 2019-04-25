@@ -447,3 +447,12 @@ class Character (Thread):
 
             else :
                 self.damageBar = self.canvas.create_line(self.x-15+self.barOffsetx,self.y+25+self.barOffsety,self.x+25+self.barOffsetx,self.y+25+self.barOffsety, width= 5, fill="red")
+
+        for spot in self.parent.spots:
+            if spot.tower :
+                try:
+                    self.canvas.tag_lower(self.last_img, spot.tower.last_img)
+                    self.canvas.tag_lower(self.healthBar, spot.tower.last_img)
+                    self.canvas.tag_lower(self.damageBar, spot.tower.last_img)
+                except :
+                    None

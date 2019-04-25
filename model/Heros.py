@@ -23,7 +23,10 @@ class Heros(Character):
         self.spriteSize = self.lv0["spriteSize"]
         self.y_Anim = self.lv0["y_Anim"]
         self.zoom = self.lv0["zoom"]
-
+        if "barOffsetx" in self.lv0:
+            self.barOffsetx = self.lv0["barOffsetx"]
+        if "barOffsety" in self.lv0:
+            self.barOffsety = self.lv0["barOffsety"]
         Character.__init__(self, parent, x, y)
         
         # On définit l'ordonnée minimale et maximale où on peut aller
@@ -319,16 +322,15 @@ class Adventurer(Heros):
         "attackSpeed" : 4,
 
         # Spritesheet du Heros
-        "barOffsetx" : -8.5,
         "barOffsety" : 10,
         "damagingSprite" : [1, 2, 3, 4],
-        "num_sprintes" : {"idle": 13, "runRight": 8,
+        "num_sprintes" : {"idleLeft":13 ,"idleRight": 13, "runRight": 8,
                         "runLeft": 8, "attackRight": 10, "attackLeft": 10, "die": 7},
         "spritesheet" : "view/src/Adventurer.png",
         "spriteSize" : 32,
         "zoom" : 2,
-        "y_Anim" : {"idle": 0, "runRight": 32, "runLeft": 288,
-                "attackRight": 64, "attackLeft": 324, "die": 256}
+        "y_Anim" : {"idleLeft":256,"idleRight": 0, "runRight": 32, "runLeft": 288,
+                "attackRight": 64, "attackLeft": 324, "die": 224}
     }
 
     def __init__(self, canvas, x, y, max_y, min_y):

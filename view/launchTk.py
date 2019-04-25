@@ -192,7 +192,7 @@ class MainApplication(tk.Frame):
 
     # Fonction permettant de passer d'une frame à l'autre en détruisant l'autre
     def switchFrame(self, nframe):
-        nlevel = nframe(self, self.parent, heros="Goku")
+        nlevel = nframe(self, self.parent, heros="Aventurier")
         if self.currentFrame:
             self.currentFrame.destroy()
             del self.currentFrame
