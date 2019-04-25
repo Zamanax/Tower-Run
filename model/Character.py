@@ -316,7 +316,7 @@ class Character (Thread):
     # Méthode d'incrémentation de l'image à afficher
     def incrementSprite(self):               
 
-        # On incrémente le sprite et/ou on reset (en fonction de l'état)
+        # On incrémente le sprite et/ou on reset (en fonction de l'état et du nombre d'animation)
         self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
 
         # Selon l'état on modifie le temps d'incrémentation
@@ -392,7 +392,8 @@ class Character (Thread):
     # Fonction chargée de l'affichage du personnage en fonction de son état
     def show(self) :
         # On supprime l'ancienne image
-        self.canvas.delete(self.last_img)
+        if self.last_img:
+            self.canvas.delete(self.last_img)
         # Si on dépasse le tableau on recommence à la première image
         if self.sprite >= self.num_sprintes[self.state]:
             self.sprite = 0
@@ -451,8 +452,9 @@ class Character (Thread):
         for spot in self.parent.spots:
             if spot.tower :
                 try:
-                    self.canvas.tag_lower(self.last_img, spot.tower.last_img)
-                    self.canvas.tag_lower(self.healthBar, spot.tower.last_img)
-                    self.canvas.tag_lower(self.damageBar, spot.tower.last_img)
+                    if spot.tower.last_img:
+                        self.canvas.tag_lower(self.last_img, spot.tower.last_img)
+                        self.canvas.tag_lower(self.healthBar, spot.tower.last_img)
+                        self.canvas.tag_lower(self.damageBar, spot.tower.last_img)
                 except :
                     None

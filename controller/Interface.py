@@ -219,11 +219,9 @@ class Interface(tk.Frame):
                     self.spotZone.destroy()
                     self.spotDamagetype.destroy()
                     self.spotSpeed.destroy()
-
-                if self.selected.tower.price is "int":
-                    print("pass")
+                    
+                if self.selected.tower.price is not "Max":
                     if self.selected.tower.price > self.parent.gold.get():
-                        print("pass")
                         self.buildButton["state"] = "disabled"
                         self.buildButton["text"] = "Pas Assez d'Or"
 

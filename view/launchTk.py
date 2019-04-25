@@ -58,7 +58,7 @@ class Lvl(tk.Frame):
                                 height=self.rootHeight, highlightthickness=0)
 
         # Affichage de l'arrière plan 
-        self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+        self.background = self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
         # Défintion de l'argent et de la vie
         self.gold = tk.IntVar(self.canvas, self.gold)
