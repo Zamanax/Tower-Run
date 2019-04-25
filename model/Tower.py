@@ -28,9 +28,6 @@ class Tower(Thread):
     speed_evo=[speed, speed+2, speed+6]
     price_evo=[0,0,0]
     
-   
-
-    
     def __del__(self):
         for el in self.__dict__:
             del el
@@ -248,8 +245,6 @@ class Projectile(Thread):
                 
 # Classes des mortiers, archers, mages... basés sur le même template que les autres
 class Mortier(Tower):
-
-    
     coordsLvl1=[ 16, 54, 85, 142]
     coordsLvl2=[ 91, 30, 191, 142]              #coordonnées des images des différents niveaux dans la sprite sheet
     coordsLvl3=[ 203, 3, 313, 142]
