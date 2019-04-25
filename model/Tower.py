@@ -488,17 +488,19 @@ class Caillou(Projectile):
 class Fleche(Projectile):
     def __init__(self, tour):
 
-        self.target=target
-        self.damage=damage
-        
-        self.canvas=canvas
+        self.target=tour.target
+        self.damage=tour.damage
+        self.x = tour.x-10
+        self.y = tour.y-40
+
+        self.canvas=tour.canvas
         self.tx=self.target.x
         self.ty=self.target.y
         if self.tx<=self.x and self.ty<= self.y:
             self.img=tk.PhotoImage(file = "view/src/flèche gh.png")
         elif self.tx>=self.x and self.ty>=self.y:
             self.img=tk.PhotoImage(file= "view/src/flèche db.png")
-        elif target.x>=self.x and self.ty<= self.y:
+        elif self.tx>=self.x and self.ty<= self.y:
             self.img=tk.PhotoImage(file = "view/src/flèche dh.png")
         elif self.tx<=self.x and self.ty>=self.y:
             self.img=tk.PhotoImage(file ="view/src/flèche gb.png")
