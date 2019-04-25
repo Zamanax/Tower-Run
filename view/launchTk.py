@@ -4,7 +4,9 @@ import model.Tower as Tow
 import model.Heros as He
 from model.Ennemy import *
 from model.fonctions_utiles import subimage
-
+import tkinter.ttk as ttk
+from threading import Thread
+import asyncio
 # Classe des emplacement stockants les données pour l'interface
 
 
@@ -39,9 +41,10 @@ class Lvl(tk.Frame):
     image = None
 
     def __init__(self, parent, *args, **kwargs):
+        self.parent = parent
+
         # On récupère le heros choisi
         selectedHeros = kwargs.get('heros', None)
-
         # Défintion de l'arrière plan du niveau
         self.backImg = tk.PhotoImage(file=self.image)
 
@@ -123,7 +126,6 @@ class Lvl(tk.Frame):
 
 # Classe du menu principal
 
-
 class MainMenu(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
@@ -165,11 +167,17 @@ class MainMenu(tk.Frame):
     def startGame(self, event):
         if 390 < event.x < 890 and 500 < event.y < 900:
             self.parent.heros = self.heros.get()
+            self.launchProgress()
             self.parent.switchFrame(Lvl1)
 
+    def launchProgress(self):
+        
+        self.progressBar = ttk.Progressbar(self.canvas,orient="horizontal", length=400, mode="determinate")
+        if self.heros.get() == "Goku":
+            self.progressBar["maximum"] = 290
+        self.progressBar.place(x=440, y=615)
+
 # -----------------Chargement de la Frame LVL 1 ----------------------
-
-
 class Lvl1(Lvl):
     image = "view/src/Lvl1Background.png"
     gold = 1000

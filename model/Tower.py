@@ -218,7 +218,6 @@ class Projectile(Thread):
                 for ennemy in self.tour.parent.ennemies:
                     if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.zone and ennemy.state != "die":
                         to_hit.append(ennemy)
-                        print ("to hit")
             else :
                 to_hit.append(self.target)
 

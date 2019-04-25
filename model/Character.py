@@ -234,10 +234,9 @@ class Character (Thread):
 
         # On utilise un tuple pour lui donner les animations à charger
         tasks = self.getIdleRightAnim(),self.getIdleLeftAnim(), self.getRunRightAnim(), self.getRunLeftAnim(), self.getAttackRightAnim(), self.getAttackLeftAnim(), self.getDeathAnim()
-        
+
         # On attends les résultats de chaque fonction
         (self.idleRight, self.idleLeft, self.runRight, self.runLeft, self.attackRight, self.attackLeft, self.death) = loop.run_until_complete(asyncio.gather(*tasks))
-
         # On lance l'animation
         self.idleAnim()
         self.incrementSprite()
@@ -246,21 +245,25 @@ class Character (Thread):
     async def getIdleRightAnim(self):
         idleRight = [self.subimage(self.spriteSize*i, self.y_Anim["idleRight"], self.spriteSize*(i+1), self.y_Anim["idleRight"]+self.spriteSize).zoom(self.zoom)
                      for i in range(self.num_sprintes["idleRight"])]
+                     
         return idleRight
     async def getIdleLeftAnim(self):
         idleLeft = [self.subimage(self.spriteSize*i, self.y_Anim["idleLeft"], self.spriteSize*(i+1), self.y_Anim["idleLeft"]+self.spriteSize).zoom(self.zoom)
                      for i in range(self.num_sprintes["idleLeft"])]
+                     
         idleLeft.reverse()
         return idleLeft
     async def getRunRightAnim(self):
 
         runRight = [self.subimage(self.spriteSize*i, self.y_Anim["runRight"], self.spriteSize*(i+1), self.y_Anim["runRight"]+self.spriteSize).zoom(self.zoom)
                         for i in range(self.num_sprintes["runRight"])]
+                        
         return runRight
     async def getRunLeftAnim(self):
 
         runLeft = [self.subimage(self.spriteSize*i, self.y_Anim["runLeft"], self.spriteSize*(i+1), self.y_Anim["runLeft"]+self.spriteSize).zoom(self.zoom)
                     for i in range(self.num_sprintes["runLeft"])]
+                    
         runLeft.reverse()
 
         return runLeft
@@ -268,12 +271,14 @@ class Character (Thread):
 
         attackRight = [self.subimage(self.spriteSize*i, self.y_Anim["attackRight"], self.spriteSize*(i+1), self.y_Anim["attackRight"]+self.spriteSize).zoom(self.zoom)
                     for i in range(self.num_sprintes["attackRight"])]
+                    
 
         return attackRight
     async def getAttackLeftAnim(self):
 
         attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
                     for i in range(self.num_sprintes["attackLeft"])]
+                    
         attackLeft.reverse()
 
         return attackLeft
@@ -281,6 +286,7 @@ class Character (Thread):
 
         death = [self.subimage(self.spriteSize*i, self.y_Anim["die"], self.spriteSize*(i+1), self.y_Anim["die"]+self.spriteSize).zoom(self.zoom)
                     for i in range(self.num_sprintes["die"])]
+                    
 
         return death
 #----------------------------------------------------------------------------------------------------------------------
@@ -293,7 +299,7 @@ class Character (Thread):
     def subimage(self, x1, y1, x2, y2):
         # Création de la variable à retourner
         sprite = tk.PhotoImage()
-
+        self.parent.update()
         # Décupage de l'image en Tcl à partir de l'image du personnage et des coordonnées
         sprite.tk.call(sprite, 'copy', self.spritesheet,
                        '-from', x1, y1, x2, y2, '-to', 0, 0)

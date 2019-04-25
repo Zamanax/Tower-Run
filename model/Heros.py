@@ -10,6 +10,7 @@ class Heros(Character):
     # Variables propres au héros
     team = "ally"
     lv0 = {}
+    compteur=0
 
     def __init__(self, parent, x, y, max_y, min_y):
 
@@ -52,9 +53,13 @@ class Heros(Character):
             self.specialMoveRight = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["specialMoveRight"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["specialMoveRight"]+self.lv0["spriteSize"]).zoom(self.zoom)
                           for i in range(self.lv0["num_sprintes"]["specialMoveRight"])]
             self.specialMoveLeft.reverse()
-
+        
             self.getLvlSprite(self.lv1)
+            
+        if self.lv2 != {}:
             self.getLvlSprite(self.lv2)
+
+        if self.lv3 != {}:
             self.getLvlSprite(self.lv3)
         
     # Fonction chargée de charger des animations en fonctions des niveaux
@@ -79,11 +84,13 @@ class Heros(Character):
         specialMoveLeft = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["specialMoveLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["specialMoveLeft"]+dict["spriteSize"]).zoom(self.zoom)
                           for i in range(dict["num_sprintes"]["specialMoveLeft"])]
         specialMoveLeft.reverse()
+
         return specialMoveLeft
 
     async def getSpecialMoveRight(self, dict, image):
         specialMoveRight = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["specialMoveRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["specialMoveRight"]+dict["spriteSize"]).zoom(self.zoom)
                           for i in range(dict["num_sprintes"]["specialMoveRight"])]
+        
         return specialMoveRight
 
     async def getIdleRightAnim1(self, dict, image):
@@ -95,6 +102,7 @@ class Heros(Character):
         idleLeft1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["idleLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["idleLeft"]+dict["spriteSize"]).zoom(self.zoom)
                           for i in range(self.lv1["num_sprintes"]["idleLeft"])]
         idleLeft1.reverse()
+
         return idleLeft1
 
     async def getRunRightAnim1(self, dict, image):
@@ -137,12 +145,16 @@ class Heros(Character):
         transform1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["transform"], dict["spriteSize"]*(i+1), self.lv1["y_Anim"]["transform"]+dict["spriteSize"]).zoom(self.zoom)
                            for i in range(dict["num_sprintes"]["transform"])]
         transform1.reverse()
+
         return transform1
     
     def subimage1(self,image, x1, y1, x2, y2):
         # Création de la variable à retourner
+        self.compteur+=1
         sprite = tk.PhotoImage()
-
+        print(self.compteur)
+        self.parent.parent.currentFrame.progressBar["value"] = self.compteur
+        self.parent.update()
         # Décupage de l'image en Tcl
         sprite.tk.call(sprite, 'copy', image,
                        '-from', x1, y1, x2, y2, '-to', 0, 0)
@@ -354,12 +366,12 @@ class Ichigo(Heros):
         # Spritesheet du Heros
         "damagingSprite" : [2,3,5,12,13],
         "num_sprintes": {"idleRight": 2, "idleLeft":2 , "runRight": 8,
-                         "runLeft": 8, "attackRight": 16, "attackLeft": 16, "die": 2, "transform": 20},
+                         "runLeft": 8, "attackRight": 16, "attackLeft": 16,"specialMoveRight":19, "specialMoveLeft":19, "die": 2, "transform": 20},
         "spritesheet": "view/src/Ichigo0.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight": 0,"idleLeft":200, "runRight": 400, "runLeft": 600,
-                   "attackRight": 800, "attackLeft": 1000, "die": 0, "transform": 1800}
+                   "attackRight": 800, "attackLeft": 1000, "die": 0,"specialMoveRight":1200, "specialMoveLeft":1400, "transform": 1800}
     }
 
     lv1 = {
@@ -371,12 +383,12 @@ class Ichigo(Heros):
         # Spritesheet du Heros
         "damagingSprite" : [2,3,7,8,9,13,14,17,18],
         "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8,
-                         "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7},
+                         "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7, "specialMoveRight":13, "specialMoveLeft":13},
         "spritesheet": "view/src/Ichigo1.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight": 0,"idleLeft":200, "runRight": 400, "runLeft": 600,
-                   "attackRight": 1200, "attackLeft": 1400, "die": 0, "transform": 2200}
+                   "attackRight": 1200, "attackLeft": 1400, "die": 0,"specialMoveRight":1600, "specialMoveLeft":1800, "transform": 2200}
     }
 
     lv2 = {
@@ -388,12 +400,12 @@ class Ichigo(Heros):
         # Spritesheet du Heros
         "damagingSprite" : [1,2,6,7,11,12,13,14],
         "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8,
-                         "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 7},
+                         "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 0, "specialMoveRight":14, "specialMoveLeft":14},
         "spritesheet": "view/src/Ichigo2.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 800, "runLeft": 1000,
-                   "attackRight": 1200, "attackLeft": 1400, "die": 0, "transform": 1200}
+                   "attackRight": 1200, "attackLeft": 1400,"specialMoveRight":1600, "specialMoveLeft":1800, "die": 0, "transform": 1200}
     }
 
 class Goku(Heros):
