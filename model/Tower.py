@@ -19,6 +19,7 @@ class Tower(Thread):
     range=0     #portée de tir
     damage=1    #dégâts
     speed=3     #cadence de tir
+    zone=-1    #zone de dégats si explosion
 
     d_up=50
     r_up=25
@@ -142,16 +143,15 @@ class Tower(Thread):
         self.price="Max"
 
         self.show_evol()
-
-
     
     def tir_p(self):
         """fonction qui 'tire' le projectile"""
         
         if self.target : #si un ennemi est ciblé
-            self.projectile(self) 
-            if self.target.hp <= 0: #si ses pv tomben à zero
 
+            self.projectile(self) 
+
+            if self.target.hp <= 0: #si ses pv tombent à zero
                 self.target.die(False)  #on appelle la méthode qui provoque la mort de l'ennemi
                 self.target = None      #on n'a plus de cible
                 self.canvas.after(int(6000/self.speed), self.seek) #on recherche
@@ -168,8 +168,6 @@ class Tower(Thread):
         else :
             self.seek()
     
-
-
 # Classe projectile permattant de leur affecter des méthodes
 class Projectile(Thread):
     """classe abstraite des projectiles lancés par les tours"""
@@ -186,6 +184,7 @@ class Projectile(Thread):
         Thread.__init__(self)
         self.start()                #Thread
 
+        self.zone=tour.zone
         self.tour = tour
         self.x=tour.x-5
         self.y=tour.y-70         #coordonnées
@@ -201,7 +200,7 @@ class Projectile(Thread):
 
         self.v=3                        #un coefficient en pixel pour le déplacement du projectile
 
-        self.traj()                     #on fait un calcul de trajectoire
+                           #on fait un calcul de trajectoire
 
     def traj(self):
         n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/self.v)  #distance tour-ennemie divisée par le nombre de pixel de déplacement par coup
@@ -217,11 +216,24 @@ class Projectile(Thread):
             self.canvas.delete(self.corps)  #on supprime
 
         if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
-            
+            to_hit=[]
+            if self.zone != -1:
+                for ennemy in self.tour.parent.ennemies:
+                    if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.zone and ennemy.state != "die":
+                        to_hit.append(ennemy)
+                        print ("to hit")
+            else :
+                to_hit.append(self.target)
+
             self.canvas.delete(self.corps)              #on efface l'image
-            self.corps=self.canvas.create_image(self.x, self.y, image=self.img)     #on met l'image d'impact
+            # self.canvas.create_oval(self.x+self.zone, self.y+self.zone, self.x-self.zone, self.y-self.zone)
+            self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)     #on met l'image d'impact
             self.target.hp-=self.damage             #on enlève les dégâts
-            self.canvas.after(5, self.canvas.delete, self.corps)
+            for cible in to_hit:
+                cible.hp-=self.tour.damage
+                if cible.hp<=0:
+                    cible.die(False)
+            self.canvas.after(150, self.canvas.delete, self.corps)
             return
         
 
@@ -234,7 +246,7 @@ class Projectile(Thread):
 
 #________________________________________________________________________________________________________________________
                 
-# Classe des mortiers basés sur le même template que les autres
+# Classes des mortiers, archers, mages... basés sur le même template que les autres
 class Mortier(Tower):
 
     
@@ -246,9 +258,9 @@ class Mortier(Tower):
     range = 120
     damage = 1                          #attributs
     speed = 2
-    zone = 3
+    zone = 80
     r_up=25
-    d_up=50
+    d_up=10
 
     damagetype = "explosion"        #type de dégâts
 
@@ -277,7 +289,7 @@ class FireM(Tower):
     image="view/src/Mage2.png"
     damage = 4
     speed = 3
-    zone = 1
+    zone = -1
     range = 150
     r_up=25
     d_up=25
@@ -308,7 +320,7 @@ class WaterM(Tower):
     image="view/src/Mage3.png"
     damage = 4
     speed = 3
-    zone = 1
+    zone = -1
     range = 150
     damagetype = "water"
     d_up=50
@@ -335,7 +347,7 @@ class EarthM(Tower):
     coordsLvl3 = [203, 0, 323, 132]
     damage = 4
     speed = 3
-    zone = 1
+    zone = -1
     range = 150
     damagetype = "earth"
     d_up=50
@@ -364,7 +376,7 @@ class Archer(Tower):
     range=200
     damage = 4
     speed = 5
-    zone = 1
+    zone = -1
     damagetype = "shot"
     d_up=50
     r_up=25
@@ -379,7 +391,7 @@ class Archer(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, parent, x, y,Fleche)
+        Tower.__init__(self, parent, x, y, Fleche)
 
     def __str__(self):
         return "Archer"
@@ -471,42 +483,38 @@ class Mine(Tower):
 
 class Boulet(Projectile):
     def __init__(self,tour):
-        Projectile.__init__(self,tour, "view/src/bouletDeCanon.png", "view/src/bouletDeCanon.png")
+        Projectile.__init__(self,tour, "view/src/bouletDeCanon.png", "view/src/kaboom.png")
+        self.traj()  
 
 class BouleDeFeu(Projectile):
     def __init__(self,tour):
         Projectile.__init__(self,tour, "view/src/flamèche.png", "view/src/flamèche.png")
+        self.traj()  
 
 class LameDEau(Projectile):
     def __init__(self, tour):
         Projectile.__init__(self, tour, "view/src/petit shuriken eau.png", "view/src/petit shuriken eau.png")
+        self.traj()  
 
 class Caillou(Projectile):
     def __init__(self, tour):
         Projectile.__init__(self, tour, "view/src/caillou.png", "view/src/caillou.png")
+        self.traj()  
 
 class Fleche(Projectile):
     def __init__(self, tour):
-
-        self.target=tour.target
-        self.damage=tour.damage
-        self.x = tour.x-10
-        self.y = tour.y-40
-
-        self.canvas=tour.canvas
-        self.tx=self.target.x
-        self.ty=self.target.y
-        if self.tx<=self.x and self.ty<= self.y:
-            self.img=tk.PhotoImage(file = "view/src/flèche gh.png")
+        Projectile.__init__(self, tour,"view/src/flèche gh.png","view/src/flèche gh.png")
+        if self.tx<=self.x and self.ty<=self.y:
+            self.img=tk.PhotoImage(file ="view/src/flèche gh.png")
         elif self.tx>=self.x and self.ty>=self.y:
-            self.img=tk.PhotoImage(file= "view/src/flèche db.png")
-        elif self.tx>=self.x and self.ty<= self.y:
-            self.img=tk.PhotoImage(file = "view/src/flèche dh.png")
+            self.img=tk.PhotoImage(file="view/src/flèche db.png")
+        elif self.tx>=self.x and self.ty<=self.y:
+            self.img=tk.PhotoImage(file="view/src/flèche dh.png")
         elif self.tx<=self.x and self.ty>=self.y:
-            self.img=tk.PhotoImage(file ="view/src/flèche gb.png")
+            self.img=tk.PhotoImage(file="view/src/flèche gb.png")
         self.boom=self.img
         self.v=4
-        self.traj()
+        self.traj()  
 
 class Kamehameha(Thread):
     gauche=[0,0,90,100]

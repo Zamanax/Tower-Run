@@ -6,12 +6,14 @@ from model.Ennemy import *
 from model.fonctions_utiles import subimage
 
 # Classe des emplacement stockants les données pour l'interface
+
+
 class Emplacement():
     bonus = {}
     state = None
     tower = None
     last_img = None
-    
+
     # Utilisation des arguments accessoires pour ajouter des tours supplémentaires
     def __init__(self, x, y, *args, **kwargs):
         state = kwargs.get('state', None)
@@ -25,7 +27,9 @@ class Emplacement():
         if bonus:
             self.bonus = bonus
 
-# Classe des niveaux 
+# Classe des niveaux
+
+
 class Lvl(tk.Frame):
     # Définiton des variables de chaque niveau
     heros = None
@@ -57,8 +61,9 @@ class Lvl(tk.Frame):
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                                 height=self.rootHeight, highlightthickness=0)
 
-        # Affichage de l'arrière plan 
-        self.background = self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+        # Affichage de l'arrière plan
+        self.background = self.canvas.create_image(
+            0, 0, image=self.backImg, anchor="nw")
 
         # Défintion de l'argent et de la vie
         self.gold = tk.IntVar(self.canvas, self.gold)
@@ -78,7 +83,7 @@ class Lvl(tk.Frame):
         # Début de l'interface
         self.interface = View.Interface(self)
 
-        # Bind des évenèments utilisateurs 
+        # Bind des évenèments utilisateurs
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
         self.canvas.bind_all("t", self.heros.specialAttack)
@@ -117,9 +122,11 @@ class Lvl(tk.Frame):
             del el
 
 # Classe du menu principal
+
+
 class MainMenu(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
-
+        self.parent = parent
         # Définiton des variables
         self.backImg = tk.PhotoImage(file="view/src/MainMenu.png")
         self.rootWidth = self.backImg.width()
@@ -128,13 +135,41 @@ class MainMenu(tk.Frame):
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
 
-        # Reste du GUI
+        self.heros = tk.StringVar(self)
+
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                                 height=self.rootHeight, highlightthickness=0)
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
+        self.makeButtons()
+        
+        self.canvas.bind("<Button-1>", self.startGame)
+
+        self.canvas.pack(side="right", fill='both', expand=True)
+
+    def makeButtons(self):
+        self.adventurerBtn = tk.Radiobutton(self.canvas, text="Aventurier", value="Aventurier", variable=self.heros,
+                                            bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.adventurerBtn.place(x=256, y= 450)
+
+        self.gokuBtn = tk.Radiobutton(self.canvas, text="Goku", value="Goku", variable=self.heros,
+                                      bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.gokuBtn.place(x=600, y= 450)
+
+        self.ichigoBtn = tk.Radiobutton(self.canvas, text="Ichigo", value="Ichigo", variable=self.heros,
+                                        bg="#73cb4d", activebackground="#73cb4d", selectcolor="#5ab134", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.ichigoBtn.place(x=925, y= 450)
+
+        self.adventurerBtn.select()
+
+    def startGame(self, event):
+        if 390 < event.x < 890 and 500 < event.y < 900:
+            self.parent.heros = self.heros.get()
+            self.parent.switchFrame(Lvl1)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
+
+
 class Lvl1(Lvl):
     image = "view/src/Lvl1Background.png"
     gold = 1000
@@ -179,20 +214,22 @@ class Lvl2(Lvl):
         Skeleton(self, 50, 225, self.heros)
 
 # -----------------Chargement de la vue principale--------------------
+
+
 class MainApplication(tk.Frame):
     currentFrame = None
-
+    heros = None
     def __init__(self, parent, *args, **kwargs):
         # Instance de la Frame
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
         # Chargement de la Frame de départ
-        self.switchFrame(Lvl1)
+        self.switchFrame(MainMenu)
 
     # Fonction permettant de passer d'une frame à l'autre en détruisant l'autre
     def switchFrame(self, nframe):
-        nlevel = nframe(self, self.parent, heros="Aventurier")
+        nlevel = nframe(self, self.parent, heros=self.heros)
         if self.currentFrame:
             self.currentFrame.destroy()
             del self.currentFrame

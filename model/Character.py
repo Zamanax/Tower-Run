@@ -344,6 +344,7 @@ class Character (Thread):
     
     def moveTo(self,x,y):
         self.n_coups=int((((self.x-x)**2+(self.y-y)**2)**0.5)/2)
+        if self.n_coups == 0 : self.n_coups = 1
         self.inc_abs=-(self.x-x)/self.n_coups
         self.inc_ord=-(self.y-y)/self.n_coups
         self.Move(x,y)
@@ -426,6 +427,9 @@ class Character (Thread):
         elif self.state == "idleLeft":
             self.last_img = self.canvas.create_image(
             self.x, self.y, image=self.idleLeft[self.sprite])
+        elif self.state == "die":
+            self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.death[self.sprite])
 
         #  On supprime l'ancienne barre de vie
         if self.healthBar:
