@@ -147,12 +147,12 @@ class Heros(Character):
 
     async def getIdleRightAnim1(self, dict, image):
         idleRight1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["idleRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["idleRight"]+dict["spriteSize"]).zoom(self.zoom)
-                          for i in range(self.lv1["num_sprintes"]["idleRight"])]
+                          for i in range(dict["num_sprintes"]["idleRight"])]
         return idleRight1
 
     async def getIdleLeftAnim1(self, dict, image):
         idleLeft1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["idleLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["idleLeft"]+dict["spriteSize"]).zoom(self.zoom)
-                          for i in range(self.lv1["num_sprintes"]["idleLeft"])]
+                          for i in range(dict["num_sprintes"]["idleLeft"])]
         idleLeft1.reverse()
 
         return idleLeft1
@@ -160,7 +160,7 @@ class Heros(Character):
     async def getRunRightAnim1(self, dict, image):
 
         runRight1 = [self.subimage1(image,dict["spriteSize"]*i, dict["y_Anim"]["runRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["runRight"]+dict["spriteSize"]).zoom(self.zoom)
-                              for i in range(self.lv1["num_sprintes"]["runRight"])]
+                              for i in range(dict["num_sprintes"]["runRight"])]
         return runRight1
 
     async def getRunLeftAnim1(self, dict, image):
@@ -357,7 +357,6 @@ class Heros(Character):
         # Si on a fini de se transformer
         if "transform" in self.num_sprintes:
             if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
-                self.state = "idleLeft"
                 if self.lvl == 1:
                     self.transformAnim = self.transformAnim1
                     self.num_sprintes = self.lv1["num_sprintes"]
@@ -368,7 +367,8 @@ class Heros(Character):
 
                 elif self.lvl == 3:
                     self.num_sprintes = self.lv3["num_sprintes"]
-
+                self.state = "idleLeft"                
+                self.sprite = 0
             elif (self.sprite == self.num_sprintes["specialMoveRight"] - 1 and self.state == "specialMoveRight"): 
                 self.state = "idleRight"
             elif (self.sprite == self.num_sprintes["specialMoveLeft"] - 1 and self.state == "specialMoveLeft"):
@@ -457,7 +457,24 @@ class Ichigo(Heros):
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 800, "runLeft": 1000,
-                   "attackRight": 1200, "attackLeft": 1400,"specialMoveRight":1600, "specialMoveLeft":1800, "die": 0, "transform": 2000}
+                   "attackRight": 1200, "attackLeft": 1400,"specialMoveRight":1600, "specialMoveLeft":1800, "die": 0, "transform": 2200}
+    }
+
+    lv3 = {
+        "hp": 50,
+        "damage": 2,
+        "speed": 8,
+        "attackSpeed": 6,
+
+        # Spritesheet du Heros
+        "damagingSprite" : [1,2,6,7,11,12,13,14],
+        "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2,
+                         "runLeft": 2, "attackRight": 6, "attackLeft": 6, "die": 2, "specialMoveRight":14, "specialMoveLeft":14},
+        "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo3.png",
+        "spriteSize": 200,
+        "zoom": 1,
+        "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 800, "runLeft": 1000,
+                   "attackRight": 1200, "attackLeft": 1400,"specialMoveRight":1600, "specialMoveLeft":1800, "die": 0}
     }
 
 class Goku(Heros):

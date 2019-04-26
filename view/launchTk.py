@@ -175,12 +175,14 @@ class MainMenu(tk.Frame):
         self.progressBar = ttk.Progressbar(self.canvas,orient="horizontal", length=400, mode="determinate")
         if self.heros.get() == "Goku":
             self.progressBar["maximum"] = 290
+        if self.heros.get() == "Ichigo":
+            self.progressBar["maximum"] = 249
         self.progressBar.place(x=440, y=615)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
-    gold = 1000
+    gold = 1500
 
     spots = [Emplacement(180, 175),
              Emplacement(358, 175),

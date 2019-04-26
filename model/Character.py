@@ -402,7 +402,7 @@ class Character (Thread):
         if self.last_img:
             self.canvas.delete(self.last_img)
         # Si on dépasse le tableau on recommence à la première image
-        if self.sprite >= self.num_sprintes[self.state]:
+        if self.sprite > self.num_sprintes[self.state] - 1:
             self.sprite = 0
 
         # On affiche la bonne image en fonction de l'état
