@@ -23,9 +23,9 @@ class Interface(tk.Frame):
     spotPrice = None
 
     def __init__(self, parent, *args, **kwargs):
-        self.lochoice = tk.PhotoImage(file="view/src/lochoice.png")
-        self.hammerSign = tk.PhotoImage(file="view/src/HammerSign.png")
-        self.moneyIcon = tk.PhotoImage(file="view/src/Money - Copie.png")
+        self.lochoice = tk.PhotoImage(file="view/src/assets/lochoice.png")
+        self.hammerSign = tk.PhotoImage(file="view/src/tours/tours/HammerSign.png")
+        self.moneyIcon = tk.PhotoImage(file="view/src/assets/Money - Copie.png")
         self.parent = parent
         self.canvas = parent.canvas
 
@@ -33,7 +33,7 @@ class Interface(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.v = tk.StringVar()
 
-        self.backImg = tk.PhotoImage(file="view/src/Interface.png")
+        self.backImg = tk.PhotoImage(file="view/src/background/Interface.png")
         self.interface = tk.Canvas(
             self, width=200, height=650, highlightthickness=0)
         self.interface.create_image(0, 0, image=self.backImg, anchor="nw")
@@ -203,7 +203,7 @@ class Interface(tk.Frame):
                     self.buildButton["state"] = "disabled"
                 self.spotName["text"] += str(self.selected.tower)
 
-                if hasattr(self.selected.tower, "zone"):
+                if hasattr(self.selected.tower, "damagetype"):
                     self.spotDamage["text"] += str(self.selected.tower.damage) + \
                         " ⇢ " + str(self.selected.tower.ndamage)
                     self.spotZone["text"] += str(self.selected.tower.zone)
@@ -234,7 +234,7 @@ class Interface(tk.Frame):
                 self.spotName["text"] += "Vide ⇢ " + str(state)
                 self.spotPrice["text"] = self.dico[state].price
 
-                if hasattr(self.dico[state], "zone"):
+                if hasattr(self.dico[state], "damagetype"):
                     self.spotDamage["text"] += "0 ⇢ " + \
                         str(self.dico[state].damage)
                     self.spotZone["text"] += "Aucun ⇢ " + \

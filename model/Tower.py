@@ -247,7 +247,7 @@ class Mortier(Tower):
     coordsLvl1=[ 16, 54, 85, 142]
     coordsLvl2=[ 91, 30, 191, 142]              #coordonnées des images des différents niveaux dans la sprite sheet
     coordsLvl3=[ 203, 3, 313, 142]
-    image="view/src/Mortier.png"
+    image="view/src/tours/tours/Mortier.png"
 
     range = 120
     damage = 1                          #attributs
@@ -280,7 +280,7 @@ class FireM(Tower):
     coordsLvl1 = [3, 72, 69, 129]
     coordsLvl2 = [91, 49, 191, 139]
     coordsLvl3 = [203, 3, 313, 141]
-    image="view/src/Mage2.png"
+    image="view/src/tours/tours/Mage2.png"
     damage = 4
     speed = 3
     zone = -1
@@ -311,7 +311,7 @@ class WaterM(Tower):
     coordsLvl1=[3,72,82,139]
     coordsLvl2=[91,47,195,139]
     coordsLvl3=[203,0,323,139]
-    image="view/src/Mage3.png"
+    image="view/src/tours/tours/Mage3.png"
     damage = 4
     speed = 3
     zone = -1
@@ -335,7 +335,7 @@ class WaterM(Tower):
         return "Mage d'Eau"
 
 class EarthM(Tower):
-    image="view/src/Mage1.png"
+    image="view/src/tours/tours/Mage1.png"
     coordsLvl1 = [3, 62, 82, 132]
     coordsLvl2= [91, 47, 195, 132]
     coordsLvl3 = [203, 0, 323, 132]
@@ -363,7 +363,7 @@ class EarthM(Tower):
         return "Mage de Terre"
 
 class Archer(Tower):
-    image="view/src/Archer.png"
+    image="view/src/tours/tours/Archer.png"
     coordsLvl1 = [3,51,82,138]
     coordsLvl2 = [91,35,195,144]
     coordsLvl3 = [203,0,295,144]
@@ -391,11 +391,11 @@ class Archer(Tower):
         return "Archer"
         
 class Forgeron(Tower):
-    
+    zone = None
     coordsLvl1 = [0,0,120,115]
     coordsLvl2 = [125,0,250,115]
     coordsLvl3 = [250,0,380,115]
-    image= 'view/src/Forgeron.png'
+    image= 'view/src/tours/tours/Forgeron.png'
     price_evo=[200, 500, 750]
     price=price_evo[0]
     def __init__(self, parent, x,y):
@@ -434,7 +434,7 @@ class Mine(Tower):
     coordsLvl1 = [13,13,148,110]
     coordsLvl2 = [165,8,289,120]
     coordsLvl3 = [334,5,486,125]
-    image= 'view/src/Mine.png'
+    image= 'view/src/tours/tours/Mine.png'
     price_evo=[200, 500, 750]
     production=30
     def __init__(self, parent, x, y):
@@ -477,88 +477,35 @@ class Mine(Tower):
 
 class Boulet(Projectile):
     def __init__(self,tour):
-        Projectile.__init__(self,tour, "view/src/bouletDeCanon.png", "view/src/kaboom.png")
+        Projectile.__init__(self,tour, "view/src/tours/projectile/bouletDeCanon.png", "view/src/tours/projectile/kaboom.png")
         self.traj()  
 
 class BouleDeFeu(Projectile):
     def __init__(self,tour):
-        Projectile.__init__(self,tour, "view/src/flamèche.png", "view/src/flamèche.png")
+        Projectile.__init__(self,tour, "view/src/tours/projectile/flamèche.png", "view/src/tours/projectile/flamèche.png")
         self.traj()  
 
 class LameDEau(Projectile):
     def __init__(self, tour):
-        Projectile.__init__(self, tour, "view/src/petit shuriken eau.png", "view/src/petit shuriken eau.png")
+        Projectile.__init__(self, tour, "view/src/tours/projectile/petit shuriken eau.png", "view/src/tours/projectile/petit shuriken eau.png")
         self.traj()  
 
 class Caillou(Projectile):
     def __init__(self, tour):
-        Projectile.__init__(self, tour, "view/src/caillou.png", "view/src/caillou.png")
+        Projectile.__init__(self, tour, "view/src/tours/projectile/caillou.png", "view/src/tours/projectile/caillou.png")
         self.traj()  
 
 class Fleche(Projectile):
     def __init__(self, tour):
-        Projectile.__init__(self, tour,"view/src/flèche gh.png","view/src/flèche gh.png")
+        Projectile.__init__(self, tour,"view/src/tours/projectile/flèche gh.png","view/src/tours/projectile/flèche gh.png")
         if self.tx<=self.x and self.ty<=self.y:
-            self.img=tk.PhotoImage(file ="view/src/flèche gh.png")
+            self.img=tk.PhotoImage(file ="view/src/tours/projectile/flèche gh.png")
         elif self.tx>=self.x and self.ty>=self.y:
-            self.img=tk.PhotoImage(file="view/src/flèche db.png")
+            self.img=tk.PhotoImage(file="view/src/tours/projectile/flèche db.png")
         elif self.tx>=self.x and self.ty<=self.y:
-            self.img=tk.PhotoImage(file="view/src/flèche dh.png")
+            self.img=tk.PhotoImage(file="view/src/tours/projectile/flèche dh.png")
         elif self.tx<=self.x and self.ty>=self.y:
-            self.img=tk.PhotoImage(file="view/src/flèche gb.png")
+            self.img=tk.PhotoImage(file="view/src/tours/projectile/flèche gb.png")
         self.boom=self.img
         self.v=4
         self.traj()  
-
-class Kamehameha(Thread):
-    gauche=[0,0,90,100]
-    milieu=[90,0,190,100]
-    droite=[190,0,290,100]
-    head=None
-
-
-    def __init__(self, hero):
-        Thread.__init__(self)
-        self.start()
-        self.longueur=0
-        self.hero=hero
-        
-        self.y=hero.y-5
-        self.parent = hero.parent
-        self.target=hero.target
-        self.damage=hero.damage
-        self.canvas=hero.canvas
-        self.v=30
-        self.img="view/src/kamehameha_1.png"
-        self.d=load(self.droite, self.img)
-        self.g=load(self.gauche, self.img)
-        self.m=load(self.milieu, self.img)      
-        if self.hero.state=="specialMoveRight":
-            self.tete=self.d
-            self.x=hero.x+100
-        elif self.hero.state=="specialMoveLeft":
-            self.x=hero.x-100
-            self.tete=self.g
-        self.tir()
-
-       
-    def tir(self):
-        ennemies = self.parent.ennemies
-        self.longueur+=1
-        if type(self.head)!=None:
-            self.canvas.delete(self.head)
-            self.canvas.create_image(self.x, self.y, image=self.m)
-
-        for ennemy in ennemies:
-            if ennemy.x-35<=self.x<=ennemy.x+35 and ennemy.y-40<=self.y<=ennemy.y+40:
-                ennemy.hp-=self.damage
-                if ennemy.hp <= 0:
-                    ennemy.die(False)
-        if self.hero.state=="specialMoveLeft":
-            self.x-=self.v
-        elif self.hero.state=="specialMoveRight":
-            self.x+=self.v
-    
-        self.head=self.canvas.create_image(self.x, self.y, image=self.tete)
-        if not self.longueur==20:
-            self.canvas.after(150,self.tir)

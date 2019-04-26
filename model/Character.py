@@ -336,7 +336,7 @@ class Character (Thread):
             time = 200
         # Dans le cas d'un coup spécial, on tire un projectile
         elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.sprite== self.num_sprintes[self.state]-1:
-            Tow.Kamehameha(self)
+            self.coupSpe(self)
             time = 2700
         elif self.state == "specialMoveRight" or self.state == "specialMoveRight":
             time = 300

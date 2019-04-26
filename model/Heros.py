@@ -2,16 +2,68 @@ import tkinter as tk
 import asyncio
 from functools import lru_cache
 from threading import Thread
-
+from model.fonctions_utiles import load
 from model.Character import Character
-import model.Tower as Tow
+
+class Kamehameha(Thread):
+    gauche=[0,0,90,100]
+    milieu=[90,0,190,100]
+    droite=[190,0,290,100]
+    head=None
+
+
+    def __init__(self, hero):
+        Thread.__init__(self)
+        self.start()
+        self.longueur=0
+        self.hero=hero
+        
+        self.y=hero.y-5
+        self.parent = hero.parent
+        self.target=hero.target
+        self.damage=hero.damage
+        self.canvas=hero.canvas
+        self.v=30
+        self.img="view/src/personnage/heros/Goku/kamehameha_1.png"
+        self.d=load(self.droite, self.img)
+        self.g=load(self.gauche, self.img)
+        self.m=load(self.milieu, self.img)      
+        if self.hero.state=="specialMoveRight":
+            self.tete=self.d
+            self.x=hero.x+100
+        elif self.hero.state=="specialMoveLeft":
+            self.x=hero.x-100
+            self.tete=self.g
+        self.tir()
+
+       
+    def tir(self):
+        ennemies = self.parent.ennemies
+        self.longueur+=1
+        if type(self.head)!=None:
+            self.canvas.delete(self.head)
+            self.canvas.create_image(self.x, self.y, image=self.m)
+
+        for ennemy in ennemies:
+            if ennemy.x-35<=self.x<=ennemy.x+35 and ennemy.y-40<=self.y<=ennemy.y+40:
+                ennemy.hp-=self.damage
+                if ennemy.hp <= 0:
+                    ennemy.die(False)
+        if self.hero.state=="specialMoveLeft":
+            self.x-=self.v
+        elif self.hero.state=="specialMoveRight":
+            self.x+=self.v
+    
+        self.head=self.canvas.create_image(self.x, self.y, image=self.tete)
+        if not self.longueur==20:
+            self.canvas.after(150,self.tir)
 
 class Heros(Character):
     # Variables propres au héros
     team = "ally"
     lv0 = {}
     compteur=0
-
+    coupSpe = Kamehameha
     def __init__(self, parent, x, y, max_y, min_y):
 
         self.hp = self.lv0["hp"]
@@ -338,7 +390,7 @@ class Adventurer(Heros):
         "damagingSprite" : [1, 2, 3, 4],
         "num_sprintes" : {"idleLeft":13 ,"idleRight": 13, "runRight": 8,
                         "runLeft": 8, "attackRight": 10, "attackLeft": 10, "die": 7},
-        "spritesheet" : "view/src/Adventurer.png",
+        "spritesheet" : "view/src/personnage/heros/Aventurier/Adventurer.png",
         "spriteSize" : 32,
         "zoom" : 2,
         "y_Anim" : {"idleLeft":256,"idleRight": 0, "runRight": 32, "runLeft": 288,
@@ -367,7 +419,7 @@ class Ichigo(Heros):
         "damagingSprite" : [2,3,5,12,13],
         "num_sprintes": {"idleRight": 2, "idleLeft":2 , "runRight": 8,
                          "runLeft": 8, "attackRight": 16, "attackLeft": 16,"specialMoveRight":19, "specialMoveLeft":19, "die": 2, "transform": 20},
-        "spritesheet": "view/src/Ichigo0.png",
+        "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo0.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight": 0,"idleLeft":200, "runRight": 400, "runLeft": 600,
@@ -384,7 +436,7 @@ class Ichigo(Heros):
         "damagingSprite" : [2,3,7,8,9,13,14,17,18],
         "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8,
                          "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7, "specialMoveRight":13, "specialMoveLeft":13},
-        "spritesheet": "view/src/Ichigo1.png",
+        "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo1.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight": 0,"idleLeft":200, "runRight": 400, "runLeft": 600,
@@ -400,12 +452,12 @@ class Ichigo(Heros):
         # Spritesheet du Heros
         "damagingSprite" : [1,2,6,7,11,12,13,14],
         "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8,
-                         "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 0, "specialMoveRight":14, "specialMoveLeft":14},
-        "spritesheet": "view/src/Ichigo2.png",
+                         "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 6, "specialMoveRight":14, "specialMoveLeft":14},
+        "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo2.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 800, "runLeft": 1000,
-                   "attackRight": 1200, "attackLeft": 1400,"specialMoveRight":1600, "specialMoveLeft":1800, "die": 0, "transform": 1200}
+                   "attackRight": 1200, "attackLeft": 1400,"specialMoveRight":1600, "specialMoveLeft":1800, "die": 0, "transform": 2000}
     }
 
 class Goku(Heros):
@@ -418,7 +470,7 @@ class Goku(Heros):
         "attackSpeed": 3,
         "num_sprintes": {"idleRight": 8, "idleLeft": 8, "runRight": 4,
                          "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 8, "transform": 9, "specialMoveRight": 16, "specialMoveLeft": 16},
-        "spritesheet": "view/src/Goku0.png",
+        "spritesheet": "view/src/personnage/heros/Goku/Goku0.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 400, "runLeft": 600,
@@ -433,7 +485,7 @@ class Goku(Heros):
         "attackSpeed": 3,
         "num_sprintes": {"idleRight": 4, "idleLeft":4 , "runRight": 4,
                          "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 4, "transform": 8, "specialMoveRight": 17, "specialMoveLeft":17},
-        "spritesheet": "view/src/Goku1.png",
+        "spritesheet": "view/src/personnage/heros/Goku/Goku1.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 400, "runLeft": 600,
@@ -448,7 +500,7 @@ class Goku(Heros):
         "attackSpeed": 5,
         "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
                          "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die": 4, "transform": 8, "specialMoveRight": 17, "specialMoveLeft":17},
-        "spritesheet": "view/src/Goku2.png",
+        "spritesheet": "view/src/personnage/heros/Goku/Goku2.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 400, "runLeft": 600,
@@ -463,7 +515,7 @@ class Goku(Heros):
         "damagingSprite": [3, 7, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24],
         "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
                          "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die": 4, "transform": 8, "specialMoveRight":8, "specialMoveLeft":8},
-        "spritesheet": "view/src/Goku3.png",
+        "spritesheet": "view/src/personnage/heros/Goku/Goku3.png",
         "spriteSize": 200,
         "zoom": 1,
         "y_Anim": {"idleRight":0, "idleLeft": 200, "runRight": 400, "runLeft": 600,

@@ -38,7 +38,7 @@ class Skeleton (Ennemy) :
     y_Anim = {"idleRight" : 32,"idleLeft":0, "runRight" : 32, "runLeft" : 0, "attackRight": 32, "attackLeft": 0, "die" : 64}
     damagingSprite = [4,6,7,8]
     num_sprintes = {"idleRight": 1, "idleLeft" : 1, "runRight" : 4, "runLeft" : 4, "attackRight" : 8, "attackLeft": 8, "die": 4}
-    spritesheet = "view/src/Skeleton.png"
+    spritesheet = "view/src/personnage/ennemis/Skeleton.png"
     zoom = 2
 
 class miniSkeleton (Skeleton) :

@@ -56,7 +56,7 @@ class Lvl(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         # Chargement de l'animation des tours
-        self.upImage = "view/src/Storm_evolution.png"
+        self.upImage = "view/src/assets/Storm_evolution.png"
         self.upAnim = [subimage(self.upImage, 200*i, 0, 200*(i+1), 200)
                        for i in range(6)]
 
@@ -130,7 +130,7 @@ class MainMenu(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         # Définiton des variables
-        self.backImg = tk.PhotoImage(file="view/src/MainMenu.png")
+        self.backImg = tk.PhotoImage(file="view/src/background/MainMenu.png")
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
 
@@ -179,7 +179,7 @@ class MainMenu(tk.Frame):
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
-    image = "view/src/Lvl1Background.png"
+    image = "view/src/background/Lvl1Background.png"
     gold = 1000
 
     spots = [Emplacement(180, 175),
@@ -202,7 +202,7 @@ class Lvl1(Lvl):
 
 
 class Lvl2(Lvl):
-    image = "view/src/Lvl2Background.png"
+    image = "view/src/background/Lvl2Background.png"
     gold = 1000
 
     spots = [Emplacement(180, 175),
