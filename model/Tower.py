@@ -8,9 +8,9 @@ class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
 
     lvl = 1         # niveau de la tour 
-    lv1 = None
-    lv2 = None
-    lv3 = None      # attributs pour les images
+    # lv1 = None
+    # lv2 = None
+    # lv3 = None      # attributs pour les images
     last_storm=None
     last_img=None
     seeking=None
@@ -93,7 +93,7 @@ class Tower(Thread):
         self.show_evol()
 
     #Attribution des variables partagées pour chaque instance de la classe
-    __slot__=("__dict__","lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3", "construction")
+    __slots__=("lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3")
 
     def seek(self):
         """Méthode chargée de rechercher les ennemis à attaquer"""
@@ -169,7 +169,7 @@ class Tower(Thread):
 class Projectile(Thread):
     """classe abstraite des projectiles lancés par les tours"""
 
-    __slot__=('__dict__', "boom", "img")
+    __slots__=("boom", "img")
     damage = 0  
 
     target = None

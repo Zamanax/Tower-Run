@@ -335,7 +335,10 @@ class Character (Thread):
         elif self.state == "transform" :
             time = 200
         # Dans le cas d'un coup spécial, on tire un projectile
-        elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.sprite== self.num_sprintes[self.state]-1:
+        elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Goku" and self.sprite== self.num_sprintes[self.state]-1:
+            self.coupSpe(self)
+            time = 2700
+        elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Ichigo" and self.sprite==self.num_sprintes[self.state]-4:
             self.coupSpe(self)
             time = 2700
         elif self.state == "specialMoveRight" or self.state == "specialMoveRight":
@@ -436,6 +439,9 @@ class Character (Thread):
         elif self.state == "die":
             self.last_img = self.canvas.create_image(
             self.x, self.y, image=self.death[self.sprite])
+        elif self.state == "instantMove":
+            self.last_img = self.canvas.create_image(
+            self.x, self.y, image=self.instantMoveAnim[self.sprite])
 
         #  On supprime l'ancienne barre de vie
         if self.healthBar:

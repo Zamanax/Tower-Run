@@ -89,6 +89,7 @@ class Lvl(tk.Frame):
         # Bind des évenèments utilisateurs
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
+        self.canvas.bind("<Button-2>", self.heros.instantMove)
         self.canvas.bind_all("t", self.heros.specialAttack)
 
         # Pack des canvas pour affichage
@@ -169,6 +170,12 @@ class MainMenu(tk.Frame):
             self.parent.heros = self.heros.get()
             self.launchProgress()
             self.parent.switchFrame(Lvl1)
+        elif 242 < event.x < 391 and 285 < event.y < 435:
+            self.adventurerBtn.select()
+        elif 563 < event.x < 714 and 285 < event.y < 435:
+            self.gokuBtn.select()
+        elif 888 < event.x < 1042 and 285 < event.y < 435:
+            self.ichigoBtn.select()
 
     def launchProgress(self):
         
