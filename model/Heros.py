@@ -303,6 +303,57 @@ class GetsugaTenshou3(GetsugaTenshou2):
     v = 8
     longueurMax = 30
 
+class Mugetsu(Thread):
+    mugetsu=[0,0,200,200]
+    corps = None
+    img = "view/src/personnage/heros/Ichigo/mugetsu.png"
+    v = 120
+    longueurMax = 15
+    def __init__(self, hero):
+        Thread.__init__(self)
+        self.start()
+        self.longueur = 0
+        self.y = hero.y-5
+        self.hero = hero
+        self.y = hero.y-16
+        self.parent = hero.parent
+        self.target = hero.target
+        self.damage = hero.damage
+        self.canvas = hero.canvas
+
+        self.m=load(self.mugetsu, self.img)
+
+
+        if self.hero.state == "specialMoveRight":
+            self.x = hero.x+50
+        elif self.hero.state == "specialMoveLeft":
+            self.x = hero.x-50
+            self.v=-self.v
+        
+        self.tir()
+
+    def tir(self):
+        ennemies = self.parent.ennemies
+        self.longueur += 1
+        trainee = []
+
+        for ennemy in ennemies:
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-60 <= self.y <= ennemy.y+60:
+                ennemy.hp -= self.damage
+                if ennemy.hp <= 0:
+                    ennemy.die(False)
+
+        self.x += self.v
+
+        self.corps = self.canvas.create_image(self.x, self.y, image=self.m)
+        trainee.append(self.corps)
+        if not self.longueur == self.longueurMax-1:
+            self.canvas.after(150*4, self.tir)
+        elif self.longueur==self.longueurMax-1:
+            self.canvas.after(350, self.tir)             
+        else:
+            for elt in trainee:
+                self.canvas.delete(elt)   
 
 class Heros(Character):
     # Variables propres au héros
@@ -718,12 +769,12 @@ class Ichigo(Heros):
 
         # Spritesheet du Heros
         "damagingSprite": [2, 3, 7, 8, 9, 13, 14, 17, 18],
-        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8,
+        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8, "instantMove":2,
                          "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7, "specialMoveRight": 13, "specialMoveLeft": 13},
         "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo1.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove":800,
                    "attackRight": 1200, "attackLeft": 1400, "die": 0, "specialMoveRight": 1600, "specialMoveLeft": 1800, "transform": 2200}
     }
 
@@ -736,12 +787,12 @@ class Ichigo(Heros):
 
         # Spritesheet du Heros
         "damagingSprite": [1, 2, 6, 7, 11, 12, 13, 14],
-        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8,
+        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8, "instantMove":2,
                          "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 6, "specialMoveRight": 14, "specialMoveLeft": 14},
         "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo2.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 800, "runLeft": 1000,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 800, "runLeft": 1000, "instantMove":400,
                    "attackRight": 1200, "attackLeft": 1400, "specialMoveRight": 1600, "specialMoveLeft": 1800, "die": 0, "transform": 2200}
     }
 
@@ -750,15 +801,15 @@ class Ichigo(Heros):
         "damage": 2,
         "speed": 8,
         "attackSpeed": 6,
-
+        "coupSpe" : Mugetsu,
         # Spritesheet du Heros
         "damagingSprite": [1, 2, 6, 7, 11, 12, 13, 14],
-        "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2,
+        "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2, "instantMove":2,
                          "runLeft": 2, "attackRight": 6, "attackLeft": 6, "die": 2, "specialMoveRight": 14, "specialMoveLeft": 14},
         "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo3.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 800, "runLeft": 1000,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 800, "runLeft": 1000, "instantMove": 400,
                    "attackRight": 1200, "attackLeft": 1400, "specialMoveRight": 1600, "specialMoveLeft": 1800, "die": 0}
     }
 

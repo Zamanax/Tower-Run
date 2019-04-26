@@ -340,7 +340,7 @@ class Character (Thread):
             time = 2700
         elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Ichigo" and self.sprite==self.num_sprintes[self.state]-4:
             self.coupSpe(self)
-            time = 2700
+            time = 200
         elif self.state == "specialMoveRight" or self.state == "specialMoveRight":
             time = 300
         elif self.state == "die":
