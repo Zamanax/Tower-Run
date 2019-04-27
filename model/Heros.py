@@ -2,11 +2,9 @@ import tkinter as tk
 import asyncio
 from functools import lru_cache
 from threading import Thread
+
 from model.fonctions_utiles import load
 from model.Character import Character
-# from subprocess import call
-import os
-from subprocess import call
 
 
 class Kamehameha(Thread):
@@ -16,8 +14,9 @@ class Kamehameha(Thread):
     head = None
     img = "view/src/personnage/heros/Goku/kamehameha_1.png"
     v = 30
-    longueurMax = 30
-
+    longueurMax = 15
+    trainee = []
+    isHeadingRight = False
     def __init__(self, hero):
         Thread.__init__(self)
         self.start()
@@ -36,6 +35,7 @@ class Kamehameha(Thread):
         if self.hero.state == "specialMoveRight":
             self.x = hero.x+100
             self.tete = self.d
+            self.isHeadingRight = True
 
         elif self.hero.state == "specialMoveLeft":
             self.x = hero.x-100
@@ -46,27 +46,37 @@ class Kamehameha(Thread):
     def tir(self):
         ennemies = self.parent.ennemies
         self.longueur += 1
-        trainee = []
-        if type(self.head) != None and self.longueur != self.longueurMax:
-            self.canvas.delete(self.head)
-            trainee.append(self.canvas.create_image(
+
+        if self.longueur != self.longueurMax:
+
+            if self.head:
+                self.canvas.delete(self.head)
+            self.trainee.append(self.canvas.create_image(
                 self.x, self.y, image=self.m))
 
-        for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40:
-                ennemy.hp -= self.damage
-                if ennemy.hp <= 0:
-                    ennemy.die(False)
-        if self.hero.state == "specialMoveLeft":
-            self.x -= self.v
-        elif self.hero.state == "specialMoveRight":
-            self.x += self.v
+            for ennemy in ennemies:
+                if self.x-35 <= ennemy.x <= self.x+35 and self.y-40 <= ennemy.y <= self.y+40:
+                    ennemy.hp -= self.damage
+                    if ennemy.hp <= 0:
+                        ennemy.die(False)
 
-        self.head = self.canvas.create_image(self.x, self.y, image=self.tete)
-        if not self.longueur == self.longueurMax:
+            if self.isHeadingRight:
+                self.x += self.v
+            else:
+                self.x -= self.v
+
+
+            self.head = self.canvas.create_image(self.x, self.y, image=self.tete)
+
             self.canvas.after(150, self.tir)
+
         else:
-            for elt in trainee:
+            if self.isHeadingRight:
+                self.hero.state = "idleRight"
+            else:
+                self.hero.state = "idleLeft"
+            self.hero.incrementSprite()
+            for elt in self.trainee:
                 self.canvas.delete(elt)
 
 
@@ -303,8 +313,9 @@ class GetsugaTenshou3(GetsugaTenshou2):
     v = 8
     longueurMax = 30
 
+
 class Mugetsu(Thread):
-    mugetsu=[0,0,200,200]
+    mugetsu = [0, 0, 200, 200]
     corps = None
     img = "view/src/personnage/heros/Ichigo/mugetsu.png"
     v = 120
@@ -323,15 +334,14 @@ class Mugetsu(Thread):
         self.damage = hero.damage
         self.canvas = hero.canvas
 
-        self.m=load(self.mugetsu, self.img)
-
+        self.m = load(self.mugetsu, self.img)
 
         if self.hero.state == "specialMoveRight":
             self.x = hero.x+50
         elif self.hero.state == "specialMoveLeft":
             self.x = hero.x-50
-            self.v=-self.v
-        
+            self.v = -self.v
+
         self.tir()
 
     def tir(self):
@@ -351,19 +361,20 @@ class Mugetsu(Thread):
 
         if self.longueur == self.longueurMax:
             for elt in self.trainee:
-                self.canvas.delete(elt)  
+                self.canvas.delete(elt)
             del self
-        elif self.longueur==self.longueurMax-1:
-            self.canvas.after(350, self.tir)  
-        else :
-            self.canvas.after(200, self.tir)           
+        elif self.longueur == self.longueurMax-1:
+            self.canvas.after(350, self.tir)
+        else:
+            self.canvas.after(200, self.tir)
+
 
 class Heros(Character):
     # Variables propres au héros
     team = "ally"
     lv0 = {}
     compteur = 0
-
+    reg = 1
     def __init__(self, parent, x, y, max_y, min_y):
 
         self.hp = self.lv0["hp"]
@@ -683,14 +694,31 @@ class Heros(Character):
 
     # Incrémentation du sprite en fonction de l'état
     def incrementSprite(self):
-        reg = 1
+        increment = True
+
         # Régénration du Héros
-        if (self.sprite == self.num_sprintes["idleRight"] - 1 or self.sprite == self.num_sprintes["idleLeft"]-1) and (self.state == "idleRight"or self.state == "idleLeft") and self.hp + reg <= self.baseHp:
-            self.hp += reg
+        if (self.sprite == self.num_sprintes["idleRight"] - 1 or self.sprite == self.num_sprintes["idleLeft"]-1) and (self.state == "idleRight"or self.state == "idleLeft") and self.hp + self.reg <= self.baseHp:
+            self.hp += self.reg
+
+        if self.state == "specialMoveRight" or self.state == "specialMoveLeft":
+            if self.sprite == self.num_sprintes["specialMoveRight"] - 1:
+                if self.name == "Goku":
+                    self.coupSpe(self)
+                    increment = False
+                # self.state = "idleRight"
+            elif self.sprite == self.num_sprintes["specialMoveLeft"] - 1:
+                if self.name == "Goku":
+                    self.coupSpe(self)
+                    increment = False
+                # self.state = "idleLeft"
+
+            elif self.sprite == self.num_sprintes["specialMoveRight"] - 4 and self.name == "Ichigo":
+                self.coupSpe(self)
+                increment = False
 
         # Si on a fini de se transformer
-        if "transform" in self.num_sprintes:
-            if self.sprite == self.num_sprintes["transform"] - 1 and self.state == "transform":
+        elif self.state == "transform":
+            if self.sprite == self.num_sprintes["transform"] - 1:
                 if self.lvl == 1:
                     self.transformAnim = self.transformAnim1
                     self.num_sprintes = self.lv1["num_sprintes"]
@@ -703,11 +731,9 @@ class Heros(Character):
                     self.num_sprintes = self.lv3["num_sprintes"]
                 self.state = "idleLeft"
                 self.sprite = 0
-        if (self.sprite == self.num_sprintes["specialMoveRight"] - 1 and self.state == "specialMoveRight"):
-            self.state = "idleRight"
-        elif (self.sprite == self.num_sprintes["specialMoveLeft"] - 1 and self.state == "specialMoveLeft"):
-            self.state = "idleLeft"
-        super().incrementSprite()
+
+        if increment:
+            super().incrementSprite()
 
 
 class Adventurer(Heros):
@@ -772,12 +798,12 @@ class Ichigo(Heros):
 
         # Spritesheet du Heros
         "damagingSprite": [2, 3, 7, 8, 9, 13, 14, 17, 18],
-        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8, "instantMove":2,
+        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8, "instantMove": 2,
                          "runLeft": 8, "attackRight": 23, "attackLeft": 23, "die": 2, "transform": 7, "specialMoveRight": 13, "specialMoveLeft": 13},
         "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo1.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove":800,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove": 800,
                    "attackRight": 1200, "attackLeft": 1400, "die": 0, "specialMoveRight": 1600, "specialMoveLeft": 1800, "transform": 2200}
     }
 
@@ -790,12 +816,12 @@ class Ichigo(Heros):
 
         # Spritesheet du Heros
         "damagingSprite": [1, 2, 6, 7, 11, 12, 13, 14],
-        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8, "instantMove":2,
+        "num_sprintes": {"idleRight": 2, "idleLeft": 2, "runRight": 8, "instantMove": 2,
                          "runLeft": 8, "attackRight": 18, "attackLeft": 18, "die": 2, "transform": 6, "specialMoveRight": 14, "specialMoveLeft": 14},
         "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo2.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 800, "runLeft": 1000, "instantMove":400,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 800, "runLeft": 1000, "instantMove": 400,
                    "attackRight": 1200, "attackLeft": 1400, "specialMoveRight": 1600, "specialMoveLeft": 1800, "die": 0, "transform": 2200}
     }
 
@@ -804,10 +830,10 @@ class Ichigo(Heros):
         "damage": 2,
         "speed": 8,
         "attackSpeed": 6,
-        "coupSpe" : Mugetsu,
+        "coupSpe": Mugetsu,
         # Spritesheet du Heros
         "damagingSprite": [1, 2, 6, 7, 11, 12, 13, 14],
-        "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2, "instantMove":2,
+        "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2, "instantMove": 2,
                          "runLeft": 2, "attackRight": 6, "attackLeft": 6, "die": 2, "specialMoveRight": 14, "specialMoveLeft": 14},
         "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo3.png",
         "spriteSize": 200,
@@ -818,7 +844,7 @@ class Ichigo(Heros):
 
 
 class Goku(Heros):
-    name = "Son Goku"
+    name = "Goku"
     lv0 = {
         "hp": 50,
         "damage": 2,
@@ -843,11 +869,11 @@ class Goku(Heros):
         "coupSpe": Kamehameha2,
         "attackSpeed": 3,
         "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
-                         "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 4, "transform": 8, "specialMoveRight": 17, "specialMoveLeft": 17, "instantMove":4},
+                         "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 4, "transform": 8, "specialMoveRight": 17, "specialMoveLeft": 17, "instantMove": 4},
         "spritesheet": "view/src/personnage/heros/Goku/Goku1.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove":800,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove": 800,
                    "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200, "specialMoveRight": 1600, "specialMoveLeft": 1800}
     }
 
@@ -859,11 +885,11 @@ class Goku(Heros):
         "coupSpe": Kamehameha3,
         "attackSpeed": 5,
         "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
-                         "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die": 4, "transform": 8, "specialMoveRight": 17, "specialMoveLeft": 17, "instantMove":3},
+                         "runLeft": 4, "attackRight": 26, "attackLeft": 26, "die": 4, "transform": 8, "specialMoveRight": 17, "specialMoveLeft": 17, "instantMove": 3},
         "spritesheet": "view/src/personnage/heros/Goku/Goku2.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove":800,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove": 800,
                    "attackRight": 1200, "attackLeft": 1400, "die": 200, "transform": 2200, "specialMoveRight": 1600, "specialMoveLeft": 1800}
     }
 
@@ -875,10 +901,10 @@ class Goku(Heros):
         "coupSpe": Genkidamasupreme,
         "damagingSprite": [3, 7, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24],
         "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
-                         "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die": 4, "transform": 8, "specialMoveRight": 8, "specialMoveLeft": 8, "instantMove":2},
+                         "runLeft": 4, "attackRight": 24, "attackLeft": 24, "die": 4, "transform": 8, "specialMoveRight": 8, "specialMoveLeft": 8, "instantMove": 2},
         "spritesheet": "view/src/personnage/heros/Goku/Goku3.png",
         "spriteSize": 200,
         "zoom": 1,
-        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove":0,
+        "y_Anim": {"idleRight": 0, "idleLeft": 200, "runRight": 400, "runLeft": 600, "instantMove": 0,
                    "attackRight": 800, "attackLeft": 1000, "die": 200, "specialMoveRight": 1200, "specialMoveLeft": 1400}
     }

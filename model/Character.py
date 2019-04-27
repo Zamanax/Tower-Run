@@ -320,33 +320,28 @@ class Character (Thread):
         self.afterIdle = self.canvas.after(time, self.idleAnim)
 
     # Méthode d'incrémentation de l'image à afficher
-    def incrementSprite(self):               
-
+    def incrementSprite(self, **kwargs):               
+        time = kwargs.get("time", 0)
         # On incrémente le sprite et/ou on reset (en fonction de l'état et du nombre d'animation)
-        self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
+        
+        if time == 0:
+            self.sprite = (self.sprite+1) % self.num_sprintes[self.state]
 
         # Selon l'état on modifie le temps d'incrémentation
-        if self.state == "idleLeft" or self.state=="idleRight":
-            time = 250
-        elif self.state == "runRight" or self.state == "runLeft":
-            time = 100
-        elif self.state == "attackRight" or self.state == "attackLeft":
-            time = int(500/self.attackSpeed)
-        elif self.state == "transform" :
-            time = 200
-        # Dans le cas d'un coup spécial, on tire un projectile
-        elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Goku" and self.sprite== self.num_sprintes[self.state]-1:
-            self.coupSpe(self)
-            time = 2000
-        elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Ichigo" and self.sprite==self.num_sprintes[self.state]-4:
-            self.coupSpe(self)
-            time = 200
-        elif self.state == "specialMoveRight" or self.state == "specialMoveRight":
-            time = 300
-        elif self.state == "die":
-            time = 400
-        else :
-            time = 200
+            if self.state == "idleLeft" or self.state=="idleRight":
+                time = 250
+            elif self.state == "runRight" or self.state == "runLeft":
+                time = 100
+            elif self.state == "attackRight" or self.state == "attackLeft":
+                time = int(500/self.attackSpeed)
+            elif self.state == "transform" :
+                time = 200
+            elif self.state == "specialMoveRight" or self.state == "specialMoveRight":
+                time = 300
+            elif self.state == "die":
+                time = 400
+            else :
+                time = 200
 
         # On rappelle la fonction
         self.incrementing = self.canvas.after(time, self.incrementSprite)
