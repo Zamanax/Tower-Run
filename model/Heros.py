@@ -348,13 +348,15 @@ class Mugetsu(Thread):
 
         self.corps = self.canvas.create_image(self.x, self.y, image=self.m)
         self.trainee.append(self.corps)
-        if not self.longueur == self.longueurMax-1:
-            self.canvas.after(150*4, self.tir)
-        elif self.longueur==self.longueurMax-1:
-            self.canvas.after(350, self.tir)             
-        else:
+
+        if self.longueur == self.longueurMax:
             for elt in self.trainee:
-                self.canvas.delete(elt)   
+                self.canvas.delete(elt)  
+            del self
+        elif self.longueur==self.longueurMax-1:
+            self.canvas.after(350, self.tir)  
+        else :
+            self.canvas.after(200, self.tir)           
 
 class Heros(Character):
     # Variables propres au héros
@@ -701,10 +703,10 @@ class Heros(Character):
                     self.num_sprintes = self.lv3["num_sprintes"]
                 self.state = "idleLeft"
                 self.sprite = 0
-            elif (self.sprite == self.num_sprintes["specialMoveRight"] - 1 and self.state == "specialMoveRight"):
-                self.state = "idleRight"
-            elif (self.sprite == self.num_sprintes["specialMoveLeft"] - 1 and self.state == "specialMoveLeft"):
-                self.state = "idleLeft"
+        if (self.sprite == self.num_sprintes["specialMoveRight"] - 1 and self.state == "specialMoveRight"):
+            self.state = "idleRight"
+        elif (self.sprite == self.num_sprintes["specialMoveLeft"] - 1 and self.state == "specialMoveLeft"):
+            self.state = "idleLeft"
         super().incrementSprite()
 
 

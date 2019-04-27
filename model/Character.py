@@ -337,7 +337,7 @@ class Character (Thread):
         # Dans le cas d'un coup spécial, on tire un projectile
         elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Goku" and self.sprite== self.num_sprintes[self.state]-1:
             self.coupSpe(self)
-            time = 2700
+            time = 2000
         elif (self.state == "specialMoveRight" or self.state =="specialMoveLeft") and self.name=="Ichigo" and self.sprite==self.num_sprintes[self.state]-4:
             self.coupSpe(self)
             time = 200
@@ -376,7 +376,7 @@ class Character (Thread):
                 if self.state=="runRight":
                     self.state = "idleRight"
                 elif self.state=="runLeft":
-                    self.state="idleLeft"
+                    self.state = "idleLeft"
                 self.move = None
                 return
                 
