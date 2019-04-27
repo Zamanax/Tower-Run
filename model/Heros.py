@@ -134,7 +134,7 @@ class Kamehameha3(Thread):
         self.longueur = 0
 
         self.hero = hero
-        self.y = hero.y-20
+        self.y = hero.y-23
         self.parent = hero.parent
         self.target = hero.target
         self.damage = hero.damage
@@ -152,7 +152,7 @@ class Kamehameha3(Thread):
             self.tete2 = self.d2
 
         elif self.hero.state == "specialMoveLeft":
-            self.x = hero.x-100
+            self.x = hero.x-132
             self.tete1 = self.g1
             self.tete2 = self.g2
 
@@ -189,6 +189,11 @@ class Kamehameha3(Thread):
         if not self.longueur == self.longueurMax:
             self.canvas.after(150, self.tir)
         else:
+            if self.hero.state == "specialMoveLeft":
+                self.hero.state = "idleLeft"
+            else:
+                self.hero.state = "idleRight"
+            self.hero.incrementSprite()
             for elt in trainee:
                 self.canvas.delete(elt)
 
@@ -248,6 +253,12 @@ class Genkidamasupreme(Thread):
         self.head = self.canvas.create_image(self.x, self.y, image=self.corps)
         if not self.longueur == self.longueurMax:
             self.canvas.after(150, self.tir)
+        else:
+            if self.hero.state == "specialMoveRight":
+                self.hero.state = "idleRight"
+            else: 
+                self.hero.state = "idleLeft"
+            self.hero.incrementSprite()
 
 
 class GetsugaTenshou(Genkidamasupreme):
@@ -360,6 +371,10 @@ class Mugetsu(Thread):
         self.trainee.append(self.corps)
 
         if self.longueur == self.longueurMax:
+            self.hero.state = "idleRight"
+            self.hero.sprite = 0
+            if self.hero.incrementing == None:
+                self.hero.incrementSprite()
             for elt in self.trainee:
                 self.canvas.delete(elt)
             del self
@@ -734,6 +749,8 @@ class Heros(Character):
 
         if increment:
             super().incrementSprite()
+        else :
+            self.incrementing = None
 
 
 class Adventurer(Heros):
