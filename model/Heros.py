@@ -309,6 +309,8 @@ class Mugetsu(Thread):
     img = "view/src/personnage/heros/Ichigo/mugetsu.png"
     v = 120
     longueurMax = 15
+    trainee = []
+
     def __init__(self, hero):
         Thread.__init__(self)
         self.start()
@@ -335,7 +337,6 @@ class Mugetsu(Thread):
     def tir(self):
         ennemies = self.parent.ennemies
         self.longueur += 1
-        trainee = []
 
         for ennemy in ennemies:
             if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-60 <= self.y <= ennemy.y+60:
@@ -346,13 +347,13 @@ class Mugetsu(Thread):
         self.x += self.v
 
         self.corps = self.canvas.create_image(self.x, self.y, image=self.m)
-        trainee.append(self.corps)
+        self.trainee.append(self.corps)
         if not self.longueur == self.longueurMax-1:
             self.canvas.after(150*4, self.tir)
         elif self.longueur==self.longueurMax-1:
             self.canvas.after(350, self.tir)             
         else:
-            for elt in trainee:
+            for elt in self.trainee:
                 self.canvas.delete(elt)   
 
 class Heros(Character):

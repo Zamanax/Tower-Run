@@ -7,6 +7,7 @@ from model.fonctions_utiles import subimage
 import tkinter.ttk as ttk
 from threading import Thread
 import asyncio
+import os
 # Classe des emplacement stockants les données pour l'interface
 
 
@@ -265,5 +266,9 @@ def launchApp():
     MainApplication(root).pack(side="top", fill="both", expand=True)
 
     root.title("Tower Run")
+
+    imgicon = tk.PhotoImage(file=os.path.join("view/src/assets/Icon.png"))
+    root.tk.call('wm', 'iconphoto', root._w, imgicon)
+
     root.resizable(False, False)
     root.mainloop()
