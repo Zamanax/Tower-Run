@@ -34,6 +34,7 @@ class Character (Thread):
     lv3 = {}
     zoom = 1
 
+    crossCallback = None
     last_img = None
     idleRight = []
     idleLeft =[]
@@ -373,6 +374,8 @@ class Character (Thread):
                 elif self.state=="runLeft":
                     self.state = "idleLeft"
                 self.move = None
+                if self.crossCallback:
+                    self.canvas.delete(self.crossCallback)
                 return
                 
 
@@ -391,6 +394,10 @@ class Character (Thread):
             else:
                 self.state = "runRight"
         
+        else : 
+            if self.crossCallback:
+                self.canvas.delete(self.crossCallback)
+
         # On relance la fonction en fonction de la vitesse du personnage
         self.move = self.canvas.after(int(200/self.speed), self.Move, x, y)
 

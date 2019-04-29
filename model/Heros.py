@@ -402,13 +402,14 @@ class Heros(Character):
         self.spriteSize = self.lv0["spriteSize"]
         self.y_Anim = self.lv0["y_Anim"]
         self.zoom = self.lv0["zoom"]
-        self.coupSpe = self.lv0["coupSpe"]
+        if "coupSpe" in self.lv0:
+            self.coupSpe = self.lv0["coupSpe"]
         if "barOffsetx" in self.lv0:
             self.barOffsetx = self.lv0["barOffsetx"]
         if "barOffsety" in self.lv0:
             self.barOffsety = self.lv0["barOffsety"]
         Character.__init__(self, parent, x, y)
-
+        self.redCross = tk.PhotoImage(file="view/src/assets/Cross.png")
         # On définit l'ordonnée minimale et maximale où on peut aller
         self.max_y = max_y
         self.min_y = min_y
@@ -584,7 +585,8 @@ class Heros(Character):
         # Si il se transforme on ne fait rien
         if self.state == "transform":
             return
-
+        if self.crossCallback:
+            self.canvas.delete(self.crossCallback)
         # Si on bouge déjà alors on annule l'ancien mouvement
         if self.move:
             if self.state == "runRight":
@@ -606,11 +608,20 @@ class Heros(Character):
         # On effectue le mouvement en restant dans les bornes
         self.sprite = 0
         if event.y > self.max_y:
+            y = self.max_y
             self.moveTo(event.x, self.max_y)
         elif event.y < self.min_y:
+            y = self.min_y
             self.moveTo(event.x, self.min_y)
         else:
-            self.moveTo(event.x, event.y)
+            y = event.y
+        x = event.x
+        
+        self.crossCallback = self.canvas.create_image(x, y+25 , image=self.redCross)
+        self.canvas.tag_lower(self.crossCallback)
+        self.canvas.tag_raise(self.crossCallback, self.parent.background)
+
+        self.moveTo(x, y)
 
     def instantMove(self, event):
         if hasattr(self, "instantMoveAnim"):
