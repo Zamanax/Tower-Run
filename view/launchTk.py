@@ -32,6 +32,11 @@ class Emplacement():
 
 # Classe des niveaux
 
+class keySpot():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 
 class Lvl(tk.Frame):
     # Définiton des variables de chaque niveau
@@ -191,6 +196,7 @@ class MainMenu(tk.Frame):
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
     gold = 1500
+    defaultPath = [keySpot(1200, 225)]
 
     spots = [Emplacement(180, 175),
              Emplacement(358, 175),

@@ -4,7 +4,7 @@ import model.Heros as He
 
 class Ennemy (Character):
  
-    def __init__ (self, parent, x, y, heros) :
+    def __init__ (self, parent, x, y, heros, **kwargs) :
         #Initialisation en tant que Character
         Character.__init__(self,parent,x,y)
         self.heros = heros
@@ -14,13 +14,19 @@ class Ennemy (Character):
         parent.ennemies.insert(0,self)
 
         #Le Monstre se dirige toujours vers l'objectif dès son apparition
+        self.path = kwargs.get("path", None)
+        if self.path == None:
+            self.path = self.parent.defaultPath
         self.goToObjective()
 
     # Fonction chargée de faire déplacer le monstre
     def goToObjective(self):
         if self.move == None:
-            self.moveTo(1200,self.y)
-
+            if self.pathIndex != len(self.path) :
+                self.moveTo(self.path[self.pathIndex].x,self.path[self.pathIndex].y)
+            else : 
+                self.loseLife()
+                
 #---------------------------- Différents ennmis présents dans le jeu --------------
 
 class Skeleton (Ennemy) :
@@ -28,7 +34,7 @@ class Skeleton (Ennemy) :
     hp = 10
     name = "Skeleton"
     attackSpeed = 1
-    speed = 1
+    speed = 20
     damage = 2
     purse = 10
 

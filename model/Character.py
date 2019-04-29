@@ -20,6 +20,7 @@ class Character (Thread):
     
     #Coordonnées + Etats
     state = "idleLeft"
+    pathIndex = 0
     x = 0
     y = 0
     target = None
@@ -87,6 +88,9 @@ class Character (Thread):
     def goToObjective(self):
         pass
 
+    def loseLife(self):
+        self.parent.health.set(self.parent.health.get() - 1)
+
     # Initialisation de la classe
     def __init__ (self, parent, x, y) :
 
@@ -121,14 +125,15 @@ class Character (Thread):
             # On utilise le théorème de pythagore pour vérifier qu'il soit à portée
             if ((self.target.x-self.x)**2+(self.target.y-self.y)**2)**0.5>self.range:
                 # Si ce n'est pas le cas tout le monde reprends sa route
+                if self.x>self.target.x:
+                    self.state ="idleLeft"
+                else:
+                    self.state="idleRight"
+
                 self.target.move = None
                 self.target.goToObjective()
                 self.goToObjective()
-                self.target=None
-                if self.x>self.target.x:
-                    self.state ="idlLeft"
-                else:
-                    self.state="idleRight"
+                self.target=None                
                 self.attacking = None
                 self.seek()
                 self.idleAnim()
@@ -368,12 +373,14 @@ class Character (Thread):
                 
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
+                self.move = None
+                self.pathIndex += 1
+                self.goToObjective()
                 self.sprite = 0
                 if self.state=="runRight":
                     self.state = "idleRight"
                 elif self.state=="runLeft":
                     self.state = "idleLeft"
-                self.move = None
                 if self.crossCallback:
                     self.canvas.delete(self.crossCallback)
                 return
@@ -394,7 +401,10 @@ class Character (Thread):
             else:
                 self.state = "runRight"
         
-        else : 
+        else :
+            self.move = None
+            self.pathIndex += 1
+            self.goToObjective()
             if self.crossCallback:
                 self.canvas.delete(self.crossCallback)
 
