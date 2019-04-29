@@ -8,10 +8,15 @@ import tkinter.ttk as ttk
 from threading import Thread
 import asyncio
 import os
+
 # Classe des emplacement stockants les données pour l'interface
+class keySpot():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 
-class Emplacement():
+class Emplacement(keySpot):
     bonus = {}
     state = None
     tower = None
@@ -19,11 +24,9 @@ class Emplacement():
 
     # Utilisation des arguments accessoires pour ajouter des tours supplémentaires
     def __init__(self, x, y, *args, **kwargs):
+        keySpot.__init__(self, x, y)
         state = kwargs.get('state', None)
         bonus = kwargs.get('bonus', None)
-
-        self.x = x
-        self.y = y
 
         if state:
             self.state = state
@@ -31,13 +34,6 @@ class Emplacement():
             self.bonus = bonus
 
 # Classe des niveaux
-
-class keySpot():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-
 class Lvl(tk.Frame):
     # Définiton des variables de chaque niveau
     heros = None
