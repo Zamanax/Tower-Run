@@ -587,32 +587,31 @@ class Heros(Character):
             return
         if self.crossCallback:
             self.canvas.delete(self.crossCallback)
+
         # Si on bouge déjà alors on annule l'ancien mouvement
         if self.move:
+            self.canvas.after_cancel(self.move)
+            self.move = None
             if self.state == "runRight":
                 self.state = "idleRight"
             elif self.state == "runLeft":
                 self.state = "idleLeft"
-            self.canvas.after_cancel(self.move)
-            self.move = None
 
         # Si on attaque alors on annule
         if self.attacking:
+            self.canvas.after_cancel(self.attack)
+            self.attacking = None
             if self.state == "attackRight":
                 self.state = "idleRight"
             elif self.state == "attackLeft":
                 self.state = "idleLeft"
-            self.canvas.after_cancel(self.attack)
-            self.attacking = None
 
         # On effectue le mouvement en restant dans les bornes
         self.sprite = 0
         if event.y > self.max_y:
             y = self.max_y
-            self.moveTo(event.x, self.max_y)
         elif event.y < self.min_y:
             y = self.min_y
-            self.moveTo(event.x, self.min_y)
         else:
             y = event.y
         x = event.x

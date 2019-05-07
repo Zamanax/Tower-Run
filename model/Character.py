@@ -363,11 +363,11 @@ class Character (Thread):
     def Move(self, x,y):
         
         # On vérifie s'il on est déjà en train de courrir
-        if self.state == "runRight" or self.state == "runLeft":
+        if (self.state == "runRight" or self.state == "runLeft") or (self.x == x and self.y == y):
             # Dans ce cas on change sa position
-            if self.n_coups==1:
-                    self.x = x
-                    self.y = y
+            if self.n_coups is 1:
+                self.x = x
+                self.y = y
 
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
