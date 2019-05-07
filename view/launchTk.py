@@ -169,9 +169,10 @@ class MainMenu(tk.Frame):
 
     def startGame(self, event):
         if 390 < event.x < 890 and 500 < event.y < 900:
-            self.parent.heros = self.heros.get()
-            self.launchProgress()
-            self.parent.switchFrame(Lvl1)
+            if self.parent.heros == None:
+                self.parent.heros = self.heros.get()
+                self.launchProgress()
+                self.parent.switchFrame(Lvl1)
         elif 242 < event.x < 391 and 285 < event.y < 435:
             self.adventurerBtn.select()
         elif 563 < event.x < 714 and 285 < event.y < 435:

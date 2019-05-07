@@ -357,7 +357,7 @@ class Character (Thread):
         if self.n_coups == 0 : self.n_coups = 1
         self.inc_abs=-(self.x-x)/self.n_coups
         self.inc_ord=-(self.y-y)/self.n_coups
-        self.Move(x,y)
+        self.move = self.canvas.after(int(200/self.speed), self.Move, x, y)
 
     # Méthode chargée du déplacement de la position de base jusqu'à un point donné
     def Move(self, x,y):
@@ -369,8 +369,6 @@ class Character (Thread):
                     self.x = x
                     self.y = y
 
-
-                
             # Si on est arrivé on arrete la fonction et on se remet en attente
             if self.x == x and self.y == y:
                 self.move = None
