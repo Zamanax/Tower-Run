@@ -4,9 +4,6 @@ from functools import lru_cache
 from threading import Thread
 import asyncio
 
-# Import personnels
-import model.Tower as Tow
-
 class Character (Thread):
 #---------------------Attributs------------------------------------------------
     # Statistiques du Character
@@ -51,6 +48,7 @@ class Character (Thread):
     transformAnim = []
     transformAnim1 = []
     transformAnim2 = []
+    instantMoveAnim = []
     death = []
     num_sprintes = {}
     y_Anim = {}

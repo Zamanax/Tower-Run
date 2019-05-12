@@ -21,6 +21,7 @@ class Interface(tk.Frame):
     spotDamage = None
     spotDamagetype = None
     spotPrice = None
+    interfaceShown = True
 
     def __init__(self, parent, *args, **kwargs):
         self.lochoice = tk.PhotoImage(file="view/src/assets/lochoice.png")
@@ -34,15 +35,29 @@ class Interface(tk.Frame):
         self.v = tk.StringVar()
 
         self.backImg = tk.PhotoImage(file="view/src/background/Interface.png")
-        self.interface = tk.Canvas(
-            self, width=200, height=650, highlightthickness=0)
-        self.interface.create_image(0, 0, image=self.backImg, anchor="nw")
+        
+        self.createInterfaceCanvas()
+        self.createHerosCanvas()
 
         self.makeLabel()
         self.emplacementMake()
         self.makeButton()
         
         self.interface.pack()
+
+    def createInterfaceCanvas(self):
+        self.interface = tk.Canvas(
+            self, width=200, height=650, highlightthickness=0)
+        self.interface.create_image(0, 0, image=self.backImg, anchor="nw")
+        self.makeButton()
+        self.makeLabel()
+
+    def createHerosCanvas(self):
+        self.interfaceHero = tk.Canvas(
+            self, width=200, height=650, highlightthickness=0, bg="#743A3A")
+        self.swapButton2 =tk.Button(self.interfaceHero, command=self.switchCanvas, text="Swap")
+        self.swapButton2.place(x=12, y=550)
+        
 
 # ___________________________On va faire les check buttons ici max/yann ______________
     def makeButton(self):
@@ -69,10 +84,17 @@ class Interface(tk.Frame):
                            self.earthchb, self.firechb, self.archerchb, self.mortierchb]
 
         self.waterchb.select()  # on choisit les mages d'eaux par défaut au début
+
         self.buildButton = tk.Button(
             self.interface, command=self.buildTower, text="Construire", width=24, state="disabled")
-        # self.interface, command=self.buildTower, text="Construire", image=self.buttonImage, state = "disabled")
+
         self.buildButton.place(x=12, y=585)
+
+        self.swapButton1 = tk.Button(self.interface, command=self.switchCanvas, text="Swap")
+        self.swapButton1.place(x=12, y=550)
+
+        
+
 
     def makeLabel(self):
         self.wallet = tk.Label(
@@ -276,6 +298,20 @@ class Interface(tk.Frame):
 
             self.preView()
 
+    def switchCanvas(self):
+        if self.interfaceShown:
+            self.interface.destroy()
+            self.createHerosCanvas()
+            self.interfaceHero.pack()
+            # self.swapButton2.place(x=5, y=550)
+            self.interfaceShown = False
+        else : 
+            self.interfaceHero.destroy()
+            self.createInterfaceCanvas()
+            self.interface.pack()
+            self.interfaceShown = True
+
+    
     def emplacementMake(self):
         for spot in self.parent.spots:
             if spot.state == None:
