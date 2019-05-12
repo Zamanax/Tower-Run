@@ -156,6 +156,7 @@ class Character (Thread):
                 # Si l'animation à laquelle on est doit faire des dégats alors seulement on en fait
                 if self.sprite in self.damagingSprite:
                     self.target.hp -= self.damage
+                    self.parent.interface.updateHp()
 
                 # Si la cible a un nombre de point de vie négatif ou nul il meurt et on reprend sa route
                 if self.target.hp <= 0:

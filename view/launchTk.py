@@ -92,7 +92,6 @@ class Lvl(tk.Frame):
         self.canvas.bind("<Button-1>", self.interface.selectSpot)
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
         self.canvas.bind("<Button-2>", self.heros.instantMove)
-        self.canvas.bind_all("t", self.heros.specialAttack)
 
         # Pack des canvas pour affichage
         self.interface.pack(side="right", fill="y")

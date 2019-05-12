@@ -29,6 +29,7 @@ class Interface(tk.Frame):
         self.moneyIcon = tk.PhotoImage(file="view/src/assets/Money - Copie.png")
         self.parent = parent
         self.canvas = parent.canvas
+        self.hero=self.parent.heros
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
@@ -38,7 +39,6 @@ class Interface(tk.Frame):
         
         self.createInterfaceCanvas()
         self.createHerosCanvas()
-
         self.makeLabel()
         self.emplacementMake()
         self.makeButton()
@@ -57,7 +57,31 @@ class Interface(tk.Frame):
             self, width=200, height=650, highlightthickness=0, bg="#743A3A")
         self.swapButton2 =tk.Button(self.interfaceHero, command=self.switchCanvas, text="Swap")
         self.swapButton2.place(x=12, y=550)
-        
+
+        self.specialButton = tk.Button(self.interfaceHero, command=self.hero.specialAttack, text="Attaque spéciale")
+        self.specialButton.place(x=12, y=120)
+
+        # self.Name = tk.Label(
+        #     self.interfaceHero, text="Nom: ", bg="#743A3A", fg="white")
+        # self.Name.place(x=10, y=300)
+
+        self.damage = tk.Label(
+            self.interfaceHero, text="Dégâts par attaque: " + str(self.hero.damage), bg="#743A3A", fg="white")
+        self.attackspeed = tk.Label(
+            self.interfaceHero, text="Zone de dégâts: ", bg="#743A3A", fg="white")
+        self.hp = tk.Label(
+            self.interfaceHero, text="Points de Vie: " + str(self.hero.hp)+"/"+str(self.hero.baseHp), bg="#743A3A", fg="white")
+        self.speed = tk.Label(
+            self.interfaceHero, text="vitesse de déplacement: " + str(self.hero.speed), bg="#743A3A", fg="white")
+
+        self.damage.place(x=10, y=320)
+        self.attackspeed.place(x=10, y=340)
+        self.hp.place(x=10, y=360)
+        self.speed.place(x=10, y=380)
+
+    def updateHp(self):
+        if not self.interfaceShown:
+            self.hp["text"]="Points de Vie: " + str(self.hero.hp)+"/"+str(self.hero.baseHp)
 
 # ___________________________On va faire les check buttons ici max/yann ______________
     def makeButton(self):
@@ -138,145 +162,146 @@ class Interface(tk.Frame):
         self.preView()
 
     def preView(self):
-        state = ''.join([i for i in self.v.get() if not i.isdigit()])
-        for btn in self.buttonList:
-            btn["state"] = "normal"
-            
-        if self.spotName:
-            self.spotName.destroy()
-        if self.spotDamage:
-            self.spotDamage.destroy()
-        if self.spotSpeed:
-            self.spotSpeed.destroy()
-        if self.spotZone:
-            self.spotZone.destroy()
-        if self.spotDamagetype:
-            self.spotDamagetype.destroy()
-        if self.spotPrice:
-            self.spotPrice.destroy()
+        if self.interfaceShown:
+            state = ''.join([i for i in self.v.get() if not i.isdigit()])
+            for btn in self.buttonList:
+                btn["state"] = "normal"
+                
+            if self.spotName:
+                self.spotName.destroy()
+            if self.spotDamage:
+                self.spotDamage.destroy()
+            if self.spotSpeed:
+                self.spotSpeed.destroy()
+            if self.spotZone:
+                self.spotZone.destroy()
+            if self.spotDamagetype:
+                self.spotDamagetype.destroy()
+            if self.spotPrice:
+                self.spotPrice.destroy()
 
-        self.canvas.delete(self.last_lochoice)
-        self.canvas.delete(self.range_preview)
-        self.interface.delete(self.moneyCallback)
+            self.canvas.delete(self.last_lochoice)
+            self.canvas.delete(self.range_preview)
+            self.interface.delete(self.moneyCallback)
 
-        self.interface.delete(self.last_preview)
+            self.interface.delete(self.last_preview)
 
-        if self.selected:
+            if self.selected:
 
-            self.buildButton["state"] = "normal"
+                self.buildButton["state"] = "normal"
 
-            self.spotName = tk.Label(
-                self.interface, text="Nom: ", bg="#743A3A", fg="white")
-            self.spotName.place(x=10, y=300)
+                self.spotName = tk.Label(
+                    self.interface, text="Nom: ", bg="#743A3A", fg="white")
+                self.spotName.place(x=10, y=300)
 
-            self.spotDamage = tk.Label(
-                self.interface, text="Dégâts: ", bg="#743A3A", fg="white")
-            self.spotZone = tk.Label(
-                self.interface, text="Zone de dégâts: ", bg="#743A3A", fg="white")
-            self.spotDamagetype = tk.Label(
-                self.interface, text="Type: ", bg="#743A3A", fg="white")
-            self.spotSpeed = tk.Label(
-                self.interface, text="Cadence de tir: ", bg="#743A3A", fg="white")
+                self.spotDamage = tk.Label(
+                    self.interface, text="Dégâts: ", bg="#743A3A", fg="white")
+                self.spotZone = tk.Label(
+                    self.interface, text="Zone de dégâts: ", bg="#743A3A", fg="white")
+                self.spotDamagetype = tk.Label(
+                    self.interface, text="Type: ", bg="#743A3A", fg="white")
+                self.spotSpeed = tk.Label(
+                    self.interface, text="Cadence de tir: ", bg="#743A3A", fg="white")
 
-            self.spotDamage.place(x=10, y=320)
-            self.spotZone.place(x=10, y=340)
-            self.spotDamagetype.place(x=10, y=360)
-            self.spotSpeed.place(x=10, y=380)
-
-            # self.half_range = self.dico[state].range
-            # self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-            #                                                 outline="blue")
-
-            self.last_lochoice = self.canvas.create_image(
-                self.selected.x, self.selected.y-12, image=self.lochoice)
-            self.spotPrice = tk.Label(
-                self.interface, bg="#743A3A", fg="white", font=("Arial", 18), justify="left")
-
-            self.spotPrice.place(x=105, y=535)
-            self.moneyCallback = self.interface.create_image(
-                175, 550, image=self.moneyIcon)
-
-            if self.selected.tower:
-                for btn in self.buttonList:
-                    btn["state"] = "disabled"
-
-                self.buildButton["text"] = "Améliorer"
-
-                self.half_range = self.selected.tower.range
                 self.spotDamage.place(x=10, y=320)
                 self.spotZone.place(x=10, y=340)
                 self.spotDamagetype.place(x=10, y=360)
                 self.spotSpeed.place(x=10, y=380)
 
-                self.spotPrice["text"] = self.selected.tower.price
+                # self.half_range = self.dico[state].range
+                # self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                #                                                 outline="blue")
 
-                if self.selected.tower.lvl == 1:
-                    self.last_preview = self.interface.create_image(
-                        100, 475, image=self.selected.tower.lv1)
+                self.last_lochoice = self.canvas.create_image(
+                    self.selected.x, self.selected.y-12, image=self.lochoice)
+                self.spotPrice = tk.Label(
+                    self.interface, bg="#743A3A", fg="white", font=("Arial", 18), justify="left")
 
-                elif self.selected.tower.lvl == 2:
-                    self.last_preview = self.interface.create_image(
-                        100, 475, image=self.selected.tower.lv2)
+                self.spotPrice.place(x=105, y=535)
+                self.moneyCallback = self.interface.create_image(
+                    175, 550, image=self.moneyIcon)
 
-                elif self.selected.tower.lvl == 3:
-                    self.last_preview = self.interface.create_image(
-                        100, 475, image=self.selected.tower.lv3)
-                    self.buildButton["text"] = "MAX"
-                    self.buildButton["state"] = "disabled"
-                self.spotName["text"] += str(self.selected.tower)
+                if self.selected.tower:
+                    for btn in self.buttonList:
+                        btn["state"] = "disabled"
 
-                if hasattr(self.selected.tower, "damagetype"):
-                    self.spotDamage["text"] += str(self.selected.tower.damage) + \
-                        " ⇢ " + str(self.selected.tower.ndamage)
-                    self.spotZone["text"] += str(self.selected.tower.zone)
-                    self.spotDamagetype["text"] += str(
-                        self.selected.tower.damagetype)
-                    self.spotSpeed["text"] += str(self.selected.tower.speed) + \
-                        " ⇢ " + str(self.selected.tower.nspeed)
+                    self.buildButton["text"] = "Améliorer"
+
+                    self.half_range = self.selected.tower.range
+                    self.spotDamage.place(x=10, y=320)
+                    self.spotZone.place(x=10, y=340)
+                    self.spotDamagetype.place(x=10, y=360)
+                    self.spotSpeed.place(x=10, y=380)
+
+                    self.spotPrice["text"] = self.selected.tower.price
+
+                    if self.selected.tower.lvl == 1:
+                        self.last_preview = self.interface.create_image(
+                            100, 475, image=self.selected.tower.lv1)
+
+                    elif self.selected.tower.lvl == 2:
+                        self.last_preview = self.interface.create_image(
+                            100, 475, image=self.selected.tower.lv2)
+
+                    elif self.selected.tower.lvl == 3:
+                        self.last_preview = self.interface.create_image(
+                            100, 475, image=self.selected.tower.lv3)
+                        self.buildButton["text"] = "MAX"
+                        self.buildButton["state"] = "disabled"
+                    self.spotName["text"] += str(self.selected.tower)
+
+                    if hasattr(self.selected.tower, "damagetype"):
+                        self.spotDamage["text"] += str(self.selected.tower.damage) + \
+                            " ⇢ " + str(self.selected.tower.ndamage)
+                        self.spotZone["text"] += str(self.selected.tower.zone)
+                        self.spotDamagetype["text"] += str(
+                            self.selected.tower.damagetype)
+                        self.spotSpeed["text"] += str(self.selected.tower.speed) + \
+                            " ⇢ " + str(self.selected.tower.nspeed)
+                            
+                        self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                                                            outline="blue")
+                    else:
+                        self.spotDamage.destroy()
+                        self.spotZone.destroy()
+                        self.spotDamagetype.destroy()
+                        self.spotSpeed.destroy()
                         
-                    self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-                                                         outline="blue")
+                    if self.selected.tower.price is not "Max" and self.selected.tower.price > self.parent.gold.get():
+                        self.buildButton["state"] = "disabled"
+                        self.buildButton["text"] = "Pas Assez d'Or"
+
                 else:
-                    self.spotDamage.destroy()
-                    self.spotZone.destroy()
-                    self.spotDamagetype.destroy()
-                    self.spotSpeed.destroy()
-                    
-                if self.selected.tower.price is not "Max" and self.selected.tower.price > self.parent.gold.get():
-                    self.buildButton["state"] = "disabled"
-                    self.buildButton["text"] = "Pas Assez d'Or"
+                    self.last_preview = self.interface.create_image(
+                        100, 475, image=self.hammerSign)
+
+                    self.half_range = self.dico[state].range
+                    self.buildButton["text"] = "Construire"
+
+                    self.spotName["text"] += "Vide ⇢ " + str(state)
+                    self.spotPrice["text"] = self.dico[state].price
+
+                    if hasattr(self.dico[state], "damagetype"):
+                        self.spotDamage["text"] += "0 ⇢ " + \
+                            str(self.dico[state].damage)
+                        self.spotZone["text"] += "Aucun ⇢ " + \
+                            str(self.dico[state].zone)
+                        self.spotDamagetype["text"] += "Aucun ⇢ " + \
+                            str(self.dico[state].damagetype)
+                        self.spotSpeed["text"] += "0 ⇢ " + \
+                            str(self.dico[state].speed)
+
+                        self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
+                                                            outline="blue")
+
+                    if self.dico[state].price > self.parent.gold.get():
+                        self.buildButton["state"] = "disabled"
+                        self.buildButton["text"] = "Pas Assez d'Or"
+
 
             else:
-                self.last_preview = self.interface.create_image(
-                    100, 475, image=self.hammerSign)
-
-                self.half_range = self.dico[state].range
+                self.buildButton["state"] = "disabled"
                 self.buildButton["text"] = "Construire"
-
-                self.spotName["text"] += "Vide ⇢ " + str(state)
-                self.spotPrice["text"] = self.dico[state].price
-
-                if hasattr(self.dico[state], "damagetype"):
-                    self.spotDamage["text"] += "0 ⇢ " + \
-                        str(self.dico[state].damage)
-                    self.spotZone["text"] += "Aucun ⇢ " + \
-                        str(self.dico[state].zone)
-                    self.spotDamagetype["text"] += "Aucun ⇢ " + \
-                        str(self.dico[state].damagetype)
-                    self.spotSpeed["text"] += "0 ⇢ " + \
-                        str(self.dico[state].speed)
-
-                    self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-                                                         outline="blue")
-
-                if self.dico[state].price > self.parent.gold.get():
-                    self.buildButton["state"] = "disabled"
-                    self.buildButton["text"] = "Pas Assez d'Or"
-
-
-        else:
-            self.buildButton["state"] = "disabled"
-            self.buildButton["text"] = "Construire"
 
     def buildTower(self):
         state = ''.join([i for i in str(self.v.get()) if not i.isdigit()])
@@ -303,7 +328,6 @@ class Interface(tk.Frame):
             self.interface.destroy()
             self.createHerosCanvas()
             self.interfaceHero.pack()
-            # self.swapButton2.place(x=5, y=550)
             self.interfaceShown = False
         else : 
             self.interfaceHero.destroy()

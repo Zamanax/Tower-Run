@@ -636,7 +636,7 @@ class Heros(Character):
             self.canvas.after(200, self.instantMove, event)
 
     # On effectue l'attaque spéciale lorsque l'on presse la touche
-    def specialAttack(self, event):
+    def specialAttack(self):
         if self.state == "idleRight" or self.state == "attackRight" or self.state == "runRight":
             self.state = "specialMoveRight"
         elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
