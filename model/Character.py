@@ -284,7 +284,7 @@ class Character (Thread):
         attackLeft = [self.subimage(self.spriteSize*i, self.y_Anim["attackLeft"], self.spriteSize*(i+1), self.y_Anim["attackLeft"]+self.spriteSize).zoom(self.zoom)
                     for i in range(self.num_sprintes["attackLeft"])]
                     
-        attackLeft.reverse()
+        # attackLeft.reverse()
 
         return attackLeft
     async def getDeathAnim(self):

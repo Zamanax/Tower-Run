@@ -623,7 +623,7 @@ class Heros(Character):
         self.moveTo(x, y)
 
     def reOrient(self, event):
-        if event.keycode == 114:
+        if event.keysym == "Right":
             self.state = "idleRight"
         else :
             self.state = "idleLeft"

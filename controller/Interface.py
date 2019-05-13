@@ -22,6 +22,8 @@ class Interface(tk.Frame):
     spotDamagetype = None
     spotPrice = None
     interfaceShown = True
+    heroToShow = 0
+    hero_lastimg = None
 
     def __init__(self, parent, *args, **kwargs):
         self.lochoice = tk.PhotoImage(file="view/src/assets/lochoice.png")
@@ -61,10 +63,6 @@ class Interface(tk.Frame):
         self.specialButton = tk.Button(self.interfaceHero, command=self.hero.specialAttack, text="Special", width=3)
         self.specialButton.place(x=145, y=550)
 
-        # self.Name = tk.Label(
-        #     self.interfaceHero, text="Nom: ", bg="#743A3A", fg="white")
-        # self.Name.place(x=10, y=300)
-
         self.damage = tk.Label(
             self.interfaceHero, text="Dégâts par attaque: " + str(self.hero.damage), bg="#743A3A", fg="white")
         self.attackspeed = tk.Label(
@@ -78,6 +76,16 @@ class Interface(tk.Frame):
         self.attackspeed.place(x=10, y=40)
         self.hp.place(x=10, y=60)
         self.speed.place(x=10, y=80)
+
+        self.showHeros()
+
+    def showHeros(self):
+        if self.hero_lastimg:
+            self.interfaceHero.delete(self.hero_lastimg)
+        self.heroToShow = (self.heroToShow+1) % self.hero.num_sprintes["idleLeft"]
+
+        self.hero_lastimg = self.interfaceHero.create_image(100, 350, image=self.hero.idleLeft[self.heroToShow])
+        self.interfaceHero.after(250, self.showHeros)
 
     def updateHp(self):
         if not self.interfaceShown:
