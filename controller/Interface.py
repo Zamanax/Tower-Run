@@ -40,7 +40,7 @@ class Interface(tk.Frame):
         self.backImg = tk.PhotoImage(file="view/src/background/Interface.png")
         
         self.createInterfaceCanvas()
-        self.createHerosCanvas()
+        # self.createHerosCanvas()
         self.makeLabel()
         self.emplacementMake()
         self.makeButton()
@@ -83,7 +83,7 @@ class Interface(tk.Frame):
         if self.hero_lastimg:
             self.interfaceHero.delete(self.hero_lastimg)
         self.heroToShow = (self.heroToShow+1) % self.hero.num_sprintes["idleLeft"]
-
+        if self.heroToShow > len(self.hero.idleLeft) : self.heroToShow = 0
         self.hero_lastimg = self.interfaceHero.create_image(100, 350, image=self.hero.idleLeft[self.heroToShow])
         self.interfaceHero.after(250, self.showHeros)
 
@@ -111,6 +111,8 @@ class Interface(tk.Frame):
         self.forgeronchb = tk.Radiobutton(
             self.interface, value=Tow.Forgeron, text="F", variable=self.v, command=self.preView)
         self.forgeronchb.place(x=160, y=300)
+        
+        if self.hero.name == "Aventurier" : self.forgeronchb["state"] = "disabled"
 
         self.buttonList = [self.forgeronchb, self.waterchb,
                            self.earthchb, self.firechb, self.archerchb, self.mortierchb]
@@ -172,8 +174,20 @@ class Interface(tk.Frame):
     def preView(self):
         if self.interfaceShown:
             state = ''.join([i for i in self.v.get() if not i.isdigit()])
+            
             for btn in self.buttonList:
                 btn["state"] = "normal"
+            
+            if self.hero.name == "Aventurier":
+                self.forgeronchb["state"] = "disabled"
+            else :
+                for spot in self.parent.spots :
+                    if spot.tower: 
+                        if spot.tower.__str__() is "Forgeron":
+                            self.forgeronchb["state"] = "disabled"
+                            self.waterchb.select()
+                            break
+            
                 
             if self.spotName:
                 self.spotName.destroy()

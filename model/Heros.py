@@ -643,10 +643,11 @@ class Heros(Character):
 
     # On effectue l'attaque spéciale lorsque l'on presse la touche
     def specialAttack(self, *args):
-        if self.state == "idleRight" or self.state == "attackRight" or self.state == "runRight":
-            self.state = "specialMoveRight"
-        elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
-            self.state = "specialMoveLeft"
+        if hasattr(self, "coupSpe"):
+            if self.state == "idleRight" or self.state == "attackRight" or self.state == "runRight":
+                self.state = "specialMoveRight"
+            elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
+                self.state = "specialMoveLeft"
 
     # Fonction chargée de la transformation du heros
     def transform(self):
