@@ -93,8 +93,8 @@ class Lvl(tk.Frame):
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
         self.canvas.bind("<Button-2>", self.heros.instantMove)
         self.canvas.bind_all("<space>", self.heros.specialAttack)
-        self.canvas.bind("Right",self.heros.orientRight)
-        self.canvas.bind("Left", self.heros.reorientLeft)
+        self.canvas.bind_all("<KeyPress-Right>",self.heros.reOrient)
+        self.canvas.bind_all("<KeyPress-Left>", self.heros.reOrient)
 
         # Pack des canvas pour affichage
         self.interface.pack(side="right", fill="y")

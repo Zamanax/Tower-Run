@@ -74,10 +74,10 @@ class Interface(tk.Frame):
         self.speed = tk.Label(
             self.interfaceHero, text="vitesse de déplacement: " + str(self.hero.speed), bg="#743A3A", fg="white")
 
-        self.damage.place(x=10, y=320)
-        self.attackspeed.place(x=10, y=340)
-        self.hp.place(x=10, y=360)
-        self.speed.place(x=10, y=380)
+        self.damage.place(x=10, y=20)
+        self.attackspeed.place(x=10, y=40)
+        self.hp.place(x=10, y=60)
+        self.speed.place(x=10, y=80)
 
     def updateHp(self):
         if not self.interfaceShown:

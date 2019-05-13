@@ -461,14 +461,7 @@ class Heros(Character):
         elif dict == self.lv3:
             self.idleRight3, self.idleLeft3, self.runRight3, self.runLeft3, self.attackRight3, self.attackLeft3, self.specialMoveRight3, self.specialMoveLeft3, self.death3, self.instantMoveAnim3 = loop.run_until_complete(
                 asyncio.gather(*tasks))
-
-    def orientRight(self, event):
-        if self.state=="idleLeft" :
-            self.state="idleRight"
-    def orientLeft(self,event):
-        if self.state=="idleRight":
-            self.state="idleLeft"
-
+    
 # ------------------------Fonction chargée de découper les images dans les images--------
 
     async def getSpecialMoveLeft(self, dict, image):
@@ -628,6 +621,12 @@ class Heros(Character):
         self.canvas.tag_raise(self.crossCallback, self.parent.background)
 
         self.moveTo(x, y)
+
+    def reOrient(self, event):
+        if event.keycode == 114:
+            self.state = "idleRight"
+        else :
+            self.state = "idleLeft"
 
     def instantMove(self, event):
         if hasattr(self, "instantMoveAnim"):
