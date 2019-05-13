@@ -462,6 +462,13 @@ class Heros(Character):
             self.idleRight3, self.idleLeft3, self.runRight3, self.runLeft3, self.attackRight3, self.attackLeft3, self.specialMoveRight3, self.specialMoveLeft3, self.death3, self.instantMoveAnim3 = loop.run_until_complete(
                 asyncio.gather(*tasks))
 
+    def orientRight(self, event):
+        if self.state=="idleLeft" :
+            self.state="idleRight"
+    def orientLeft(self,event):
+        if self.state=="idleRight":
+            self.state="idleLeft"
+
 # ------------------------Fonction chargée de découper les images dans les images--------
 
     async def getSpecialMoveLeft(self, dict, image):
@@ -636,7 +643,7 @@ class Heros(Character):
             self.canvas.after(200, self.instantMove, event)
 
     # On effectue l'attaque spéciale lorsque l'on presse la touche
-    def specialAttack(self):
+    def specialAttack(self, *args):
         if self.state == "idleRight" or self.state == "attackRight" or self.state == "runRight":
             self.state = "specialMoveRight"
         elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":

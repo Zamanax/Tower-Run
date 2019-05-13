@@ -55,11 +55,11 @@ class Interface(tk.Frame):
     def createHerosCanvas(self):
         self.interfaceHero = tk.Canvas(
             self, width=200, height=650, highlightthickness=0, bg="#743A3A")
-        self.swapButton2 =tk.Button(self.interfaceHero, command=self.switchCanvas, text="Swap")
+        self.swapButton2 =tk.Button(self.interfaceHero, command=self.switchCanvas, text="Swap", width=2)
         self.swapButton2.place(x=12, y=550)
 
-        self.specialButton = tk.Button(self.interfaceHero, command=self.hero.specialAttack, text="Attaque spéciale")
-        self.specialButton.place(x=12, y=120)
+        self.specialButton = tk.Button(self.interfaceHero, command=self.hero.specialAttack, text="Special", width=3)
+        self.specialButton.place(x=145, y=550)
 
         # self.Name = tk.Label(
         #     self.interfaceHero, text="Nom: ", bg="#743A3A", fg="white")
@@ -114,7 +114,7 @@ class Interface(tk.Frame):
 
         self.buildButton.place(x=12, y=585)
 
-        self.swapButton1 = tk.Button(self.interface, command=self.switchCanvas, text="Swap")
+        self.swapButton1 = tk.Button(self.interface, command=self.switchCanvas, text="Swap", width=2)
         self.swapButton1.place(x=12, y=550)
 
         
