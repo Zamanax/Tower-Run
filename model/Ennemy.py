@@ -34,7 +34,7 @@ class Skeleton (Ennemy) :
     hp = 10
     name = "Skeleton"
     attackSpeed = 1
-    speed = 2
+    speed = 20
     damage = 2
     purse = 10
 

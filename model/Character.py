@@ -69,7 +69,7 @@ class Character (Thread):
     afterIdle = None
     seeking = None
     incrementing = None
-    dying = None
+    dying  = None
 
 #------------------------------------------------------------------------------
 
@@ -87,7 +87,12 @@ class Character (Thread):
         pass
 
     def loseLife(self):
-        self.parent.health.set(self.parent.health.get() - 1)
+        if self.parent.health.get() <= 0 and self.parent.lost is None:
+            self.perdu=tk.PhotoImage(file="view/src/background/Lose.png")
+            self.parent.lost = self.parent.canvas.create_image(540,325, image=self.perdu)
+        else :
+            self.parent.health.set(self.parent.health.get() - 1)
+
 
     # Initialisation de la classe
     def __init__ (self, parent, x, y) :
@@ -186,6 +191,14 @@ class Character (Thread):
         if delete:
             self.canvas.delete(self.last_img)
             self.canvas.after_cancel(self.dying)
+            nb = 0
+            for ennemy in self.parent.ennemies:
+                if ennemy.state == "die":
+                    nb +=1
+            if nb == len(self.parent.ennmies) and self.parent.waveIndex == len(self.parent.waveDict) -1:
+                self.perdu=tk.PhotoImage(file="view/src/background/Lose.png")
+                self.parent.lost = self.parent.canvas.create_image(540,325, image=self.perdu)
+                #Mets la win ragy
             del self
             return
 

@@ -1,7 +1,7 @@
 import tkinter as tk
-from Heros import Heros
-from Character import Character
-from coupspe import *
+from model.Heros import Heros
+from model.Character import Character
+from model.coupspe import *
 
 class Adventurer(Heros):
 

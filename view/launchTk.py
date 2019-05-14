@@ -1,7 +1,7 @@
 import tkinter as tk
 import controller.Interface as View
 import model.Tower as Tow
-import model.Heros as He
+from model.herostats import *
 from model.Ennemy import *
 from model.fonctions_utiles import subimage
 import tkinter.ttk as ttk
@@ -41,6 +41,7 @@ class Lvl(tk.Frame):
     spots = []
 
     image = None
+    lost = None
 
     wave1 = []
 
@@ -74,15 +75,15 @@ class Lvl(tk.Frame):
 
         # Défintion de l'argent et de la vie
         self.gold = tk.IntVar(self.canvas, self.gold)
-        self.health = tk.IntVar(self.canvas, 20)
+        self.health = tk.IntVar(self.canvas, 1)
 
         # Chargement du Héros
         if selectedHeros == "Ichigo":
-            self.heros = He.Ichigo(self, 900, 250, 260, 160)
+            self.heros = Ichigo(self, 900, 250, 260, 160)
         elif selectedHeros == "Goku":
-            self.heros = He.Goku(self, 900, 250, 260, 160)
+            self.heros = Goku(self, 900, 250, 260, 160)
         else:
-            self.heros = He.Adventurer(self, 900, 250, 260, 160)
+            self.heros = Adventurer(self, 900, 250, 260, 160)
 
         # Lancement des Vagues
         self.launchWaves(self.wave1)
@@ -134,7 +135,7 @@ class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         # Définiton des variables
-        #self.backImg = tk.PhotoImage(file="view/src/background/MainMenu.png")
+        self.backImg = tk.PhotoImage(file="view/src/background/MainMenu.png")
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
         
@@ -154,7 +155,7 @@ class MainSelectLevel(tk.Frame):
         self.canvas.pack(side="right", fill='both', expand=True)
         
     def makeButtons(self):
-        self.Level1Btn = tk.Radiobutton(self.canvas, text="Level1", value="Level1", variable=self.heros,
+        self.Level1Btn = tk.Radiobutton(self.canvas, text="Level1", value="Level1", variable=self.levels,
                                             bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.Level1Btn.place(x=256, y= 450)
 
@@ -168,12 +169,11 @@ class MainSelectLevel(tk.Frame):
 
         self.Level1Btn.select()
 
-    def startGame(self, event):
+    def startLevel(self, event):
         #if ((event.x-centreducercle.x)**2 + (event.y-centreducercle.y)**2)**(0.5):
         if 390 < event.x < 890 and 500 < event.y < 900:
-            if self.parent.levels == None:
-                self.parent.levels = self.levels.get()
-                self.parent.switchFrame(Lvl1)
+            self.parent.levels = self.levels.get()
+            self.parent.switchFrame(MainMenu)
         elif 242 < event.x < 391 and 285 < event.y < 435:
             self.Level1Btn.select()
         elif 563 < event.x < 714 and 285 < event.y < 435:
@@ -182,7 +182,6 @@ class MainSelectLevel(tk.Frame):
             self.Level3Btn.select()
         
 # Classe du menu principal
-
 class MainMenu(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
