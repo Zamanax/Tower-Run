@@ -42,6 +42,8 @@ class Lvl(tk.Frame):
 
     image = None
 
+    wave1 = []
+
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
 
@@ -83,7 +85,7 @@ class Lvl(tk.Frame):
             self.heros = He.Adventurer(self, 900, 250, 260, 160)
 
         # Lancement des Vagues
-        self.launchWaves()
+        self.launchWaves(self.wave1)
 
         # Début de l'interface
         self.interface = View.Interface(self)
@@ -129,6 +131,56 @@ class Lvl(tk.Frame):
         for el in self.__dict__:
             del el
 
+"""class MainSelectLevel(tk.Frame):
+    def __init__(self, parent, *args, **kwargs):
+        self.parent = parent
+        # Définiton des variables
+        #self.backImg = tk.PhotoImage(file="view/src/background/MainMenu.png")
+        self.rootWidth = self.backImg.width()
+        self.rootHeight = self.backImg.height()
+        
+        # Instance de la Frame
+        tk.Frame.__init__(self, parent)
+
+        self.levels = tk.StringVar(self)
+
+        self.canvas = tk.Canvas(self, width=self.rootWidth,
+                                height=self.rootHeight, highlightthickness=0)
+        self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
+
+        self.makeButtons()
+
+        self.canvas.bind("<Button-1>", self.startLevel)
+
+        self.canvas.pack(side="right", fill='both', expand=True)
+        
+            def makeButtons(self):
+        self.Level1Btn = tk.Radiobutton(self.canvas, text="Aventurier", value="Aventurier", variable=self.heros,
+                                            bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.Level1Btn.place(x=256, y= 450)
+
+        self.LevelBtn = tk.Radiobutton(self.canvas, text="Goku", value="Goku", variable=self.heros,
+                                      bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.LevelBtn.place(x=600, y= 450)
+
+        self.ichigoBtn = tk.Radiobutton(self.canvas, text="Ichigo", value="Ichigo", variable=self.heros,
+                                        bg="#73cb4d", activebackground="#73cb4d", selectcolor="#5ab134", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.ichigoBtn.place(x=925, y= 450)
+
+        self.Level1Btn.select()
+
+    def startGame(self, event):
+        if 390 < event.x < 890 and 500 < event.y < 900:
+            if self.parent.heros == None:
+                self.parent.heros = self.heros.get()
+                self.parent.switchFrame(Lvl1)
+        elif 242 < event.x < 391 and 285 < event.y < 435:
+            self.Level1Btn.select()
+        elif 563 < event.x < 714 and 285 < event.y < 435:
+            self.Level2Btn.select()
+        elif 888 < event.x < 1042 and 285 < event.y < 435:
+            self.Level3Btn.select(
+        """
 # Classe du menu principal
 
 class MainMenu(tk.Frame):
@@ -197,6 +249,12 @@ class Lvl1(Lvl):
     gold = 1500
     defaultPath = [keySpot(1200, 225)]
 
+    waveIndex = 0
+    wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton]
+
+    waveDict = [wave1, wave2]
+
     spots = [Emplacement(180, 175),
              Emplacement(358, 175),
              Emplacement(574, 175),
@@ -206,16 +264,16 @@ class Lvl1(Lvl):
              Emplacement(323, 355),
              Emplacement(143, 355, state="Mine")]
 
-    def launchWaves(self):
-        Skeleton(self, 0, 225, self.heros)
-        Skeleton(self, -100, 225, self.heros)
-        Skeleton(self, -50, 225, self.heros)
-        Skeleton(self, -150, 225, self.heros)
-        Skeleton(self, 50, 225, self.heros)
+    def launchWaves(self, dict):
+        for i in range(len(dict)):
+            dict[i](self, -50*i, 225, self.heros)
+        self.waveIndex += 1
+
+    def nextWave(self):
+        if self.waveIndex <= len(self.waveDict) - 1:
+            self.launchWaves(self.waveDict[self.waveIndex])
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
-
-
 class Lvl2(Lvl):
     image = "view/src/background/Lvl2Background.png"
     gold = 1000

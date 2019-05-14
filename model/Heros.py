@@ -55,7 +55,7 @@ class Kamehameha(Thread):
                 self.x, self.y, image=self.m))
 
             for ennemy in ennemies:
-                if self.x-35 <= ennemy.x <= self.x+35 and self.y-40 <= ennemy.y <= self.y+40:
+                if self.x-35 <= ennemy.x <= self.x+35 and self.y-40 <= ennemy.y <= self.y+40 and ennemy.state != "die":
                     ennemy.hp -= self.damage
                     if ennemy.hp <= 0:
                         ennemy.die(False)
@@ -171,7 +171,7 @@ class Kamehameha3(Thread):
                 self.x, self.y, image=self.m))
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40:
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != "die":
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
@@ -238,7 +238,7 @@ class Genkidamasupreme(Thread):
             self.canvas.delete(self.head)
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40:
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != "die":
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
@@ -360,7 +360,7 @@ class Mugetsu(Thread):
         self.longueur += 1
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-60 <= self.y <= ennemy.y+60:
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-60 <= self.y <= ennemy.y+60 and ennemy.state != "die":
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
@@ -623,13 +623,14 @@ class Heros(Character):
         self.moveTo(x, y)
 
     def reOrient(self, event):
-        if event.keysym == "Right":
-            self.state = "idleRight"
-        else :
-            self.state = "idleLeft"
+        if self.state is "idleLeft" or self.state is "idleRight":
+            if event.keysym == "Right":
+                self.state = "idleRight"
+            else :
+                self.state = "idleLeft"
 
     def instantMove(self, event):
-        if hasattr(self, "instantMoveAnim"):
+        if self.lvl != 0 and hasattr(self, "instantMoveAnim"):
             if self.sprite == self.num_sprintes["instantMove"] - 1 and self.state == "instantMove":
                 self.x = event.x
                 self.y = event.y

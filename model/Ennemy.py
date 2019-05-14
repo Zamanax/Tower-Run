@@ -11,7 +11,7 @@ class Ennemy (Character):
 
         # Insertion dans le tableau
         # Tableau contenant tous les ennemis existants
-        parent.ennemies.insert(0,self)
+        parent.ennemies.append(self)
 
         #Le Monstre se dirige toujours vers l'objectif dès son apparition
         self.path = kwargs.get("path", None)
@@ -50,7 +50,7 @@ class Skeleton (Ennemy) :
 class miniSkeleton (Skeleton) :
     hp = 5
     attackSpeed = 2
-    speed = 2
+    speed = 5
     damage = 1
     zoom = 1
 
@@ -73,7 +73,7 @@ class Totor (Ennemy):
 
 class Fat_Totor (Totor) :
     hp = 1000
-    name = "Fat_Totor"
+    name = "Fat Totor"
     damage = 20
     speed = 0.5
     zoom = 3

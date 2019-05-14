@@ -127,8 +127,8 @@ class Interface(tk.Frame):
         self.swapButton1 = tk.Button(self.interface, command=self.switchCanvas, text="Swap", width=2)
         self.swapButton1.place(x=12, y=550)
 
-        
-
+        self.waveBtn = tk.Button(self.interface, command=self.parent.nextWave, text="Wave", width=2)
+        self.waveBtn.place(x=88, y=617)
 
     def makeLabel(self):
         self.wallet = tk.Label(
