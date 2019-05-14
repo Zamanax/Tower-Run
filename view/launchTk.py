@@ -130,8 +130,7 @@ class Lvl(tk.Frame):
             del ennemy
         for el in self.__dict__:
             del el
-
-"""class MainSelectLevel(tk.Frame):
+class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         # Définiton des variables
@@ -154,33 +153,34 @@ class Lvl(tk.Frame):
 
         self.canvas.pack(side="right", fill='both', expand=True)
         
-            def makeButtons(self):
-        self.Level1Btn = tk.Radiobutton(self.canvas, text="Aventurier", value="Aventurier", variable=self.heros,
+    def makeButtons(self):
+        self.Level1Btn = tk.Radiobutton(self.canvas, text="Level1", value="Level1", variable=self.heros,
                                             bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.Level1Btn.place(x=256, y= 450)
 
-        self.LevelBtn = tk.Radiobutton(self.canvas, text="Goku", value="Goku", variable=self.heros,
-                                      bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.LevelBtn.place(x=600, y= 450)
+        self.Level2Btn = tk.Radiobutton(self.canvas, text="Level2", value="Level2", variable=self.levels,
+                                    bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.Level2Btn.place(x=600, y= 450)
 
-        self.ichigoBtn = tk.Radiobutton(self.canvas, text="Ichigo", value="Ichigo", variable=self.heros,
+        self.Level3Btn = tk.Radiobutton(self.canvas, text="Level3", value="Level3", variable=self.levels,
                                         bg="#73cb4d", activebackground="#73cb4d", selectcolor="#5ab134", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.ichigoBtn.place(x=925, y= 450)
+        self.Level3Btn.place(x=925, y= 450)
 
         self.Level1Btn.select()
 
     def startGame(self, event):
+        #if ((event.x-centreducercle.x)**2 + (event.y-centreducercle.y)**2)**(0.5):
         if 390 < event.x < 890 and 500 < event.y < 900:
-            if self.parent.heros == None:
-                self.parent.heros = self.heros.get()
+            if self.parent.levels == None:
+                self.parent.levels = self.levels.get()
                 self.parent.switchFrame(Lvl1)
         elif 242 < event.x < 391 and 285 < event.y < 435:
             self.Level1Btn.select()
         elif 563 < event.x < 714 and 285 < event.y < 435:
             self.Level2Btn.select()
         elif 888 < event.x < 1042 and 285 < event.y < 435:
-            self.Level3Btn.select(
-        """
+            self.Level3Btn.select()
+        
 # Classe du menu principal
 
 class MainMenu(tk.Frame):
@@ -306,7 +306,7 @@ class MainApplication(tk.Frame):
         self.parent = parent
 
         # Chargement de la Frame de départ
-        self.switchFrame(MainMenu)
+        self.switchFrame(MainSelectLevel)
 
     # Fonction permettant de passer d'une frame à l'autre en détruisant l'autre
     def switchFrame(self, nframe):

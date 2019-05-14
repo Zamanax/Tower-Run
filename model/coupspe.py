@@ -1,7 +1,7 @@
 import tkinter as tk
 from threading import Thread
-from fonctions_utiles import load
-from Character import Character
+from model.fonctions_utiles import load
+from model.Character import Character
 
 
 class Kamehameha(Thread):
