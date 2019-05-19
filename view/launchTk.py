@@ -82,17 +82,17 @@ class Lvl(tk.Frame):
         self.health = tk.IntVar(self.canvas, 1)
 
         # Chargement du Héros
-        if hasattr(selectedHeros, "name") is False:
+        if hasattr(selectedHeros, "name"):
+            self.heros = selectedHeros
+            self.heros.canvas = self.canvas
+            self.heros.parent = self
+        else :
             if selectedHeros == "Ichigo":
                 self.heros = Ichigo(self, 900, 250, 260, 160)
             elif selectedHeros == "Goku":
                 self.heros = Goku(self, 900, 250, 260, 160)
             else:
                 self.heros = Adventurer(self, 900, 250, 260, 160)
-        else :
-            self.heros = selectedHeros
-            self.heros.canvas = self.canvas
-            self.heros.parent = self
         self.parent.heros = self.heros
         # Lancement des Vagues
         self.launchWaves(self.wave1)
