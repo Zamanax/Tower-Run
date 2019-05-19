@@ -161,7 +161,7 @@ class Interface(tk.Frame):
 
     def selectSpot(self, event):
         print("x=" + str(event.x))
-        print("y=" + str(event.x))
+        print("y=" + str(event.y))
         area = 50
         self.selected = None
 

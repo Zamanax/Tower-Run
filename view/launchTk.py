@@ -187,14 +187,21 @@ class Lvl3(Lvl):
     waveDict = [wave1, wave2]
 
     def __init__(self, parent, *args, **kwargs):
-        self.spots=[Emplacement(180, 175),
-                    Emplacement(358, 175),
-                    Emplacement(574, 175),
-                    Emplacement(755, 175),
-                    Emplacement(791, 355),
-                    Emplacement(538, 355),
-                    Emplacement(323, 355),
-                    Emplacement(143, 355, state="Mine")]
+        self.spots=[Emplacement(50,280),
+                    Emplacement(130,280),
+                    Emplacement(300,280),
+                    Emplacement(315,385),
+                    Emplacement(510,180),
+                    Emplacement(635,180),
+                    Emplacement(510,390),
+                    Emplacement(635,390),
+                    Emplacement(1040,28),
+                    Emplacement(860,280),
+                    Emplacement(960,280),
+                    Emplacement(860,385),
+                    Emplacement(860,385),
+                    Emplacement(860,485),
+                    Emplacement(960,385)]
         return super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
@@ -210,14 +217,21 @@ class Lvl2(Lvl):
 
     nextLvl = Lvl3
     def __init__(self, parent, *args, **kwargs):
-        self.spots =[Emplacement(180, 175),
-                Emplacement(358, 175),
-                Emplacement(574, 175),
-                Emplacement(755, 175),
-                Emplacement(791, 355),
-                Emplacement(538, 355),
-                Emplacement(323, 355),
-                Emplacement(143, 355, state="Mine")]
+        self.spots =[Emplacement(77,115),
+                    Emplacement(203,108),
+                    Emplacement(286,112),
+                    Emplacement(571,338),
+                    Emplacement(674,341),
+                    Emplacement(745,333),
+                    Emplacement(858,335),
+                    Emplacement(973,334),
+                    Emplacement(523,610),
+                    Emplacement(636,610),
+                    Emplacement(752,607),
+                    Emplacement(852,608),
+                    Emplacement(955,609),
+                    Emplacement(56,373),
+                    Emplacement(231,372)]
         return super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
