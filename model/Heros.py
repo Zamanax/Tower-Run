@@ -165,9 +165,10 @@ class Heros(Character):
         # Création de la variable à retourner
         self.compteur += 1
         sprite = tk.PhotoImage()
-        # print(self.compteur)
-        self.parent.parent.currentFrame.progressBar["value"] = self.compteur
-        self.parent.update()
+
+        if hasattr(self.parent.parent.currentFrame, "progressBar"):
+            self.parent.parent.currentFrame.progressBar["value"] = self.compteur
+            self.parent.update()
         # Décupage de l'image en Tcl
         sprite.tk.call(sprite, 'copy', image,
                        '-from', x1, y1, x2, y2, '-to', 0, 0)
@@ -204,7 +205,6 @@ class Heros(Character):
 
     # Fonction chargée du déplacement à la souris du héros
     def mouseMove(self, event):
-
         # Si il se transforme on ne fait rien
         if self.state == "transform":
             return
@@ -219,6 +219,8 @@ class Heros(Character):
                 self.state = "idleRight"
             elif self.state == "runLeft":
                 self.state = "idleLeft"
+        else:
+            self.sprite = 0
 
         # Si on attaque alors on annule
         if self.attacking:
@@ -230,7 +232,6 @@ class Heros(Character):
                 self.state = "idleLeft"
 
         # On effectue le mouvement en restant dans les bornes
-        self.sprite = 0
         if event.y > self.max_y:
             y = self.max_y
         elif event.y < self.min_y:
