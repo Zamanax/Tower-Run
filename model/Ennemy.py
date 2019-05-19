@@ -26,7 +26,14 @@ class Ennemy (Character):
                 self.moveTo(self.path[self.pathIndex].x,self.path[self.pathIndex].y)
             else : 
                 self.loseLife()
-                
+
+    def loseLife(self):
+        if self.parent.health.get() <= 0 and self.parent.lost is None:
+            self.parent.loseGame()
+        else :
+            self.parent.health.set(self.parent.health.get() - 1)
+        del self
+
 #---------------------------- Différents ennmis présents dans le jeu --------------
 
 class Skeleton (Ennemy) :
@@ -34,7 +41,7 @@ class Skeleton (Ennemy) :
     hp = 10
     name = "Skeleton"
     attackSpeed = 1
-    speed = 20
+    speed = 2
     damage = 2
     purse = 10
 

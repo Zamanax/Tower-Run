@@ -52,6 +52,8 @@ class Lvl(tk.Frame):
         selectedHeros = kwargs.get('heros', None)
         # Défintion de l'arrière plan du niveau
         self.backImg = tk.PhotoImage(file=self.image)
+        self.gagne=tk.PhotoImage(file="view/src/background/Win.png")
+        self.perdu=tk.PhotoImage(file="view/src/background/Lose.png")
 
         # Définition des dimensions de la fenêtre
         self.rootWidth = self.backImg.width()
@@ -121,6 +123,28 @@ class Lvl(tk.Frame):
                 self.canvas.create_line(0, (i+1)*self.rootHeight/squareWidth, self.rootWidth,
                                         (i+1)*self.rootHeight/squareWidth, stipple="gray50")
 
+    def winGame(self):
+        nb = 0
+        for ennemy in self.ennemies:
+            if ennemy.state == "die":
+                nb +=1
+        if nb == len(self.ennemies) and self.waveIndex == len(self.waveDict): # and self.parent.waveIndex == len(self.parent.waveDict) -1:
+            self.win = self.canvas.create_image(540,325, image=self.gagne)
+            self.restartBtn = tk.Button(self.canvas, text="Restart", command=self.restartGame)
+            self.restartBtn.place(x = 500, y = 400)
+
+    def loseGame(self):
+        self.lost = self.canvas.create_image(540,325, image=self.perdu)
+        self.restartBtn = tk.Button(self.canvas, text="Restart", command=self.restartGame)
+        self.restartBtn.place(x = 500, y = 400)
+
+    def restartGame(self):
+        for spot in self.spots:
+            del spot
+        self.spots = self.__class__.spots
+        self.parent.switchFrame(self.__class__)
+        del self
+
     # Fonction nulle contenant dans les autress niveaux les ennemis à charger
     def launchWaves(self):
         pass
@@ -135,7 +159,7 @@ class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         # Définiton des variables
-        self.backImg = tk.PhotoImage(file="view/src/background/MainMenu.png")
+        self.backImg = tk.PhotoImage(file="view/src/background/MainSelectLevels.png")
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
         
