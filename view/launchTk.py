@@ -84,6 +84,8 @@ class Lvl(tk.Frame):
         # Chargement du Héros
         if hasattr(selectedHeros, "name"):
             self.heros = selectedHeros
+            self.heros.x = 900
+            self.heros.y = 250
             self.heros.canvas = self.canvas
             self.heros.parent = self
         else :
@@ -240,7 +242,7 @@ class Lvl1(Lvl):
     gold = 1500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
+    wave1 = [Skeleton, Totor, Skeleton, Skeleton, Skeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
