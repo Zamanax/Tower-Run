@@ -104,7 +104,7 @@ class Dwarf (Ennemy) :
 class slime:
     pass
 
-class Bat:
+class Bat(Ennemy):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
 
     hp = 50
