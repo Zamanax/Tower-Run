@@ -104,8 +104,19 @@ class Dwarf (Ennemy) :
 class slime:
     pass
 
-class bat:
-    pass
+class Bat:
+    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
 
+    hp = 50
+    name = 'Bat'
+    attackSpeed = 1
+    speed = 3
+    damage = 5
+    purse = 20
 
-
+    spritesheet = 'view/src/personnage/ennemis/batp.png'
+    spriteSize = 96
+    damagingSprite = [2]
+    num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 5, 'runLeft' : 5, 'attackRight' : 5, 'attackLeft' : 5, 'die' : 5}
+    y_anim = {'idleRight' : 0, "idleLeft": 23, 'runRight' : 0, 'runLeft' : 23, 'attackRight' : 46, 'attackLeft' : 69, 'die' : 82}
+    zoom = 1
