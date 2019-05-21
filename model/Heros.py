@@ -13,7 +13,11 @@ class Heros(Character):
     lv0 = {}
     compteur = 0
     reg = 1
-    def __init__(self, parent, x, y, max_y, min_y):
+    def __init__(self, parent, x, y, max_y, min_y, **kwargs):
+        self.quality = int(kwargs.get("quality", 4))
+
+        if hasattr(self, "defineStats"):
+            self.defineStats()
 
         self.hp = self.lv0["hp"]
         self.damage = self.lv0["damage"]
@@ -31,6 +35,7 @@ class Heros(Character):
             self.barOffsetx = self.lv0["barOffsetx"]
         if "barOffsety" in self.lv0:
             self.barOffsety = self.lv0["barOffsety"]
+
         Character.__init__(self, parent, x, y)
         self.redCross = tk.PhotoImage(file="view/src/assets/Cross.png")
         # On définit l'ordonnée minimale et maximale où on peut aller
@@ -171,7 +176,7 @@ class Heros(Character):
             self.parent.update()
         # Décupage de l'image en Tcl
         sprite.tk.call(sprite, 'copy', image,
-                       '-from', x1, y1, x2, y2, '-to', 0, 0)
+                       '-from', int(x1), int(y1), int(x2), int(y2), '-to', 0, 0)
         return sprite
 
 # ----------------------------------------------------------------------------------------

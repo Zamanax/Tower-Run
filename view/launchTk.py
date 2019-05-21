@@ -90,9 +90,9 @@ class Lvl(tk.Frame):
             self.heros.parent = self
         else :
             if selectedHeros == "Ichigo":
-                self.heros = Ichigo(self, 900, 250, 260, 160)
+                self.heros = Ichigo(self, 900, 250, 260, 160, quality=self.parent.quality)
             elif selectedHeros == "Goku":
-                self.heros = Goku(self, 900, 250, 260, 160)
+                self.heros = Goku(self, 900, 250, 260, 160, quality=self.parent.quality)
             else:
                 self.heros = Adventurer(self, 900, 250, 260, 160)
         self.parent.heros = self.heros
@@ -323,6 +323,7 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.heros = tk.StringVar(self)
+        self.quality = tk.StringVar(self)
 
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                                 height=self.rootHeight, highlightthickness=0)
@@ -349,10 +350,20 @@ class MainMenu(tk.Frame):
 
         self.adventurerBtn.select()
 
+        self.cdiscountBtn = tk.Radiobutton(self.canvas, text="Discount", value=4, variable=self.quality, borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.cdiscountBtn.place(x=256, y=250)
+        self.lowBtn = tk.Radiobutton(self.canvas, text="Low", value=2, variable=self.quality, borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.lowBtn.place(x=600, y=250)
+        self.rtxBtn = tk.Radiobutton(self.canvas, text="RTX ON", value=1, variable=self.quality, borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.rtxBtn.place(x=925, y=250)
+
+        self.lowBtn.select()
+
     def startGame(self, event):
         if 390 < event.x < 890 and 500 < event.y < 900:
             if self.parent.heros == None:
                 self.parent.heros = self.heros.get()
+                self.parent.quality = self.quality.get()
                 self.launchProgress()
                 self.parent.switchFrame(Lvl1)
         elif 242 < event.x < 391 and 285 < event.y < 435:

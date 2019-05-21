@@ -307,7 +307,7 @@ class Character (Thread):
         self.parent.update()
         # Décupage de l'image en Tcl à partir de l'image du personnage et des coordonnées
         sprite.tk.call(sprite, 'copy', self.spritesheet,
-                       '-from', x1, y1, x2, y2, '-to', 0, 0)
+                       '-from', int(x1), int(y1), int(x2), int(y2), '-to', 0, 0)
         return sprite
 
     # Méthode chargée du placement de l'image sans déplacement
