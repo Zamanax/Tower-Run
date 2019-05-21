@@ -84,6 +84,19 @@ class Lvl(tk.Frame):
         # Chargement du Héros
         if hasattr(selectedHeros, "name"):
             self.heros = selectedHeros
+            self.heros.changeStats(self.heros.lv0)
+
+            self.heros.idleRight = self.heros.idleRight0
+            self.heros.idleLeft = self.heros.idleLeft0
+            self.heros.runRight = self.heros.runRight0
+            self.heros.runLeft = self.heros.runLeft0
+            self.heros.specialMoveRight = self.heros.specialMoveRight0
+            self.heros.specialMoveLeft = self.heros.specialMoveLeft0
+            self.heros.attackLeft = self.heros.attackLeft0
+            self.heros.attackRight = self.heros.attackRight0
+            self.heros.death = self.heros.death0
+            self.heros.instantMoveAnim = self.heros.instantMoveAnim0
+
             self.heros.x = 900
             self.heros.y = 250
             self.heros.canvas = self.canvas

@@ -296,6 +296,18 @@ class Heros(Character):
             self.lvl = 1
             self.changeStats(self.lv1)
 
+            self.idleRight0 = self.idleRight
+            self.idleLeft0 = self.idleLeft
+            self.runRight0 = self.runRight
+            self.runLeft0 = self.runLeft
+            self.specialMoveRight0 = self.specialMoveRight
+            self.specialMoveLeft0 = self.specialMoveLeft
+            self.attackLeft0 = self.attackLeft
+            self.attackRight0 = self.attackRight
+            self.death0 = self.death
+            self.instantMoveAnim0 = self.instantMoveAnim
+
+
             self.idleRight = self.idleRight1
             self.idleLeft = self.idleLeft1
             self.runRight = self.runRight1
