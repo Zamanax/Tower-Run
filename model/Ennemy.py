@@ -98,7 +98,7 @@ class Dwarf (Ennemy) :
     spriteSize = 96
     damagingSprite = []
     num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 9, 'attackLeft' : 9, 'die' : 6}
-    y_anim = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 9, 'attackLeft' : 9, 'die' : 6}
+    y_Anim = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 9, 'attackLeft' : 9, 'die' : 6}
     zoom = 1
 
 class slime:
@@ -106,6 +106,7 @@ class slime:
 
 class Bat(Ennemy):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
+    y_Anim = {'idleRight' : 0, "idleLeft": 23, 'runRight' : 0, 'runLeft' : 23, 'attackRight' : 46, 'attackLeft' : 69, 'die' : 82}
 
     hp = 50
     name = 'Bat'
@@ -115,8 +116,7 @@ class Bat(Ennemy):
     purse = 20
 
     spritesheet = 'view/src/personnage/ennemis/batp.png'
-    spriteSize = 96
+    spriteSize = 23
     damagingSprite = [2]
     num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 5, 'runLeft' : 5, 'attackRight' : 5, 'attackLeft' : 5, 'die' : 5}
-    y_anim = {'idleRight' : 0, "idleLeft": 23, 'runRight' : 0, 'runLeft' : 23, 'attackRight' : 46, 'attackLeft' : 69, 'die' : 82}
     zoom = 1
