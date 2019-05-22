@@ -187,7 +187,8 @@ class Interface(tk.Frame):
                     if spot.tower: 
                         if spot.tower.__str__() is "Forgeron":
                             self.forgeronchb["state"] = "disabled"
-                            self.waterchb.select()
+                            if state == "Forgeron":
+                                self.waterchb.select()
                             break
             
                 
