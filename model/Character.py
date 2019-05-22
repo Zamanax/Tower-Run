@@ -17,7 +17,7 @@ class Character (Thread):
     
     #Coordonnées + Etats
     state = "idleLeft"
-    pathIndex = 0
+    pathIndex = 0 
     x = 0
     y = 0
     target = None

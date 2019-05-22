@@ -85,7 +85,8 @@ class Lvl(tk.Frame):
         if hasattr(selectedHeros, "name"):
             self.heros = selectedHeros
             self.heros.changeStats(self.heros.lv0)
-
+            self.heros.lvl = 0
+            
             self.heros.idleRight = self.heros.idleRight0
             self.heros.idleLeft = self.heros.idleLeft0
             self.heros.runRight = self.heros.runRight0
@@ -336,7 +337,7 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.heros = tk.StringVar(self)
-        self.quality = tk.StringVar(self)
+        self.quality = tk.IntVar(self)
 
         self.canvas = tk.Canvas(self, width=self.rootWidth,
                                 height=self.rootHeight, highlightthickness=0)
