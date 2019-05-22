@@ -394,6 +394,7 @@ class Heros(Character):
         elif self.state == "transform":
             if self.sprite == self.num_sprintes["transform"] - 1:
                 if self.lvl == 1:
+                    self.transformAnim0 = self.transformAnim
                     self.transformAnim = self.transformAnim1
                     self.num_sprintes = self.lv1["num_sprintes"]
 

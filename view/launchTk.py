@@ -86,7 +86,8 @@ class Lvl(tk.Frame):
             self.heros = selectedHeros
             self.heros.changeStats(self.heros.lv0)
             self.heros.lvl = 0
-            
+
+            self.heros.transfromAnim = self.heros.transformAnim0
             self.heros.idleRight = self.heros.idleRight0
             self.heros.idleLeft = self.heros.idleLeft0
             self.heros.runRight = self.heros.runRight0
