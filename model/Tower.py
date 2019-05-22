@@ -195,7 +195,7 @@ class Projectile(Thread):
         self.tx=self.tour.target.x           #on prend les coordonnées de la cible à un moment donné
         self.ty=self.tour.target.y
 
-        self.v=3                        #un coefficient en pixel pour le déplacement du projectile
+        self.v=5                        #un coefficient en pixel pour le déplacement du projectile
 
                            #on fait un calcul de trajectoire
 
@@ -226,7 +226,11 @@ class Projectile(Thread):
             self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)     #on met l'image d'impact
             self.target.hp-=self.damage             #on enlève les dégâts
             for cible in to_hit:
-                cible.hp-=self.tour.damage
+                if (cible.__class__.__name__ == "SlimeE" and self.__class__.__name__ == 'BouleDeFeu') or (cible.__class__.__name__ == "SlimeF" and self.__class__.__name__ == 'LameDEau') or (cible.__class__.__name__ == "SlimeW" and self.__class__.__name__ == 'Boulet'):
+                    cible.hp-=2*self.tour.damage
+
+                else:
+                    cible.hp-=self.tour.damage
                 if cible.hp<=0:
                     cible.die(False)
             self.canvas.after(150, self.canvas.delete, self.corps)

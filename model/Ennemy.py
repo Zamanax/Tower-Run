@@ -18,6 +18,8 @@ class Ennemy (Character):
             self.path = self.parent.defaultPath
         self.goToObjective()
 
+        print (self.__class__)
+
     # Fonction chargée de faire déplacer le monstre
     def goToObjective(self):
         if self.move == None:
@@ -101,12 +103,74 @@ class Dwarf (Ennemy) :
     y_Anim = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 9, 'attackLeft' : 9, 'die' : 6}
     zoom = 1
 
-class slime:
-    pass
-
-class gladiator:
+class SlimeE(Ennemy):    
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
-    y_Anim = {'idleRight' : 0, "idleLeft": 32*, 'runRight' : 32*5, 'runLeft' : 32*6, 'attackRight' : 32*2, 'attackLeft' : 32*7, 'die' : 32*4}
+   
+
+    hp = 50
+    name= 'SlimeE'
+    i=0
+
+
+    attackSpeed = 1
+    speed = 3
+    damage = 5
+    purse = 20
+
+    spritesheet = 'view/src/personnage/ennemis/Slime.png'
+    spriteSize = 32
+    damagingSprite = [2]
+    num_sprintes = {'idleRight' : 10, "idleLeft": 10, 'runRight' : 10, 'runLeft' : 10, 'attackRight' : 10, 'attackLeft' : 10, 'die' : 10}
+    zoom = 2
+    y_Anim = {'idleRight' : 0+160*i, "idleLeft": 0+160*i, 'runRight' : 32+160*i, 'runLeft' : 32+160*i, 'attackRight' : 32*3+160*i, 'attackLeft' : 32*3+160*i, 'die' : 32*4+160*i}
+
+
+class SlimeF(SlimeE):
+    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
+   
+
+    hp = 50
+    name= 'SlimeF'
+    i=2
+
+
+    attackSpeed = 1
+    speed = 3
+    damage = 5
+    purse = 20
+
+    spritesheet = 'view/src/personnage/ennemis/Slime.png'
+    spriteSize = 32
+    damagingSprite = [2]
+    num_sprintes = {'idleRight' : 10, "idleLeft": 10, 'runRight' : 10, 'runLeft' : 10, 'attackRight' : 10, 'attackLeft' : 10, 'die' : 10}
+    zoom = 2
+    y_Anim = {'idleRight' : 0+160*i, "idleLeft": 0+160*i, 'runRight' : 32+160*i, 'runLeft' : 32+160*i, 'attackRight' : 32*3+160*i, 'attackLeft' : 32*3+160*i, 'die' : 32*4+160*i}
+
+class SlimeW(SlimeE):
+    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
+   
+
+    hp = 50
+    name= 'SlimeW'
+    i=1
+
+
+    attackSpeed = 1
+    speed = 3
+    damage = 5
+    purse = 20
+
+    spritesheet = 'view/src/personnage/ennemis/Slime.png'
+    spriteSize = 32
+    damagingSprite = [2]
+    num_sprintes = {'idleRight' : 10, "idleLeft": 10, 'runRight' : 10, 'runLeft' : 10, 'attackRight' : 10, 'attackLeft' : 10, 'die' : 10}
+    zoom = 2
+    y_Anim = {'idleRight' : 0+160*i, "idleLeft": 0+160*i, 'runRight' : 32+160*i, 'runLeft' : 32+160*i, 'attackRight' : 32*3+160*i, 'attackLeft' : 32*3+160*i, 'die' : 32*4+160*i}
+    
+
+class Gladiator(Ennemy):
+    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
+    y_Anim = {'idleRight' : 0, "idleLeft": 32*5, 'runRight' : 32, 'runLeft' : 32*6, 'attackRight' : 32*2, 'attackLeft' : 32*7, 'die' : 32*4}
 
     hp = 50
     name = 'Gladiator'
@@ -117,9 +181,9 @@ class gladiator:
 
     spritesheet = 'view/src/personnage/ennemis/Gladiator.png'
     spriteSize = 32
-    damagingSprite = [2]
+    damagingSprite = [4]
     num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 7, 'attackLeft' : 7, 'die' : 7}
-    zoom = 1
+    zoom = 2
 
 class Bat(Ennemy):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
