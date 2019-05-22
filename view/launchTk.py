@@ -257,7 +257,7 @@ class Lvl1(Lvl):
     gold = 1500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [Bat, Bat, Skeleton, Totor, Skeleton, Skeleton, Skeleton]
+    wave1 = [SlimeE, SlimeF, SlimeW , Skeleton, Totor, Skeleton, Skeleton, Skeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
