@@ -45,7 +45,9 @@ class Lvl(tk.Frame):
 
     wave1 = []
     waveIndex = 0
+    waveDict = []
 
+    nextLvl = None
 
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
@@ -172,10 +174,6 @@ class Lvl(tk.Frame):
     def launchNextLvl(self):
         self.parent.switchFrame(self.nextLvl)
         
-    # Fonction nulle contenant dans les autress niveaux les ennemis à charger
-    def launchWaves(self):
-        pass
-
     def launchWaves(self, dict):
         for i in range(len(dict)):
             dict[i](self, -50*i, 225, self.heros)
@@ -219,7 +217,7 @@ class Lvl3(Lvl):
                     Emplacement(860,385),
                     Emplacement(860,485),
                     Emplacement(960,385)]
-        return super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):
@@ -249,7 +247,7 @@ class Lvl2(Lvl):
                     Emplacement(955,609),
                     Emplacement(56,373),
                     Emplacement(231,372)]
-        return super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
@@ -273,7 +271,7 @@ class Lvl1(Lvl):
                 Emplacement(538, 355),
                 Emplacement(323, 355),
                 Emplacement(143, 355, state="Mine")]
-        return super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
 
 class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):

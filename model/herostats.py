@@ -1,6 +1,4 @@
-import tkinter as tk
 from model.Heros import Heros
-from model.Character import Character
 from model.coupspe import *
 
 class Adventurer(Heros):

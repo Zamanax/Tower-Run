@@ -2,7 +2,6 @@ import tkinter as tk
 import asyncio
 from functools import lru_cache
 from threading import Thread
-from model.coupspe import *
 from model.fonctions_utiles import load
 from model.Character import Character
 
@@ -13,11 +12,14 @@ class Heros(Character):
     lv0 = {}
     compteur = 0
     reg = 1
+
+    def defineStats(self):
+        pass
+
     def __init__(self, parent, x, y, max_y, min_y, **kwargs):
         self.quality = int(kwargs.get("quality", 4))
 
-        if hasattr(self, "defineStats"):
-            self.defineStats()
+        self.defineStats()
 
         self.hp = self.lv0["hp"]
         self.damage = self.lv0["damage"]
