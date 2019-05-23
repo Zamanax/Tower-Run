@@ -15,6 +15,12 @@ class keySpot():
         self.x = x
         self.y = y
 
+class Rectangle():
+    def __init__(self, min_x, max_x, min_y, max_y):
+        self.min_x = min_x
+        self.max_x = max_x
+        self.min_y = min_y
+        self.max_y = max_y
 
 class Emplacement(keySpot):
     bonus = {}
@@ -45,6 +51,7 @@ class Lvl(tk.Frame):
 
     wave1 = []
     waveIndex = 0
+
 
 
     def __init__(self, parent, *args, **kwargs):
@@ -180,7 +187,7 @@ class Lvl(tk.Frame):
 
     def launchWaves(self, dict):
         for i in range(len(dict)):
-            dict[i](self, -50*i, 225, self.heros)
+            dict[i](self, -50*i, self.spawnPoint.y, self.heros)
         self.waveIndex += 1
 
     def nextWave(self):
@@ -198,12 +205,22 @@ class Lvl(tk.Frame):
 class Lvl3(Lvl):
     image = "view/src/background/Lvl3Background.png"
     gold = 1000
-    defaultPath = [keySpot(1200, 225)]
+    defaultPath = [keySpot(410, 175),
+                   keySpot(410, 520),
+                   keySpot(730, 520),
+                   keySpot(730, 175),
+                   keySpot(1200, 175)]
+    
+    spawnPoint = keySpot(0, 175)
 
     wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
+
+    authorized = [Rectangle(0, 465, 120, 220),
+                  Rectangle(350, 790, 120, 570),
+                  Rectangle(680, 1200, 120, 220)]
 
     def __init__(self, parent, *args, **kwargs):
         self.spots=[Emplacement(50,280),
@@ -235,6 +252,12 @@ class Lvl2(Lvl):
     waveDict = [wave1, wave2]
 
     nextLvl = Lvl3
+
+    authorized = [Rectangle(0,385, 150, 550),
+                  Rectangle(385, 1200, 170, 250),
+                  Rectangle(385, 455, 170, 550),
+                  Rectangle(385, 1200, 470, 550)]
+
     def __init__(self, parent, *args, **kwargs):
         self.spots =[Emplacement(77,115),
                     Emplacement(203,108),
@@ -265,6 +288,10 @@ class Lvl1(Lvl):
     waveDict = [wave1, wave2]
 
     nextLvl = Lvl2
+
+    authorized = [Rectangle(0, 1200, 160, 260)]
+
+    spawnPoint = keySpot(0, 200)
 
     def __init__(self, parent, *args, **kwargs):
         self.spots = [Emplacement(180, 175),
@@ -382,7 +409,7 @@ class MainMenu(tk.Frame):
                 self.parent.heros = self.heros.get()
                 self.parent.quality = self.quality.get()
                 self.launchProgress()
-                self.parent.switchFrame(Lvl2)
+                self.parent.switchFrame(Lvl1)
         elif 242 < event.x < 391 and 285 < event.y < 435:
             self.adventurerBtn.select()
         elif 563 < event.x < 714 and 285 < event.y < 435:

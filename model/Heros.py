@@ -238,15 +238,41 @@ class Heros(Character):
             elif self.state == "attackLeft":
                 self.state = "idleLeft"
 
+        x = None
+        selectedRect = None
         # On effectue le mouvement en restant dans les bornes
-        if event.y > self.max_y:
-            y = self.max_y
-        elif event.y < self.min_y:
-            y = self.min_y
-        else:
-            y = event.y
-        x = event.x
-        
+        for rect in self.parent.authorized :
+            if event.y < rect.max_y and event.y > rect.min_y:
+                if event.x < rect.max_x and event.x > rect.min_x:
+                    x = event.x
+                    y = event.y
+                    break
+
+        if x is None :
+            
+            for rect in self.parent.authorized :
+                    if self.y <= rect.max_y and self.y >= rect.min_y:
+                        if self.x <= rect.max_x and self.x >= rect.min_x:
+                            selectedRect = rect
+            
+            if selectedRect is None :
+                selectedRect = self.parent.authorized[0]
+
+            if event.x >= selectedRect.max_x:
+                x = selectedRect.max_x
+            elif event.x <= selectedRect.min_x:
+                x = selectedRect.min_x
+            else : 
+                x = event.x
+
+            if event.y >= selectedRect.max_y:
+                y = selectedRect.max_y
+            elif event.y <= selectedRect.min_y:
+                y = selectedRect.min_y
+            else:
+                y = event.y
+            
+
         self.crossCallback = self.canvas.create_image(x, y+25 , image=self.redCross)
         self.canvas.tag_lower(self.crossCallback)
         self.canvas.tag_raise(self.crossCallback, self.parent.background)

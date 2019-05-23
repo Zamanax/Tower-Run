@@ -18,8 +18,6 @@ class Ennemy (Character):
             self.path = self.parent.defaultPath
         self.goToObjective()
 
-        print (self.__class__)
-
     # Fonction chargée de faire déplacer le monstre
     def goToObjective(self):
         if self.move == None:
@@ -116,6 +114,8 @@ class SlimeE(Ennemy):
     speed = 3
     damage = 5
     purse = 20
+    barOffsety = 10
+    barOffsetx = -5
 
     spritesheet = 'view/src/personnage/ennemis/Slime.png'
     spriteSize = 32
