@@ -261,21 +261,21 @@ class Lvl2(Lvl):
     spawnPoint = keySpot(0, 200)
 
     def __init__(self, parent, *args, **kwargs):
-        self.spots =[Emplacement(77,115),
-                    Emplacement(203,108),
-                    Emplacement(286,112),
-                    Emplacement(571,338),
-                    Emplacement(674,341),
-                    Emplacement(745,333),
-                    Emplacement(858,335),
-                    Emplacement(973,334),
-                    Emplacement(523,610),
-                    Emplacement(636,610),
-                    Emplacement(752,607),
-                    Emplacement(852,608),
-                    Emplacement(955,609),
-                    Emplacement(56,373),
-                    Emplacement(231,372)]
+        self.spots =[Emplacement(60,150),
+                    Emplacement(200,150),
+                    Emplacement(285,150),
+                    Emplacement(570,335),
+                    Emplacement(660,335),
+                    Emplacement(750,335),
+                    Emplacement(860,335),
+                    Emplacement(975,335),
+                    Emplacement(525,610),
+                    Emplacement(635,610),
+                    Emplacement(750,610),
+                    Emplacement(850,610),
+                    Emplacement(955,610),
+                    Emplacement(55,375),
+                    Emplacement(230,375)]
         return super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
