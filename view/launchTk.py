@@ -114,11 +114,11 @@ class Lvl(tk.Frame):
             self.heros.parent = self
         else :
             if selectedHeros == "Ichigo":
-                self.heros = Ichigo(self, 900, 250, 260, 160, quality=self.parent.quality)
+                self.heros = Ichigo(self, 900, 250, quality=self.parent.quality)
             elif selectedHeros == "Goku":
-                self.heros = Goku(self, 900, 250, 260, 160, quality=self.parent.quality)
+                self.heros = Goku(self, 900, 250, quality=self.parent.quality)
             else:
-                self.heros = Adventurer(self, 900, 250, 260, 160)
+                self.heros = Adventurer(self, 900, 250)
         self.parent.heros = self.heros
         # Lancement des Vagues
         self.launchWaves(self.wave1)

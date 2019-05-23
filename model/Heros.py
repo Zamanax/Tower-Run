@@ -16,7 +16,7 @@ class Heros(Character):
     def defineStats(self):
         pass
 
-    def __init__(self, parent, x, y, max_y, min_y, **kwargs):
+    def __init__(self, parent, x, y, **kwargs):
         self.quality = int(kwargs.get("quality", 4))
 
         self.defineStats()
@@ -40,9 +40,6 @@ class Heros(Character):
 
         Character.__init__(self, parent, x, y)
         self.redCross = tk.PhotoImage(file="view/src/assets/Cross.png")
-        # On définit l'ordonnée minimale et maximale où on peut aller
-        self.max_y = max_y
-        self.min_y = min_y
 
         # on cherche les ennemis
         self.seek()

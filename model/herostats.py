@@ -23,11 +23,6 @@ class Adventurer(Heros):
                    "attackRight": 64, "attackLeft": 324, "die": 224}
     }
 
-    def __init__(self, canvas, x, y, max_y, min_y):
-        Heros.__init__(self, canvas, x, y, max_y, min_y)
-        self.max_y -= 5
-        self.min_y -= 5
-
     def transform(self):
         pass
 
