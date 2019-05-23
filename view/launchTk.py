@@ -258,6 +258,8 @@ class Lvl2(Lvl):
                   Rectangle(385, 455, 170, 550),
                   Rectangle(385, 1200, 470, 550)]
 
+    spawnPoint = keySpot(0, 200)
+
     def __init__(self, parent, *args, **kwargs):
         self.spots =[Emplacement(77,115),
                     Emplacement(203,108),
@@ -328,15 +330,15 @@ class MainSelectLevel(tk.Frame):
         self.canvas.pack(side="right", fill='both', expand=True)
         
     def makeButtons(self):
-        self.Level1Btn = tk.Radiobutton(self.canvas, text="Level1", value="Level1", variable=self.levels,
+        self.Level1Btn = tk.Radiobutton(self.canvas, text="Level1", value="Lvl1", variable=self.levels,
                                             bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.Level1Btn.place(x=256, y= 450)
 
-        self.Level2Btn = tk.Radiobutton(self.canvas, text="Level2", value="Level2", variable=self.levels,
+        self.Level2Btn = tk.Radiobutton(self.canvas, text="Level2", value="Lvl2", variable=self.levels,
                                     bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.Level2Btn.place(x=600, y= 450)
 
-        self.Level3Btn = tk.Radiobutton(self.canvas, text="Level3", value="Level3", variable=self.levels,
+        self.Level3Btn = tk.Radiobutton(self.canvas, text="Level3", value="Lvl3", variable=self.levels,
                                         bg="#73cb4d", activebackground="#73cb4d", selectcolor="#5ab134", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.Level3Btn.place(x=925, y= 450)
 
@@ -409,7 +411,12 @@ class MainMenu(tk.Frame):
                 self.parent.heros = self.heros.get()
                 self.parent.quality = self.quality.get()
                 self.launchProgress()
-                self.parent.switchFrame(Lvl1)
+                if self.parent.levels == "Lvl1":
+                    self.parent.switchFrame(Lvl1)
+                elif self.parent.levels == "Lvl2":
+                    self.parent.switchFrame(Lvl2)
+                elif self.parent.levels == "Lvl3":
+                    self.parent.switchFrame(Lvl3)
         elif 242 < event.x < 391 and 285 < event.y < 435:
             self.adventurerBtn.select()
         elif 563 < event.x < 714 and 285 < event.y < 435:
