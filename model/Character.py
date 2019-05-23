@@ -478,8 +478,9 @@ class Character (Thread):
             if spot.tower :
                 try:
                     if spot.tower.last_img:
-                        self.canvas.tag_lower(self.last_img, spot.tower.last_img)
-                        self.canvas.tag_lower(self.healthBar, spot.tower.last_img)
-                        self.canvas.tag_lower(self.damageBar, spot.tower.last_img)
+                        if spot.tower.y <= self.y:
+                            self.canvas.tag_lower(self.last_img, spot.tower.last_img)
+                            self.canvas.tag_lower(self.healthBar, spot.tower.last_img)
+                            self.canvas.tag_lower(self.damageBar, spot.tower.last_img)
                 except :
                     None
