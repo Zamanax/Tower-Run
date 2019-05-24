@@ -133,35 +133,36 @@ class Heros(Character):
 
     async def getAttackRightAnim1(self, dict, image):
 
-        attackRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["attackRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackRight"]+self.lv1["spriteSize"]).zoom(self.zoom)
+        attackRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["attackRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackRight"]+dict["spriteSize"]).zoom(self.zoom)
                         for i in range(dict["num_sprintes"]["attackRight"])]
 
         return attackRight1
 
     async def getAttackLeftAnim1(self, dict, image):
 
-        attackLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["attackLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackLeft"]+self.lv1["spriteSize"]).zoom(self.zoom)
+        attackLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["attackLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackLeft"]+dict["spriteSize"]).zoom(self.zoom)
                        for i in range(dict["num_sprintes"]["attackLeft"])]
         attackLeft1.reverse()
 
         return attackLeft1
 
     async def getDeathAnim1(self, dict, image):
-
-        death1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["die"], dict["spriteSize"]*(i+1), self.lv1["y_Anim"]["die"]+dict["spriteSize"]).zoom(self.zoom)
+        print(dict["y_Anim"]["die"])
+        print(dict["num_sprintes"]["die"])
+        death1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["die"], dict["spriteSize"]*(i+1), dict["y_Anim"]["die"]+dict["spriteSize"]).zoom(self.zoom)
                   for i in range(dict["num_sprintes"]["die"])]
 
         return death1
 
     async def getTransformAnim1(self, dict, image):
-        transform1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["transform"], dict["spriteSize"]*(i+1), self.lv1["y_Anim"]["transform"]+dict["spriteSize"]).zoom(self.zoom)
+        transform1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["transform"], dict["spriteSize"]*(i+1), dict["y_Anim"]["transform"]+dict["spriteSize"]).zoom(self.zoom)
                       for i in range(dict["num_sprintes"]["transform"])]
         transform1.reverse()
 
         return transform1
 
     async def getinstantMoveAnim1(self, dict, image):
-        instantMove = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["instantMove"], dict["spriteSize"]*(i+1), self.lv1["y_Anim"]["instantMove"]+dict["spriteSize"]).zoom(self.zoom)
+        instantMove = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["instantMove"], dict["spriteSize"]*(i+1), dict["y_Anim"]["instantMove"]+dict["spriteSize"]).zoom(self.zoom)
                        for i in range(dict["num_sprintes"]["instantMove"])]
 
         return instantMove
