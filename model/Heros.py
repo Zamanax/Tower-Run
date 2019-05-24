@@ -11,7 +11,7 @@ class Heros(Character):
     team = "ally"
     lv0 = {}
     compteur = 0
-    reg = 1
+    reg = 5
 
     def defineStats(self):
         pass
@@ -31,6 +31,7 @@ class Heros(Character):
         self.spriteSize = self.lv0["spriteSize"]
         self.y_Anim = self.lv0["y_Anim"]
         self.zoom = self.lv0["zoom"]
+
         if "coupSpe" in self.lv0:
             self.coupSpe = self.lv0["coupSpe"]
         if "barOffsetx" in self.lv0:
@@ -199,7 +200,7 @@ class Heros(Character):
                             self.canvas.after_cancel(self.seeking)
                         if self.move:
                             self.canvas.after_cancel(self.move)
-
+                        
                         # On attaque
                         self.sprite = 0
                         self.attack()
@@ -210,7 +211,7 @@ class Heros(Character):
     # Fonction chargée du déplacement à la souris du héros
     def mouseMove(self, event):
         # Si il se transforme on ne fait rien
-        if self.state == "transform":
+        if self.state == "transform" or self.state == "die":
             return
         if self.crossCallback:
             self.canvas.delete(self.crossCallback)
@@ -299,6 +300,10 @@ class Heros(Character):
     # On effectue l'attaque spéciale lorsque l'on presse la touche
     def specialAttack(self, *args):
         if hasattr(self, "coupSpe"):
+
+            if self.state == "die":
+                return
+
             if self.state == "idleRight" or self.state == "attackRight" or self.state == "runRight":
                 self.state = "specialMoveRight"
             elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
@@ -436,3 +441,47 @@ class Heros(Character):
         else :
             self.incrementing = None
 
+ # Fonction spéciale chargée de tuer le héros
+    def die(self, rez):
+        if rez :
+            self.state = "idleRight"
+            # self.hp = self.baseHp
+            self.idleAnim()
+            self.incrementSprite()
+            self.seek()
+
+        # Si le personnage est déjà en train de mourrir alorso continue
+        elif self.state == "die":
+            self.show()
+
+            # Si l'animation de mort est déjà finie alors on supprime
+            if self.sprite == self.num_sprintes["die"]-1:
+                if self.afterIdle:
+                    self.canvas.after_cancel(self.afterIdle)
+                self.afterIdle = None
+                self.canvas.after_cancel(self.incrementing)
+                rez = True
+                # Avec 5s de temps d'attente
+                self.dying = self.canvas.after(5000, self.die, rez)
+                return 
+            self.dying = self.canvas.after(150, self.die, rez)
+            
+        # Si c'est le début de la mort alors on ajoute l'argent de sa bourse
+        else :
+            self.parent.interface.preView()
+            
+            # On coupe toutes les autres tâches
+            if self.move:
+                self.canvas.after_cancel(self.move)
+                self.move = None
+            if self.seeking:
+                self.canvas.after_cancel(self.seeking)
+                self.seeking = None
+            if self.attacking:
+                self.canvas.after_cancel(self.attacking)
+                self.attacking = None
+
+            # On mets son état en "mort"
+            self.state = "die"
+            self.dying = self.canvas.after(150, self.die, rez)
+        

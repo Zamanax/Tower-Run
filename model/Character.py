@@ -137,6 +137,7 @@ class Character (Thread):
                 # Si c'est le cas alors on arrêtes les tâches parrallèles et on attaque
                 if self.target.move:
                     self.canvas.after_cancel(self.target.move)
+                    self.target.move = None
                 if self.target.target == None :
                     self.target.target = self
                     if self.target.seeking:
