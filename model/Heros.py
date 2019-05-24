@@ -147,8 +147,6 @@ class Heros(Character):
         return attackLeft1
 
     async def getDeathAnim1(self, dict, image):
-        print(dict["y_Anim"]["die"])
-        print(dict["num_sprintes"]["die"])
         death1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["die"], dict["spriteSize"]*(i+1), dict["y_Anim"]["die"]+dict["spriteSize"]).zoom(self.zoom)
                   for i in range(dict["num_sprintes"]["die"])]
 

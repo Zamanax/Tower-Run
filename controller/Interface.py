@@ -160,8 +160,6 @@ class Interface(tk.Frame):
         self.mortierLabel.place(x=75, y=250)
 
     def selectSpot(self, event):
-        print("x=" + str(event.x))
-        print("y=" + str(event.y))
         area = 50
         self.selected = None
 
