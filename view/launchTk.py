@@ -178,8 +178,10 @@ class Lvl(tk.Frame):
     def restartGame(self):
         self.parent.switchFrame(self.__class__)
 
+
     def launchNextLvl(self):
         self.parent.switchFrame(self.nextLvl)
+
         
     # Fonction nulle contenant dans les autress niveaux les ennemis à charger
     def launchWaves(self):
@@ -281,7 +283,7 @@ class Lvl1(Lvl):
     gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [SlimeE, SlimeF, SlimeW , Skeleton, Totor, Skeleton, Skeleton, Skeleton]
+    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
@@ -297,9 +299,9 @@ class Lvl1(Lvl):
                       Emplacement(358, 150),
                       Emplacement(574, 150),
                       Emplacement(755, 150),
-                      Emplacement(791, 332),
-                      Emplacement(538, 332),
-                      Emplacement(323, 332),
+                      Emplacement(791, 302),
+                      Emplacement(538, 302),
+                      Emplacement(323, 302),
                       Emplacement(143, 319, state="Mine")]
         return super().__init__(parent, *args, **kwargs)
 
@@ -451,6 +453,7 @@ class MainApplication(tk.Frame):
 
         self.currentFrame = nlevel
         self.currentFrame.pack(side="top", fill="both", expand=True)
+        self.heros.reset()
         return nlevel
 
 # -----------------Fonction à executer pour lancer le jeu-------------
