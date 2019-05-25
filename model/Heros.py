@@ -325,6 +325,7 @@ class Heros(Character):
         # On annule le mouvement
         if self.move:
             self.canvas.after_cancel(self.move)
+            self.canvas.delete(self.crossCallback)
 
         # On change les stats et les animations
         if self.lvl == 0:
