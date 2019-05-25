@@ -188,6 +188,22 @@ class Gladiator(Ennemy):
     num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 7, 'attackLeft' : 7, 'die' : 7}
     zoom = 2
 
+class RedGladiator(Gladiator):
+    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
+    y_Anim = {'idleRight' : 0, "idleLeft": 32*5, 'runRight' : 32, 'runLeft' : 32*6, 'attackRight' : 32*2, 'attackLeft' : 32*7, 'die' : 32*4}
+
+    hp = 500
+    name = 'RedGladiator'
+    attackSpeed = 2
+    damage = 30
+    purse = 132
+
+    spritesheet = 'view/src/personnage/ennemis/RedGladiator.png'
+    spriteSize = 32
+    damagingSprite = [4]
+    num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 7, 'attackLeft' : 7, 'die' : 7}
+    zoom = 2
+   
 class Bat(Ennemy):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
  
