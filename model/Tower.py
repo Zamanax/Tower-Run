@@ -3,6 +3,8 @@ from threading import Thread
 from model.Heros import Heros
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 
+coeffd=1
+coeffp=1
 #____________________________________________________________________________________________________________
 class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
@@ -56,7 +58,7 @@ class Tower(Thread):
 
         spritenum=len(self.parent.upAnim)
         self.canvas.delete(self.last_storm)
-        self.last_storm=self.canvas.create_image(self.x, self.y-50, image=self.parent.upAnim[self.indice])
+        self.last_storm=self.canvas.create_image(self.x, self.y-30, image=self.parent.upAnim[self.indice])
         
         if self.indice==2:  #à la 2e image
             if not self.lvl==1:   #si on n'est pas en train de construire; c-a-d si on est en train d'améliorer
@@ -66,15 +68,15 @@ class Tower(Thread):
                 #On place la nouvelle
             if self.lvl==1:
                 self.last_img = self.canvas.create_image(
-                    self.x, self.y, image=self.lv1, anchor="s")
+                    self.x, self.y, image=self.lv1)
 
             elif self.lvl==2:
                 self.last_img=self.canvas.create_image(
-            self.x, self.y, image=self.lv2, anchor="s")
+            self.x, self.y-20, image=self.lv2)
 
             else:
                 self.last_img=self.canvas.create_image(
-            self.x, self.y, image=self.lv3, anchor="s")
+            self.x, self.y-35, image=self.lv3 )
 
             #On la place au dessus du canvas de niveau
                 self.canvas.tag_raise(self.last_img)
@@ -100,7 +102,7 @@ class Tower(Thread):
         ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
 
         for ennemy in ennemies:
-            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
+            if (((((ennemy.x-self.x)**2)**0.5+10)**2)+((((ennemy.x-self.x)**2)**0.5+10)**2))**0.5 <= self.range and ennemy.state != "die":
                 self.target = ennemy
                 self.tir_p()
                 return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
@@ -253,19 +255,19 @@ class Mortier(Tower):
     coordsLvl3=[ 203, 3, 313, 142]
     image="view/src/tours/tours/Mortier.png"
 
-    range = 120
-    damage = 1                          #attributs
+    range = 100
+    damage = 12                        #attributs
     speed = 2
     zone = 80
-    r_up=25
-    d_up=10
+    r_up=20
+    d_up=9
 
     damagetype = "explosion"        #type de dégâts
 
-    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+1, speed+2]
-    price_evo=[50, 125, 250]
+    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
     price=price_evo[0]   
 
     def __init__(self, canvas, x, y):
@@ -274,7 +276,7 @@ class Mortier(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, canvas, x, y,Boulet)
+        Tower.__init__(self, canvas, x, y-5,Boulet)
       
     def __str__(self):
         return "Mortier"
@@ -285,16 +287,16 @@ class FireM(Tower):
     coordsLvl2 = [91, 49, 191, 139]
     coordsLvl3 = [203, 3, 313, 141]
     image="view/src/tours/tours/Mage2.png"
-    damage = 4
+    damage = 8*coeffd
     speed = 3
     zone = -1
-    range = 150
-    r_up=25
-    d_up=25
+    range = 120
+    r_up=30
+    d_up=10
     damagetype = "fire"
-    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
     range_evo=[range, range+r_up, range+r_up*2]
-    price_evo=[50, 125, 250]
+    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
     price=price_evo[0]
 
     def __init__(self, canvas, x, y):
@@ -316,16 +318,16 @@ class WaterM(Tower):
     coordsLvl2=[91,47,195,139]
     coordsLvl3=[203,0,323,139]
     image="view/src/tours/tours/Mage3.png"
-    damage = 4
+    damage = 8
     speed = 3
     zone = -1
-    range = 150
+    range = 120
     damagetype = "water"
-    d_up=50
-    r_up=25
-    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    d_up=10
+    r_up=30
+    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
     range_evo=[range, range+r_up, range+r_up*2]
-    price_evo=[50, 125, 250]
+    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
     price=price_evo[0]
 
     def __init__(self, parent, x, y):
@@ -343,17 +345,16 @@ class EarthM(Tower):
     coordsLvl1 = [3, 62, 82, 132]
     coordsLvl2= [91, 47, 195, 132]
     coordsLvl3 = [203, 0, 323, 132]
-    damage = 4
+    damage = 8
     speed = 3
     zone = -1
-    range = 150
+    range = 120
     damagetype = "earth"
-    d_up=50
-    d_up=50
-    r_up=25
-    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    d_up=10
+    r_up=30
+    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
     range_evo=[range, range+r_up, range+r_up*2]
-    price_evo=[50, 125, 250]
+    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
     price=price_evo[0]
 
     def __init__(self, parent, x, y):
@@ -361,7 +362,7 @@ class EarthM(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, parent, x, y,Caillou)
+        Tower.__init__(self, parent, x-8, y,Caillou)
 
     def __str__(self):
         return "Mage de Terre"
@@ -372,16 +373,16 @@ class Archer(Tower):
     coordsLvl2 = [91,35,195,144]
     coordsLvl3 = [203,0,295,144]
     range=200
-    damage = 4
+    damage = 5
     speed = 5
     zone = -1
     damagetype = "shot"
-    d_up=50
-    r_up=25
-    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    d_up=5
+    r_up=35
+    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+4, speed+8]
-    price_evo=[50, 125, 250]
+    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
     price=price_evo[0]
 
     def __init__(self, parent, x, y):
@@ -389,7 +390,7 @@ class Archer(Tower):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
-        Tower.__init__(self, parent, x, y, Fleche)
+        Tower.__init__(self, parent, x+3, y-10, Fleche)
 
     def __str__(self):
         return "Archer"
@@ -400,14 +401,14 @@ class Forgeron(Tower):
     coordsLvl2 = [125,0,250,115]
     coordsLvl3 = [250,0,380,115]
     image= 'view/src/tours/tours/Forgeron.png'
-    price_evo=[200, 500, 750]
+    price_evo=[150, 300, 500]
     price=price_evo[0]
     def __init__(self, parent, x,y):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
         self.lv3=load(self.coordsLvl3, self.image)
         self.hero=parent.heros
-        Tower.__init__(self, parent, x, y,0)
+        Tower.__init__(self, parent, x, y-20,0)
     
     def seek(self):
         pass
@@ -439,7 +440,7 @@ class Mine(Tower):
     coordsLvl2 = [165,8,289,120]
     coordsLvl3 = [334,5,486,125]
     image= 'view/src/tours/tours/Mine.png'
-    price_evo=[200, 500, 750]
+    price_evo=[100,500, 750]
     production=30
     def __init__(self, parent, x, y):
         #self.root=tk.Tk()
