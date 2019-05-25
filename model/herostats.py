@@ -8,7 +8,7 @@ class Adventurer(Heros):
 
     lv0 = {
         "hp": 200,
-        "damage": 2,
+        "damage": 12,
         "speed": 8,
         "attackSpeed": 4,
 
