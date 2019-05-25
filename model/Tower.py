@@ -3,14 +3,7 @@ from threading import Thread
 from model.Heros import Heros
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 
-<<<<<<< HEAD
 
-#---------------------------------------------------------------------------------------------------
-=======
-coeffd=1
-coeffp=1
-#____________________________________________________________________________________________________________
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
 
