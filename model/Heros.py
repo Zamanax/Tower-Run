@@ -292,10 +292,12 @@ class Heros(Character):
 
     def instantMove(self, event):
         if self.lvl != 0 and hasattr(self, "instantMoveAnim"):
+            if self.state!= "instantMove":
+                self.last_state=self.state
             if self.sprite == self.num_sprintes["instantMove"] - 1 and self.state == "instantMove":
                 self.x = event.x
                 self.y = event.y
-                self.state = "idleRight"
+                self.state = self.last_state
                 return
             elif self.state == "instantMove":
                 self.show()
