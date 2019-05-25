@@ -3,6 +3,7 @@ import tkinter as tk
 from functools import lru_cache
 from threading import Thread
 import asyncio
+import time
 
 class Character (Thread):
 #---------------------Attributs------------------------------------------------
@@ -433,6 +434,9 @@ class Character (Thread):
         elif self.state == "transform":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.transformAnim[self.sprite])
+            # if self.sprite==self.num_sprintes["transform"]-1:
+            #     self.state=self.last_state2
+
         elif self.state == "specialMoveRight":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.specialMoveRight[self.sprite])

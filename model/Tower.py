@@ -3,9 +3,14 @@ from threading import Thread
 from model.Heros import Heros
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 
+<<<<<<< HEAD
+
+#---------------------------------------------------------------------------------------------------
+=======
 coeffd=1
 coeffp=1
 #____________________________________________________________________________________________________________
+>>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
 
@@ -19,13 +24,14 @@ class Tower(Thread):
     indice=0
 
     range=0     #portée de tir
-    damage=1    #dégâts
+
     speed=3     #cadence de tir
     zone=-1    #zone de dégats si explosion
 
     d_up=50
     r_up=25
-    damage_evo=[damage, damage+d_up, (damage+d_up)*1.25]
+    damage=1
+    damage_evo=[1,2,3]
     range_evo=[range, range+r_up, range+r_up*2]                 #variables pour les changement de stats en fonction des niveaux
     speed_evo=[speed, speed+2, speed+6]
     price_evo=[0,0,0]
@@ -44,7 +50,7 @@ class Tower(Thread):
         self.canvas = parent.canvas     #canvas
         self.x = x
         self.y = y
-
+        self.damage=self.damage_evo[0]    #dégâts
         self.price=self.price_evo[1]
         self.ndamage=self.damage_evo[1]
         self.nrange=self.range_evo[1]       #variables pour la prévision des valeurs des niveaux suivants
@@ -154,16 +160,17 @@ class Tower(Thread):
             if self.target.hp <= 0: #si ses pv tombent à zero
                 self.target.die(False)  #on appelle la méthode qui provoque la mort de l'ennemi
                 self.target = None      #on n'a plus de cible
-                self.canvas.after(int(6000/self.speed), self.seek) #on recherche
+                self.canvas.after(int(10000/self.speed), self.seek) #on recherche
                 return
 
             elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
+                print("cible hors de porté")
                 self.target = None      #on n'a plus de cible
-                self.canvas.after(int(6000/self.speed), self.seek) #on recherche
+                self.canvas.after(int(10000/self.speed), self.seek) #on recherche
                 return
 
             else :
-                self.canvas.after(int(6000/self.speed), self.tir_p) 
+                self.canvas.after(int(10000/self.speed), self.tir_p) 
 
         else :
             self.seek()
@@ -247,7 +254,7 @@ class Projectile(Thread):
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
         self.canvas.after(20,self.tir)  #récurssion
 
-#________________________________________________________________________________________________________________________
+#----------------------------------------------------------------------------------------------------
                 
 # Classes des mortiers, archers, mages... basés sur le même template que les autres
 class Mortier(Tower):
@@ -256,21 +263,19 @@ class Mortier(Tower):
     coordsLvl3=[ 203, 3, 313, 142]
     image="view/src/tours/tours/Mortier.png"
 
-    range = 100
-    damage = 12                        #attributs
-    speed = 2.5
+    range = 100                       #attributs
+    speed = 1
     zone = 80
     r_up=20
-    d_up=9
 
     damagetype = "explosion"        #type de dégâts
 
-    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
+    damage_evo=[30 , 37,5, 67,5]
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+1, speed+2]
-    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
+    price_evo=[250, 500, 1250]
     price=price_evo[0]   
-
+    damage=damage_evo[0]
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
         
@@ -288,17 +293,18 @@ class FireM(Tower):
     coordsLvl2 = [91, 49, 191, 139]
     coordsLvl3 = [203, 3, 313, 141]
     image="view/src/tours/tours/Mage2.png"
-    damage = 8*coeffd
     speed = 3
     zone = -1
     range = 120
     r_up=30
     d_up=10
     damagetype = "fire"
-    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
+    damage_evo=[20,30,54]
     range_evo=[range, range+r_up, range+r_up*2]
-    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
+    speed_evo=[speed, speed+1, speed+2]
+    price_evo=[175, 350, 875]
     price=price_evo[0]
+    damage=damage_evo[0]
 
     def __init__(self, canvas, x, y):
         # self.root=tk.Tk()
@@ -319,18 +325,18 @@ class WaterM(Tower):
     coordsLvl2=[91,47,195,139]
     coordsLvl3=[203,0,323,139]
     image="view/src/tours/tours/Mage3.png"
-    damage = 8
     speed = 3
     zone = -1
     range = 120
     damagetype = "water"
     d_up=10
     r_up=30
-    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
+    damage_evo=[20,30,54]
     range_evo=[range, range+r_up, range+r_up*2]
-    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
+    speed_evo=[speed, speed+1, speed+2]
+    price_evo=[175, 350, 875]
     price=price_evo[0]
-
+    damage=damage_evo[0]
     def __init__(self, parent, x, y):
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
@@ -346,17 +352,18 @@ class EarthM(Tower):
     coordsLvl1 = [3, 62, 82, 132]
     coordsLvl2= [91, 47, 195, 132]
     coordsLvl3 = [203, 0, 323, 132]
-    damage = 8
     speed = 3
     zone = -1
     range = 120
     damagetype = "earth"
     d_up=10
     r_up=30
-    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
+    damage_evo=[20,30,54]
     range_evo=[range, range+r_up, range+r_up*2]
-    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
+    speed_evo=[speed, speed+1, speed+2]
+    price_evo=[175, 350, 875]
     price=price_evo[0]
+    damage=damage_evo[0]
 
     def __init__(self, parent, x, y):
 
@@ -374,23 +381,23 @@ class Archer(Tower):
     coordsLvl2 = [91,35,195,144]
     coordsLvl3 = [203,0,295,144]
     range=200
-    damage = 5
     speed = 5
     zone = -1
     damagetype = "shot"
     d_up=5
     r_up=35
-    damage_evo=[damage * coeffd, (damage+d_up)*coeffd, (damage+d_up)*1.55*coeffd]
+    damage_evo=[15, 22,5, 40.5]
     range_evo=[range, range+r_up, range+r_up*2]
-    speed_evo=[speed, speed+4, speed+8]
-    price_evo=[50*coeffp, 100*coeffp, 150*coeffp]
+    speed_evo=[speed, speed+2, speed+4]
+    price_evo=[175, 350, 875]
     price=price_evo[0]
+    damage=damage_evo[0]
 
     def __init__(self, parent, x, y):
 
         self.lv1=load(self.coordsLvl1, self.image)
         self.lv2=load(self.coordsLvl2, self.image)
-        self.lv3=load(self.coordsLvl3, self.image)
+        self.lv3=load(self.coordsLvl3, self.image)       
         Tower.__init__(self, parent, x+3, y-10, Fleche)
 
     def __str__(self):
@@ -402,7 +409,7 @@ class Forgeron(Tower):
     coordsLvl2 = [125,0,250,115]
     coordsLvl3 = [250,0,380,115]
     image= 'view/src/tours/tours/Forgeron.png'
-    price_evo=[150, 300, 500]
+    price_evo=[400, 700, 1200]
     price=price_evo[0]
     def __init__(self, parent, x,y):
         self.lv1=load(self.coordsLvl1, self.image)
@@ -441,7 +448,7 @@ class Mine(Tower):
     coordsLvl2 = [165,8,289,120]
     coordsLvl3 = [334,5,486,125]
     image= 'view/src/tours/tours/Mine.png'
-    price_evo=[100,500, 750]
+    price_evo=[350,800, 1500]
     production=30
     def __init__(self, parent, x, y):
         #self.root=tk.Tk()

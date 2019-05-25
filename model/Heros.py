@@ -188,7 +188,6 @@ class Heros(Character):
         if self.target:
             self.attack()
         else:
-            print(time.time() - self.lastAttackTime)
             if (self.state == "idleRight" or self.state == "idleLeft") and time.time() - self.lastAttackTime >= 1:
                 # Sinon on cherche une cible potentielle dans les ennemis du niveau
                 for ennemy in self.parent.ennemies:
@@ -291,11 +290,17 @@ class Heros(Character):
                 self.state = "idleLeft"
 
     def instantMove(self, event):
+        if self.state=="transform":
+            return
         if self.lvl != 0 and hasattr(self, "instantMoveAnim"):
+            # if self.state== "idleRight":
+            #     self.last_state="idleRight"
+            # elif self.state=="idleLeft":
+            #     self.last_state="idleLeft"
             if self.sprite == self.num_sprintes["instantMove"] - 1 and self.state == "instantMove":
                 self.x = event.x
                 self.y = event.y
-                self.state ="idleRight"
+                self.state = "idleLeft"
                 return
             elif self.state == "instantMove":
                 self.show()
@@ -314,10 +319,28 @@ class Heros(Character):
                 self.state = "specialMoveRight"
             elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
                 self.state = "specialMoveLeft"
+    
+    def reset(self):
+        if self.lvl==0:
+            self.changeStats(self.lv0)
+            self.state="idleLeft"
+        else:
+            self.changeStats(self.lv0)
+            self.idleRight = self.idleRight0
+            self.idleLeft = self.idleLeft0
+            self.runRight = self.runRight0
+            self.runLeft = self.runLeft0
+            self.specialMoveRight = self.specialMoveRight0
+            self.specialMoveLeft = self.specialMoveLeft0
+            self.attackLeft = self.attackLeft0
+            self.attackRight = self.attackRight0
+            self.death = self.death0
+            self.instantMoveAnim = self.instantMoveAnim0
+            self.state="idleLeft"
 
     # Fonction chargée de la transformation du heros
     def transform(self):
-
+        # self.last_state2=self.state
         # On réinitialise l'image d'animation
         self.sprite = 0
         self.state = "transform"
@@ -390,6 +413,7 @@ class Heros(Character):
 
         # On change la vie de base
         self.baseHp = self.hp
+        
 
     # Fonction chargé du changement de statistiques en fonction du dictionnaire donné
     def changeStats(self, dict):
