@@ -188,10 +188,6 @@ class Heros(Character):
         if self.target:
             self.attack()
         else:
-<<<<<<< HEAD
-=======
-            print(time.time() - self.lastAttackTime)
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
             if (self.state == "idleRight" or self.state == "idleLeft") and time.time() - self.lastAttackTime >= 1:
                 # Sinon on cherche une cible potentielle dans les ennemis du niveau
                 for ennemy in self.parent.ennemies:
@@ -304,11 +300,7 @@ class Heros(Character):
             if self.sprite == self.num_sprintes["instantMove"] - 1 and self.state == "instantMove":
                 self.x = event.x
                 self.y = event.y
-<<<<<<< HEAD
                 self.state = "idleLeft"
-=======
-                self.state ="idleRight"
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
                 return
             elif self.state == "instantMove":
                 self.show()
@@ -357,10 +349,6 @@ class Heros(Character):
         if self.move:
             self.canvas.after_cancel(self.move)
             self.canvas.delete(self.crossCallback)
-<<<<<<< HEAD
-
-=======
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 
         # On change les stats et les animations
         if self.lvl == 0:

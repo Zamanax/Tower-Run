@@ -299,15 +299,9 @@ class Lvl1(Lvl):
                       Emplacement(358, 150),
                       Emplacement(574, 150),
                       Emplacement(755, 150),
-<<<<<<< HEAD
                       Emplacement(791, 302),
                       Emplacement(538, 302),
                       Emplacement(323, 302),
-=======
-                      Emplacement(791, 332),
-                      Emplacement(538, 332),
-                      Emplacement(323, 332),
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
                       Emplacement(143, 319, state="Mine")]
         return super().__init__(parent, *args, **kwargs)
 

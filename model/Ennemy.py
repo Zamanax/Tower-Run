@@ -41,11 +41,6 @@ class Skeleton (Ennemy) :
     attackSpeed = 1
     speed = 2
     damage = 5
-<<<<<<< HEAD
-
-=======
-    purse = 12
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 
     barOffsetx = -20
 
@@ -64,14 +59,10 @@ class miniSkeleton (Skeleton) :
     speed = 3
     damage = 1
     zoom = 1
-<<<<<<< HEAD
     damagingSprite = [4,6,7,8]
     num_sprintes = {"idleRight": 1, "idleLeft" : 1, "runRight" : 4, "runLeft" : 4, "attackRight" : 8, "attackLeft": 8, "die": 4}
     dps = damage*len(damagingSprite)/ (0.5/attackSpeed*num_sprintes["attackRight"])
     purse = hp/5+dps*1.5+speed
-=======
-    purse = 6
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 
 class Bat(Ennemy):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
@@ -84,7 +75,6 @@ class Bat(Ennemy):
     damage = 15
  
 
-<<<<<<< HEAD
     spritesheet = 'view/src/personnage/ennemis/batp.png'
     spriteSize = 23
     damagingSprite = [2]
@@ -93,30 +83,6 @@ class Bat(Ennemy):
     dps = damage*len(damagingSprite)/ (0.5/attackSpeed*num_sprintes["attackRight"])
     purse = hp/5+dps*1.5+speed
     
-=======
-    hp = 250 * coeffv
-    name = "Totor"
-    attackSpeed = 2
-    speed = 1
-    damage = 20
-    purse = 25
-
-    spritesheet = 'view/src/personnage/ennemis/Totor.png'
-    spriteSize = 96
-    y_Anim = {"idleRight" : 0, "idleLeft" : 960, "runRight" : 96, "runLeft" : 96*12, "attackRight": 96*3, "attackLeft": 96*13, "die" : 96*9}
-    damagingSprite = [1,3]
-    num_sprintes = {"idleRight" : 5, "idleLeft": 5, "runRight" : 8, "runLeft" : 8, "attackRight" : 9, "attackLeft": 9, "die": 6}
-    zoom = 2
-
-class Fat_Totor (Totor) :
-    hp = 750 * coeffv
-    name = "Fat Totor"
-    damage = 40
-    speed = 1
-    zoom = 3
-    purse = 35
-
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 class Dwarf (Ennemy) :
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
 
@@ -125,11 +91,6 @@ class Dwarf (Ennemy) :
     attackSpeed = 3
     speed = 4
     damage = 5
-<<<<<<< HEAD
-
-=======
-    purse = 10
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 
     spritesheet = 'view/src/personnage/ennemis/Dwarf.png'
     spriteSize = 96
@@ -164,13 +125,9 @@ class SlimeE(Ennemy):
     num_sprintes = {'idleRight' : 10, "idleLeft": 10, 'runRight' : 10, 'runLeft' : 10, 'attackRight' : 10, 'attackLeft' : 10, 'die' : 10}
     zoom = 2
     y_Anim = {'idleRight' : 0+160*i, "idleLeft": 0+160*i, 'runRight' : 32+160*i, 'runLeft' : 32+160*i, 'attackRight' : 32*3+160*i, 'attackLeft' : 32*3+160*i, 'die' : 32*4+160*i}
-<<<<<<< HEAD
     dps = damage*len(damagingSprite)/ (0.5/attackSpeed*num_sprintes["attackRight"])
     purse = hp/5+dps*1.5+speed
     
-=======
-
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 class SlimeF(SlimeE):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
    
@@ -226,11 +183,6 @@ class Gladiator(Ennemy):
     attackSpeed = 1
     speed = 1
     damage = 25
-<<<<<<< HEAD
-
-=======
-    purse = 40
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 
     spritesheet = 'view/src/personnage/ennemis/Gladiator.png'
     spriteSize = 32
@@ -240,7 +192,6 @@ class Gladiator(Ennemy):
     dps = damage*len(damagingSprite)/ (0.5/attackSpeed*num_sprintes["attackRight"])
     purse = hp/5+dps*1.5+speed
 
-<<<<<<< HEAD
 class Totor (Ennemy):
     __slots__ = ("idle", "runRight",
                 "runLeft", "attackRight", "attackLeft", "death")
@@ -283,34 +234,6 @@ class RedGladiator(Gladiator):
     speed = 1
     attackSpeed = 1
     damage = 30
-=======
-class RedGladiator(Gladiator):
-    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
-    y_Anim = {'idleRight' : 0, "idleLeft": 32*5, 'runRight' : 32, 'runLeft' : 32*6, 'attackRight' : 32*2, 'attackLeft' : 32*7, 'die' : 32*4}
-
-    hp = 500
-    name = 'RedGladiator'
-    attackSpeed = 2
-    damage = 30
-    purse = 132
-
-    spritesheet = 'view/src/personnage/ennemis/RedGladiator.png'
-    spriteSize = 32
-    damagingSprite = [4]
-    num_sprintes = {'idleRight' : 5, "idleLeft": 5, 'runRight' : 8, 'runLeft' : 8, 'attackRight' : 7, 'attackLeft' : 7, 'die' : 7}
-    zoom = 2
-   
-class Bat(Ennemy):
-    __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
- 
-    y_Anim = {'idleRight' : 0, "idleLeft": 23, 'runRight' : 0, 'runLeft' : 23, 'attackRight' : 46, 'attackLeft' : 69, 'die' : 82}
-    hp = 80 * coeffv
-    name = 'Bat'
-    attackSpeed = 2
-    speed = 3
-    damage = 15
-    purse = 25
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 
     spritesheet = 'view/src/personnage/ennemis/RedGladiator.png'
     spriteSize = 32

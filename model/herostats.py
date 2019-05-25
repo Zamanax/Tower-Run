@@ -6,13 +6,8 @@ class Adventurer(Heros):
     name = "Aventurier"
 
     lv0 = {
-<<<<<<< HEAD
         "hp": 200,
         "damage": 2,
-=======
-        "hp": 100,
-        "damage": 4,
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
         "speed": 8,
         "attackSpeed": 4,
 
