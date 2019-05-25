@@ -187,7 +187,7 @@ class Lvl(tk.Frame):
 
     def launchWaves(self, dict):
         for i in range(len(dict)):
-            dict[i](self, -50*i, self.spawnPoint.y, self.heros)
+            dict[i](self, -50*i, self.spawnPoint.y)
         self.waveIndex += 1
 
     def nextWave(self):
