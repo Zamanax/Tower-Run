@@ -125,7 +125,6 @@ class Character (Thread):
                 else:
                     self.state="idleRight"
 
-                self.target.move = None
                 self.target.goToObjective()
                 self.goToObjective()
                 self.target=None                
@@ -135,7 +134,7 @@ class Character (Thread):
                 return 
             else:
                 # Si c'est le cas alors on arrêtes les tâches parrallèles et on attaque
-                if self.target.move:
+                if self.target.move and self.target.__class__.__bases__[0].__name__ != "Heros":
                     self.canvas.after_cancel(self.target.move)
                     self.target.move = None
                 if self.target.target == None :

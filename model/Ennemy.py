@@ -4,10 +4,9 @@ import model.Heros as He
 coeffv =2
 class Ennemy (Character):
  
-    def __init__ (self, parent, x, y, heros, **kwargs) :
+    def __init__ (self, parent, x, y, **kwargs) :
         #Initialisation en tant que Character
         Character.__init__(self,parent,x,y)
-        self.heros = heros
 
         # Insertion dans le tableau
         # Tableau contenant tous les ennemis existants

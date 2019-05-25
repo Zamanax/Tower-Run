@@ -4,7 +4,7 @@ from functools import lru_cache
 from threading import Thread
 from model.fonctions_utiles import load
 from model.Character import Character
-
+import time
 
 class Heros(Character):
     # Variables propres au héros
@@ -12,6 +12,8 @@ class Heros(Character):
     lv0 = {}
     compteur = 0
     reg = 5
+
+    lastAttackTime = 0.0
 
     def defineStats(self):
         pass
@@ -186,7 +188,8 @@ class Heros(Character):
         if self.target:
             self.attack()
         else:
-            if self.state == "idleRight" or self.state == "idleLeft":
+            print(time.time() - self.lastAttackTime)
+            if (self.state == "idleRight" or self.state == "idleLeft") and time.time() - self.lastAttackTime >= 1:
                 # Sinon on cherche une cible potentielle dans les ennemis du niveau
                 for ennemy in self.parent.ennemies:
                     # On calcule la distance et l'état
@@ -230,6 +233,10 @@ class Heros(Character):
         if self.attacking:
             self.canvas.after_cancel(self.attack)
             self.attacking = None
+            if self.target :
+                self.canvas.after_cancel(self.target.attack)
+                self.target.attacking = None
+            self.lastAttackTime = time.time()
             if self.state == "attackRight":
                 self.state = "idleRight"
             elif self.state == "attackLeft":
