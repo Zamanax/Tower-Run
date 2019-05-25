@@ -102,8 +102,9 @@ class Tower(Thread):
         ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
 
         for ennemy in ennemies:
-            if (((((ennemy.x-self.x)**2)**0.5+10)**2)+((((ennemy.x-self.x)**2)**0.5+10)**2))**0.5 <= self.range and ennemy.state != "die":
+            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die":
                 self.target = ennemy
+                print("ciblé")
                 self.tir_p()
                 return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
                             #On le cible, on tir, et on arrête de chercher
@@ -146,7 +147,7 @@ class Tower(Thread):
     def tir_p(self):
         """fonction qui 'tire' le projectile"""
         
-        if self.target : #si un ennemi est ciblé
+        if self.target!=None : #si un ennemi est ciblé
 
             self.projectile(self) 
 
@@ -257,7 +258,7 @@ class Mortier(Tower):
 
     range = 100
     damage = 12                        #attributs
-    speed = 2
+    speed = 2.5
     zone = 80
     r_up=20
     d_up=9
