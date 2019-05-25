@@ -236,7 +236,7 @@ class Interface(tk.Frame):
                 #                                                 outline="blue")
 
                 self.last_lochoice = self.canvas.create_image(
-                    self.selected.x, self.selected.y-12, image=self.lochoice)
+                    self.selected.x, self.selected.y+8, image=self.lochoice)
                 self.spotPrice = tk.Label(
                     self.interface, bg="#743A3A", fg="white", font=("Arial", 18), justify="left")
 
@@ -363,6 +363,6 @@ class Interface(tk.Frame):
         for spot in self.parent.spots:
             if spot.state == None:
                 spot.last_img = self.canvas.create_image(
-                    spot.x, spot.y, image=self.hammerSign, anchor="s")
+                    spot.x, spot.y, image=self.hammerSign)
             else:
                 spot.tower = self.dico[spot.state](self.parent, spot.x, spot.y)

@@ -178,8 +178,10 @@ class Lvl(tk.Frame):
     def restartGame(self):
         self.parent.switchFrame(self.__class__)
 
+
     def launchNextLvl(self):
         self.parent.switchFrame(self.nextLvl)
+
         
     # Fonction nulle contenant dans les autress niveaux les ennemis à charger
     def launchWaves(self):
@@ -187,7 +189,7 @@ class Lvl(tk.Frame):
 
     def launchWaves(self, dict):
         for i in range(len(dict)):
-            dict[i](self, -50*i, self.spawnPoint.y, self.heros)
+            dict[i](self, -50*i, self.spawnPoint.y)
         self.waveIndex += 1
 
     def nextWave(self):
@@ -204,7 +206,7 @@ class Lvl(tk.Frame):
 # -----------------Chargement de la Frame LVL 3 ----------------------
 class Lvl3(Lvl):
     image = "view/src/background/Lvl3Background.png"
-    gold = 1000
+    gold = 500
     defaultPath = [keySpot(410, 175),
                    keySpot(410, 520),
                    keySpot(730, 520),
@@ -224,26 +226,23 @@ class Lvl3(Lvl):
 
     def __init__(self, parent, *args, **kwargs):
         self.spots=[Emplacement(50,280),
-                    Emplacement(130,280),
+                    Emplacement(180,280),
                     Emplacement(300,280),
                     Emplacement(315,385),
                     Emplacement(510,180),
                     Emplacement(635,180),
                     Emplacement(510,390),
                     Emplacement(635,390),
-                    Emplacement(1040,28),
-                    Emplacement(860,280),
+                    Emplacement(840,280),
                     Emplacement(960,280),
-                    Emplacement(860,385),
-                    Emplacement(860,385),
-                    Emplacement(860,485),
-                    Emplacement(960,385)]
+                    Emplacement(840,385),
+                    Emplacement(840,485)]
         return super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):
     image = "view/src/background/Lvl2Background.png"
-    gold = 1000
+    gold = 500
     defaultPath = [keySpot(1200, 225)]
 
     wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
@@ -281,10 +280,10 @@ class Lvl2(Lvl):
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
-    gold = 1500
+    gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [SlimeE, SlimeF, SlimeW , Skeleton, Totor, Skeleton, Skeleton, Skeleton]
+    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
@@ -296,14 +295,14 @@ class Lvl1(Lvl):
     spawnPoint = keySpot(0, 200)
 
     def __init__(self, parent, *args, **kwargs):
-        self.spots = [Emplacement(180, 175),
-                Emplacement(358, 175),
-                Emplacement(574, 175),
-                Emplacement(755, 175),
-                Emplacement(791, 355),
-                Emplacement(538, 355),
-                Emplacement(323, 355),
-                Emplacement(143, 355, state="Mine")]
+        self.spots = [Emplacement(180, 150),
+                      Emplacement(358, 150),
+                      Emplacement(574, 150),
+                      Emplacement(755, 150),
+                      Emplacement(791, 302),
+                      Emplacement(538, 302),
+                      Emplacement(323, 302),
+                      Emplacement(143, 319, state="Mine")]
         return super().__init__(parent, *args, **kwargs)
 
 class MainSelectLevel(tk.Frame):
@@ -454,6 +453,7 @@ class MainApplication(tk.Frame):
 
         self.currentFrame = nlevel
         self.currentFrame.pack(side="top", fill="both", expand=True)
+        self.heros.reset()
         return nlevel
 
 # -----------------Fonction à executer pour lancer le jeu-------------

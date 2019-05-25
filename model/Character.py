@@ -3,6 +3,7 @@ import tkinter as tk
 from functools import lru_cache
 from threading import Thread
 import asyncio
+import time
 
 class Character (Thread):
 #---------------------Attributs------------------------------------------------
@@ -125,7 +126,6 @@ class Character (Thread):
                 else:
                     self.state="idleRight"
 
-                self.target.move = None
                 self.target.goToObjective()
                 self.goToObjective()
                 self.target=None                
@@ -135,7 +135,7 @@ class Character (Thread):
                 return 
             else:
                 # Si c'est le cas alors on arrêtes les tâches parrallèles et on attaque
-                if self.target.move:
+                if self.target.move and self.target.__class__.__bases__[0].__name__ != "Heros":
                     self.canvas.after_cancel(self.target.move)
                     self.target.move = None
                 if self.target.target == None :
@@ -434,6 +434,9 @@ class Character (Thread):
         elif self.state == "transform":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.transformAnim[self.sprite])
+            # if self.sprite==self.num_sprintes["transform"]-1:
+            #     self.state=self.last_state2
+
         elif self.state == "specialMoveRight":
             self.last_img = self.canvas.create_image(
                 self.x, self.y, image=self.specialMoveRight[self.sprite])

@@ -7,7 +7,7 @@ class Adventurer(Heros):
     name = "Aventurier"
 
     lv0 = {
-        "hp": 100,
+        "hp": 200,
         "damage": 2,
         "speed": 8,
         "attackSpeed": 4,
@@ -34,11 +34,11 @@ class Ichigo(Heros):
 
     def defineStats(self):
         self.lv0 = {
-            "hp": 50,
-            "damage": 2,
+            "hp": 150,
+            "damage": 5,
             "speed": 8,
             "coupSpe": GetsugaTenshou,
-            "attackSpeed": 4,
+            "attackSpeed": 3,
 
             # Spritesheet du Heros
             "damagingSprite": [2, 3, 5, 12, 13],
@@ -52,11 +52,11 @@ class Ichigo(Heros):
         }
 
         self.lv1 = {
-            "hp": 50,
-            "damage": 2,
+            "hp": 300,
+            "damage": 10,
             "speed": 8,
             "coupSpe": GetsugaTenshou2,
-            "attackSpeed": 6,
+            "attackSpeed": 3,
 
             # Spritesheet du Heros
             "damagingSprite": [2, 3, 7, 8, 9, 13, 14, 17, 18],
@@ -70,11 +70,11 @@ class Ichigo(Heros):
         }
 
         self.lv2 = {
-            "hp": 50,
-            "damage": 2,
-            "speed": 8,
+            "hp": 450,
+            "damage": 15,
+            "speed": 7,
             "coupSpe": GetsugaTenshou3,
-            "attackSpeed": 6,
+            "attackSpeed":4 ,
 
             # Spritesheet du Heros
             "damagingSprite": [1, 2, 6, 7, 11, 12, 13, 14],
@@ -88,13 +88,13 @@ class Ichigo(Heros):
         }
 
         self.lv3 = {
-            "hp": 50,
-            "damage": 2,
+            "hp": 600,
+            "damage": 20,
             "speed": 8,
-            "attackSpeed": 6,
+            "attackSpeed": 5,
             "coupSpe": Mugetsu,
             # Spritesheet du Heros
-            "damagingSprite": [1, 2, 6, 7, 11, 12, 13, 14],
+            "damagingSprite": [ 1, 2, 3, 4, 5],
             "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2, "instantMove": 2,
                              "runLeft": 2, "attackRight": 6, "attackLeft": 6, "die": 5, "specialMoveRight": 14, "specialMoveLeft": 14},
             "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo3 (" + str(self.quality) + ").png",
@@ -110,8 +110,8 @@ class Goku(Heros):
 
     def defineStats(self):
         self.lv0 = {
-            "hp": 50,
-            "damage": 2,
+            "hp": 150,
+            "damage": 10,
             "damagingSprite": [5, 10, 11, 12, 13, 18, 22, 23],
             "speed": 10,
             "coupSpe": Kamehameha,
@@ -127,12 +127,12 @@ class Goku(Heros):
         }
 
         self.lv1 = {
-            "hp": 50,
-            "damage": 4,
+            "hp": 300,
+            "damage": 15,
             "damagingSprite": [2, 3, 4, 5, 6, 7, 12, 13, 14, 15],
             "speed": 15,
             "coupSpe": Kamehameha2,
-            "attackSpeed": 3,
+            "attackSpeed": 4,
             "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
                              "runLeft": 4, "attackRight": 15, "attackLeft": 15, "die": 5, "transform": 8, "specialMoveRight": 17, "specialMoveLeft": 17, "instantMove": 4},
             "spritesheet": "view/src/personnage/heros/Goku/Goku1 (" + str(self.quality) + ").png",
@@ -144,8 +144,8 @@ class Goku(Heros):
         }
 
         self.lv2 = {
-            "hp": 50,
-            "damage": 4,
+            "hp": 450,
+            "damage":20,
             "damagingSprite": [1, 2, 3, 5, 6, 7, 8, 12, 13, 16, 17, 21, 22, 23, 24, 25],
             "speed": 20,
             "coupSpe": Kamehameha3,
@@ -160,10 +160,10 @@ class Goku(Heros):
         }
 
         self.lv3 = {
-            "hp": 50,
-            "damage": 4,
+            "hp": 600,
+            "damage": 25,
             "speed": 25,
-            "attackSpeed": 5,
+            "attackSpeed": 6,
             "coupSpe": Genkidamasupreme,
             "damagingSprite": [3, 7, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24],
             "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 4,
