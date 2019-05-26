@@ -51,7 +51,7 @@ class Skeleton (Ennemy) :
     spritesheet = "view/src/personnage/ennemis/Skeleton.png"
     zoom = 2
     dps = damage*len(damagingSprite)/ (0.5/attackSpeed*num_sprintes["attackRight"])
-    purse = int(int(hp/5+dps*1.5+speed))
+    purse = int(hp/5+dps*1.5+speed)
     
 class miniSkeleton (Skeleton) :
     hp = 50 * coeffv
@@ -62,7 +62,7 @@ class miniSkeleton (Skeleton) :
     damagingSprite = [4,6,7,8]
     num_sprintes = {"idleRight": 1, "idleLeft" : 1, "runRight" : 4, "runLeft" : 4, "attackRight" : 8, "attackLeft": 8, "die": 4}
     dps = damage*len(damagingSprite)/ (0.5/attackSpeed*num_sprintes["attackRight"])
-    purse = int(int(hp/5+dps*1.5+speed))
+    purse = int(hp/5+dps*1.5+speed)
 
 class Bat(Ennemy):
     __slots__ = ('idle', 'runRight', 'runLeft', 'attackRight', 'attackLeft', "death")
