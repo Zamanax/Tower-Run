@@ -254,7 +254,6 @@ class Projectile(Thread):
                     cible.die(False)
                     self.tour.target=None 
                     self.canvas.after_cancel(self.tour.firing)
-                    self.canvas.after_cancel(self.tour.ciblement)
                     if self.boomname=="view/src/tours/projectile/kaboom.png":
                         print("Kaboom") 
                         self.canvas.after(650, self.canvas.delete, self.corps)
