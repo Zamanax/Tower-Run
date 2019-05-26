@@ -176,11 +176,15 @@ class Lvl(tk.Frame):
         self.restartBtn.place(x = 500, y = 400)
 
     def restartGame(self):
+        self.heros.reset()
         self.parent.switchFrame(self.__class__)
 
 
+
     def launchNextLvl(self):
+        self.heros.reset()
         self.parent.switchFrame(self.nextLvl)
+
 
         
     # Fonction nulle contenant dans les autress niveaux les ennemis à charger
@@ -280,7 +284,7 @@ class Lvl2(Lvl):
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
-    gold = 500
+    gold = 2500
     defaultPath = [keySpot(1200, 225)]
 
     wave1 = [miniSkeleton,miniSkeleton,miniSkeleton]
@@ -453,7 +457,7 @@ class MainApplication(tk.Frame):
 
         self.currentFrame = nlevel
         self.currentFrame.pack(side="top", fill="both", expand=True)
-        self.heros.reset()
+        
         return nlevel
 
 # -----------------Fonction à executer pour lancer le jeu-------------

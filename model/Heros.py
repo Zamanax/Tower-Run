@@ -324,7 +324,9 @@ class Heros(Character):
         if self.lvl==0:
             self.changeStats(self.lv0)
             self.state="idleLeft"
-        else:
+        elif self.lvl==3:
+            self.lvl=0
+            self.baseHp = self.hp
             self.changeStats(self.lv0)
             self.idleRight = self.idleRight0
             self.idleLeft = self.idleLeft0
@@ -335,7 +337,22 @@ class Heros(Character):
             self.attackLeft = self.attackLeft0
             self.attackRight = self.attackRight0
             self.death = self.death0
-            self.instantMoveAnim = self.instantMoveAnim0
+            self.instantMoveAnim = self.instantMoveAnim0 
+            self.state="idleLeft"
+        else:
+            self.lvl=0
+            self.baseHp = self.hp
+            self.changeStats(self.lv0)
+            self.idleRight = self.idleRight0
+            self.idleLeft = self.idleLeft0
+            self.runRight = self.runRight0
+            self.runLeft = self.runLeft0
+            self.specialMoveRight = self.specialMoveRight0
+            self.specialMoveLeft = self.specialMoveLeft0
+            self.attackLeft = self.attackLeft0
+            self.attackRight = self.attackRight0
+            self.death = self.death0
+            self.instantMoveAnim = self.instantMoveAnim0 
             self.state="idleLeft"
 
     # Fonction chargée de la transformation du heros
@@ -411,21 +428,22 @@ class Heros(Character):
             self.death = self.death3
             self.instantMoveAnim = self.instantMoveAnim3
 
-        # On change la vie de base
-        self.baseHp = self.hp
+
         
 
     # Fonction chargé du changement de statistiques en fonction du dictionnaire donné
-    def changeStats(self, dict):
-        self.hp = dict["hp"]
-        self.damage = dict["damage"]
-        self.damagingSprite = dict["damagingSprite"]
-        self.speed = dict["speed"]
-        self.coupSpe = dict["coupSpe"]
-        self.attackSpeed = dict["attackSpeed"]
-        self.spritesheet = dict["spritesheet"]
-        self.spriteSize = dict["spriteSize"]
-        self.y_Anim = dict["y_Anim"]
+    def changeStats(self, dicto):
+        self.hp = dicto["hp"]
+        self.damage = dicto["damage"]
+        self.damagingSprite = dicto["damagingSprite"]
+        self.speed = dicto["speed"]
+        self.coupSpe = dicto["coupSpe"]
+        self.attackSpeed = dicto["attackSpeed"]
+        self.spritesheet = dicto["spritesheet"]
+        self.spriteSize = dicto["spriteSize"]
+        self.y_Anim = dicto["y_Anim"]
+        self.num_sprintes= dicto["num_sprintes"]
+        self.baseHp = self.hp   # On change la vie de base
 
     # Incrémentation du sprite en fonction de l'état
     def incrementSprite(self):

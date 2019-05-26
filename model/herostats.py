@@ -8,11 +8,7 @@ class Adventurer(Heros):
 
     lv0 = {
         "hp": 200,
-<<<<<<< HEAD
-        "damage": 2,
-=======
         "damage": 12,
->>>>>>> 2283aba2670df8f95c22228e5160bf1c826005a0
         "speed": 8,
         "attackSpeed": 4,
 
@@ -39,11 +35,7 @@ class Ichigo(Heros):
     def defineStats(self):
         self.lv0 = {
             "hp": 150,
-<<<<<<< HEAD
-            "damage": 5,
-=======
             "damage": 10,
->>>>>>> 2283aba2670df8f95c22228e5160bf1c826005a0
             "speed": 8,
             "coupSpe": GetsugaTenshou,
             "attackSpeed": 3,
@@ -61,11 +53,7 @@ class Ichigo(Heros):
 
         self.lv1 = {
             "hp": 300,
-<<<<<<< HEAD
-            "damage": 10,
-=======
             "damage": 15,
->>>>>>> 2283aba2670df8f95c22228e5160bf1c826005a0
             "speed": 8,
             "coupSpe": GetsugaTenshou2,
             "attackSpeed": 3,
@@ -83,11 +71,7 @@ class Ichigo(Heros):
 
         self.lv2 = {
             "hp": 450,
-<<<<<<< HEAD
-            "damage": 15,
-=======
             "damage": 20,
->>>>>>> 2283aba2670df8f95c22228e5160bf1c826005a0
             "speed": 7,
             "coupSpe": GetsugaTenshou3,
             "attackSpeed":4 ,
@@ -105,11 +89,7 @@ class Ichigo(Heros):
 
         self.lv3 = {
             "hp": 600,
-<<<<<<< HEAD
-            "damage": 20,
-=======
             "damage": 25,
->>>>>>> 2283aba2670df8f95c22228e5160bf1c826005a0
             "speed": 8,
             "attackSpeed": 5,
             "coupSpe": Mugetsu,

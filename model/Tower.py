@@ -2,15 +2,10 @@ import tkinter as tk
 from threading import Thread
 from model.Heros import Heros
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
+import time 
 
-<<<<<<< HEAD
 
 #---------------------------------------------------------------------------------------------------
-=======
-coeffd=1
-coeffp=1
-#____________________________________________________________________________________________________________
->>>>>>> 46ddcbd49473f28b587bf7a23feed06fe65327e6
 class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
 
@@ -50,12 +45,13 @@ class Tower(Thread):
         self.canvas = parent.canvas     #canvas
         self.x = x
         self.y = y
+        
         self.damage=self.damage_evo[0]    #dégâts
         self.price=self.price_evo[1]
         self.ndamage=self.damage_evo[1]
         self.nrange=self.range_evo[1]       #variables pour la prévision des valeurs des niveaux suivants
         self.nspeed=self.speed_evo[1]
-
+        
         self.construction()
         self.seek()
     
@@ -76,13 +72,21 @@ class Tower(Thread):
                 self.last_img = self.canvas.create_image(
                     self.x, self.y, image=self.lv1)
 
-            elif self.lvl==2:
+            elif self.lvl==2 and str(self)!="Forgeron":
                 self.last_img=self.canvas.create_image(
             self.x, self.y-20, image=self.lv2)
 
-            else:
+            elif self.lvl==2 and str(self)=="Forgeron":
+                self.last_img=self.canvas.create_image(
+            self.x, self.y, image=self.lv2)
+
+            elif self.lvl==3 and str(self)!="Forgeron":
                 self.last_img=self.canvas.create_image(
             self.x, self.y-35, image=self.lv3 )
+
+            elif self.lvl==3 and str(self)=="Forgeron":
+                self.last_img=self.canvas.create_image(
+            self.x, self.y, image=self.lv3 )
 
             #On la place au dessus du canvas de niveau
                 self.canvas.tag_raise(self.last_img)
@@ -99,23 +103,6 @@ class Tower(Thread):
 
     def construction(self):
         self.show_evol()
-
-    #Attribution des variables partagées pour chaque instance de la classe
-    __slots__=("lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3")
-
-    def seek(self):
-        """Méthode chargée de rechercher les ennemis à attaquer"""
-        ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
-
-        for ennemy in ennemies:
-            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die":
-                self.target = ennemy
-                print("ciblé")
-                self.tir_p()
-                return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
-                            #On le cible, on tir, et on arrête de chercher
-
-        self.canvas.after(250, self.seek) #sinon on recherche
     
     def upgrade(self):
         #wrapper des fonctions d'upgrade
@@ -149,31 +136,49 @@ class Tower(Thread):
         self.price="Max"
 
         self.show_evol()
+
+    #Attribution des variables partagées pour chaque instance de la classe
+    __slots__=("lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3")
+
+    def seek(self):
+        """Méthode chargée de rechercher les ennemis à attaquer"""
+        ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
+
+        for ennemy in ennemies:
+            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die": 
+                print("ciblé")
+                self.target = ennemy
+                self.tir_p()
+                self.ciblage()
+                return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
+                            #On le cible, on tir, et on arrête de chercher
+
+        self.canvas.after(250, self.seek) #sinon on recherche
     
-    def tir_p(self):
-        """fonction qui 'tire' le projectile"""
-        
+
+    
+    def ciblage(self): 
         if self.target!=None : #si un ennemi est ciblé
-
-            self.projectile(self) 
-
-            if self.target.hp <= 0: #si ses pv tombent à zero
-                self.target.die(False)  #on appelle la méthode qui provoque la mort de l'ennemi
-                self.target = None      #on n'a plus de cible
-                self.canvas.after(int(10000/self.speed), self.seek) #on recherche
-                return
-
-            elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
+            print("je vais m'assurer")
+            if ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
                 print("cible hors de porté")
                 self.target = None      #on n'a plus de cible
-                self.canvas.after(int(10000/self.speed), self.seek) #on recherche
+                self.canvas.after_cancel(self.firing)
+                self.canvas.after_cancel(self.ciblement)
+                print("on a tiré il y a ",(int(time.time())-int(self.dernier_tir))*1000, "milli secondes" )
+                print("ciblage dans :",int(10000/self.speed)- (int(time.time())-int(self.dernier_tir))*1000, " milli secondes")
+                self.canvas.after(int(10000/self.speed)-(int(time.time())-int(self.dernier_tir))*1000, self.seek) #on recherche
                 return
+        print("je m'assure dans une demi seconde")
+        self.ciblement=self.canvas.after(500, self.ciblage)
 
-            else :
-                self.canvas.after(int(10000/self.speed), self.tir_p) 
-
-        else :
-            self.seek()
+    def tir_p(self):
+        """fonction qui 'tire' le projectile"""       
+        print("je tire!")    
+        self.projectile(self) 
+        self.dernier_tir=time.time()
+        print("je retire dans", 10/self.speed, "secondes!")
+        self.firing=self.canvas.after(int(10000/self.speed), self.tir_p) 
     
 # Classe projectile permattant de leur affecter des méthodes
 class Projectile(Thread):
@@ -195,7 +200,7 @@ class Projectile(Thread):
         self.tour = tour
         self.x=tour.x-5
         self.y=tour.y-70         #coordonnées
-        
+        self.boomname=boom
         self.img=tk.PhotoImage(file=image)
         self.boom=tk.PhotoImage(file=boom)      #Prép des images
 
@@ -206,8 +211,11 @@ class Projectile(Thread):
         self.ty=self.tour.target.y
 
         self.v=5                        #un coefficient en pixel pour le déplacement du projectile
+        self.mininit()
+        self.traj()                   #on fait un calcul de trajectoire
 
-                           #on fait un calcul de trajectoire
+    def mininit(self):
+        pass
 
     def traj(self):
         n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/self.v)  #distance tour-ennemie divisée par le nombre de pixel de déplacement par coup
@@ -225,7 +233,7 @@ class Projectile(Thread):
         if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
             to_hit=[]
             if self.zone != -1:
-                for ennemy in self.tour.parent.ennemies:
+                for ennemy in self.tour.parent.ennemies:        #toute la partie de l'explosion
                     if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.zone and ennemy.state != "die":
                         to_hit.append(ennemy)
             else :
@@ -234,15 +242,28 @@ class Projectile(Thread):
             self.canvas.delete(self.corps)              #on efface l'image
             # self.canvas.create_oval(self.x+self.zone, self.y+self.zone, self.x-self.zone, self.y-self.zone)
             self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)     #on met l'image d'impact
-            self.target.hp-=self.damage             #on enlève les dégâts
+            # self.target.hp-=self.damage             #on enlève les dégâts
+            
             for cible in to_hit:
                 if (cible.__class__.__name__ == "SlimeE" and self.__class__.__name__ == 'BouleDeFeu') or (cible.__class__.__name__ == "SlimeF" and self.__class__.__name__ == 'LameDEau') or (cible.__class__.__name__ == "SlimeW" and self.__class__.__name__ == 'Boulet'):
                     cible.hp-=2*self.tour.damage
-
-                else:
+                else:                                       #Partie coup critique élémentaire
                     cible.hp-=self.tour.damage
+
                 if cible.hp<=0:
                     cible.die(False)
+                    self.tour.target=None 
+                    self.canvas.after_cancel(self.tour.firing)
+                    self.canvas.after_cancel(self.tour.ciblement)
+                    if self.boomname=="view/src/tours/projectile/kaboom.png":
+                        print("Kaboom") 
+                        self.canvas.after(650, self.canvas.delete, self.corps)
+                    else:
+                        print("pas kaboom")
+                        self.canvas.after(150, self.canvas.delete, self.corps)
+                    self.canvas.after(int(10000/self.tour.speed)-(int(time.time())-int(self.tour.dernier_tir))*1000,self.tour.seek())
+                    return
+
             self.canvas.after(150, self.canvas.delete, self.corps)
             return
         
@@ -252,7 +273,7 @@ class Projectile(Thread):
     
 
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
-        self.canvas.after(20,self.tir)  #récurssion
+        self.canvas.after(15,self.tir)  #récurssion
 
 #----------------------------------------------------------------------------------------------------
                 
@@ -270,7 +291,7 @@ class Mortier(Tower):
 
     damagetype = "explosion"        #type de dégâts
 
-    damage_evo=[30 , 37,5, 67,5]
+    damage_evo=[30 , 37.5, 67.5]
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+1, speed+2]
     price_evo=[250, 500, 1250]
@@ -386,7 +407,7 @@ class Archer(Tower):
     damagetype = "shot"
     d_up=5
     r_up=35
-    damage_evo=[15, 22,5, 40.5]
+    damage_evo=[15, 22.5, 40.5]
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+2, speed+4]
     price_evo=[175, 350, 875]
@@ -491,26 +512,29 @@ class Mine(Tower):
 class Boulet(Projectile):
     def __init__(self,tour):
         Projectile.__init__(self,tour, "view/src/tours/projectile/bouletDeCanon.png", "view/src/tours/projectile/kaboom.png")
-        self.traj()  
+  
 
 class BouleDeFeu(Projectile):
     def __init__(self,tour):
         Projectile.__init__(self,tour, "view/src/tours/projectile/flamèche.png", "view/src/tours/projectile/flamèche.png")
-        self.traj()  
+  
 
 class LameDEau(Projectile):
     def __init__(self, tour):
         Projectile.__init__(self, tour, "view/src/tours/projectile/petit shuriken eau.png", "view/src/tours/projectile/petit shuriken eau.png")
-        self.traj()  
+
 
 class Caillou(Projectile):
     def __init__(self, tour):
         Projectile.__init__(self, tour, "view/src/tours/projectile/caillou.png", "view/src/tours/projectile/caillou.png")
-        self.traj()  
+
 
 class Fleche(Projectile):
     def __init__(self, tour):
         Projectile.__init__(self, tour,"view/src/tours/projectile/flèche gh.png","view/src/tours/projectile/flèche gh.png")
+        
+    def mininit(self):
+        print("on initialise la flèche")
         if self.tx<=self.x and self.ty<=self.y:
             self.img=tk.PhotoImage(file ="view/src/tours/projectile/flèche gh.png")
         elif self.tx>=self.x and self.ty>=self.y:
@@ -521,4 +545,3 @@ class Fleche(Projectile):
             self.img=tk.PhotoImage(file="view/src/tours/projectile/flèche gb.png")
         self.boom=self.img
         self.v=4
-        self.traj()  

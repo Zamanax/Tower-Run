@@ -56,7 +56,7 @@ class Skeleton (Ennemy) :
 class miniSkeleton (Skeleton) :
     hp = 50 * coeffv
     attackSpeed = 2
-    speed = 3
+    speed = 2
     damage = 1
     zoom = 1
     damagingSprite = [4,6,7,8]
