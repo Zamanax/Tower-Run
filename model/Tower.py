@@ -2,8 +2,7 @@ import tkinter as tk
 from threading import Thread
 from model.Heros import Heros
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
-import time 
-import pysnooper
+import time
 
 #---------------------------------------------------------------------------------------------------
 class Tower(Thread):
@@ -140,7 +139,7 @@ class Tower(Thread):
     #Attribution des variables partagées pour chaque instance de la classe
     __slots__=("lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3")
 
-    @pysnooper.snoop()
+    
     def seek(self):
         """Méthode chargée de rechercher les ennemis à attaquer"""
         # print("on me dit de chercher")
