@@ -86,7 +86,7 @@ class Lvl(tk.Frame):
 
         # Défintion de l'argent et de la vie
         self.gold = tk.IntVar(self.canvas, self.gold)
-        self.health = tk.IntVar(self.canvas, 1)
+        self.health = tk.IntVar(self.canvas, 5)
 
         # Chargement du Héros
         if hasattr(selectedHeros, "name"):
