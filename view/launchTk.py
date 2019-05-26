@@ -51,11 +51,8 @@ class Lvl(tk.Frame):
 
     wave1 = []
     waveIndex = 0
-    waveDict = []
-    
-    spawnPoint = keySpot(0, 220)
 
-    nextLvl = None
+
 
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
@@ -183,10 +180,18 @@ class Lvl(tk.Frame):
         self.parent.switchFrame(self.__class__)
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4f2ad7107e18e6ddc08dbaf30a04daab129a67d6
     def launchNextLvl(self):
         self.heros.reset()
         self.parent.switchFrame(self.nextLvl)
+
+        
+    # Fonction nulle contenant dans les autress niveaux les ennemis à charger
+    def launchWaves(self):
+        pass
 
     def launchWaves(self, dict):
         for i in range(len(dict)):
@@ -238,12 +243,12 @@ class Lvl3(Lvl):
                     Emplacement(960,280),
                     Emplacement(840,385),
                     Emplacement(840,485)]
-        super().__init__(parent, *args, **kwargs)
+        return super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):
     image = "view/src/background/Lvl2Background.png"
-    gold = 2000
+    gold = 500
     defaultPath = [keySpot(1200, 225)]
 
     wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
@@ -276,7 +281,7 @@ class Lvl2(Lvl):
                     Emplacement(955,610),
                     Emplacement(55,375),
                     Emplacement(230,375)]
-        super().__init__(parent, *args, **kwargs)
+        return super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
@@ -284,7 +289,7 @@ class Lvl1(Lvl):
     gold = 2500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton]
+    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Dwarf,Skeleton,miniSkeleton,miniSkeleton,]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
@@ -304,7 +309,7 @@ class Lvl1(Lvl):
                       Emplacement(538, 302),
                       Emplacement(323, 302),
                       Emplacement(143, 319, state="Mine")]
-        super().__init__(parent, *args, **kwargs)
+        return super().__init__(parent, *args, **kwargs)
 
 class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -454,7 +459,7 @@ class MainApplication(tk.Frame):
 
         self.currentFrame = nlevel
         self.currentFrame.pack(side="top", fill="both", expand=True)
-        # self.heros.reset()
+        self.heros.reset()
         return nlevel
 
 # -----------------Fonction à executer pour lancer le jeu-------------
