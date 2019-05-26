@@ -283,7 +283,7 @@ class Lvl1(Lvl):
     gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Dwarf,Skeleton,miniSkeleton,miniSkeleton,]
+    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Dwarf,Skeleton,miniSkeleton,miniSkeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
@@ -453,7 +453,6 @@ class MainApplication(tk.Frame):
 
         self.currentFrame = nlevel
         self.currentFrame.pack(side="top", fill="both", expand=True)
-        self.heros.reset()
         return nlevel
 
 # -----------------Fonction à executer pour lancer le jeu-------------
