@@ -3,7 +3,7 @@ from threading import Thread
 from model.Heros import Heros
 from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 import time 
-
+import pysnooper
 
 #---------------------------------------------------------------------------------------------------
 class Tower(Thread):
@@ -140,27 +140,29 @@ class Tower(Thread):
     #Attribution des variables partagées pour chaque instance de la classe
     __slots__=("lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3")
 
+    @pysnooper.snoop()
     def seek(self):
         """Méthode chargée de rechercher les ennemis à attaquer"""
-        print("on me dit de chercher")
+        # print("on me dit de chercher")
         if self.target==None:
             ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
             for ennemy in ennemies:
                 if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die": 
-                    print("vu")
+                    # print("vu")
                     self.target = ennemy
-                    Thread(target=self.ciblage())
-                    print("je le cible là")
-                    print("ciblé")
-                    if self.dernier_tir!=None:
-                        print("déjà tiré avant")
-                        self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.tir_p())
-                    else:
-                        print("premier tir de ma vie woulah")   
-                        self.tir_p()
+                    # Thread(target=self.ciblage())
+                    self.ciblage()
+                    # print("je le cible là")
+                    # print("ciblé")
+                    # if self.dernier_tir!=None:
+                    #     # print("déjà tiré avant")
+                    #     self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.tir_p())
+                    # else:
+                        # print("premier tir de ma vie woulah")   
+                    self.tir_p()
                     return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
                                 #On le cible, on tir, et on arrête de chercher
-            print("je re recherche")
+            # print("je re recherche")
             self.canvas.after(250, self.seek) #sinon on recherche
     
 
@@ -169,20 +171,20 @@ class Tower(Thread):
         if self.target!=None : #si un ennemi est ciblé
             
             if ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
-                print("il est sorti")
+                # print("il est sorti")
                 self.target = None      #on n'a plus de cible
                 self.canvas.after_cancel(self.firing)
                 self.canvas.after_cancel(self.ciblement)
                 self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.seek) #on recherche
                 return
-            print("je m'assure dans une demi seconde")
+            # print("je m'assure dans une demi seconde")
         self.ciblement=self.canvas.after(50, self.ciblage)
 
     def tir_p(self):
         """fonction qui 'tire' le projectile"""
-        print("ah on me dit qu'il faut que je tire")   
+        # print("ah on me dit qu'il faut que je tire")   
         if self.target!=None:  
-            print("je tire")     
+            # print("je tire")     
             self.projectile(self) 
             self.dernier_tir=time.time()
             self.firing=self.canvas.after(int(10000/self.speed), self.tir_p) 
@@ -202,7 +204,7 @@ class Projectile(Thread):
     def __init__(self,tour, image,boom):
         Thread.__init__(self)
         self.start()                #Thread
-        print("projectile initialisé")
+        # print("projectile initialisé")
         self.zone=tour.zone
         self.tour = tour
         self.x=tour.x-5
@@ -225,13 +227,13 @@ class Projectile(Thread):
         pass
 
     def traj(self):
-        print("calcule de trajectoire")
+        # print("calcule de trajectoire")
         n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/self.v)  #distance tour-ennemie divisée par le nombre de pixel de déplacement par coup
         self.inc_abs=-(self.x-self.tx)/n_coups                 
         self.inc_ord=-(self.y-self.ty)/n_coups
-        print("calcul fini je tire")
-        if self.target.hp-self.damage<=0:
-            print("JE VAIS LE TUER")
+        # print("calcul fini je tire")
+        # if self.target.hp-self.damage<=0:
+            # print("JE VAIS LE TUER")
         self.tir()   
                                                         #tir!
         
@@ -242,7 +244,7 @@ class Projectile(Thread):
             self.canvas.delete(self.corps)  #on supprime
 
         if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
-            print(self.target.hp)
+            # print(self.target.hp)
             to_hit=[]
             if self.zone != -1:
                 for ennemy in self.tour.parent.ennemies:        #toute la partie de l'explosion
@@ -264,21 +266,21 @@ class Projectile(Thread):
                     cible.hp-=self.tour.damage
 
             if self.target.hp<=0:
-                print("je tue")
+                # print("je tue")
                 cible.die(False)
-                print("j'ai plus de cible")
+                # print("j'ai plus de cible")
                 self.tour.target=None 
-                print("j'arrête de tirer")
+                # print("j'arrête de tirer")
                 self.canvas.after_cancel(self.tour.firing)
-                print("j'arrete de cibler")
+                # print("j'arrete de cibler")
                 self.canvas.after_cancel(self.tour.ciblement)
                 if self.boomname=="view/src/tours/projectile/kaboom.png":
-                    print("Kaboom") 
+                    # print("Kaboom") 
                     self.canvas.after(650, self.canvas.delete, self.corps)
                 else:
-                    print("pas kaboom")
+                    # print("pas kaboom")
                     self.canvas.after(150, self.canvas.delete, self.corps)
-                print("je vais lancer une recherche")
+                # print("je vais lancer une recherche")
                 self.tour.seek()
                 return
 
