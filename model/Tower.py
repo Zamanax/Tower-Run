@@ -17,9 +17,9 @@ class Tower(Thread):
     last_img=None
     seeking=None
     indice=0
-
+    target=None
     range=0     #portée de tir
-
+    dernier_tir=None
     speed=3     #cadence de tir
     zone=-1    #zone de dégats si explosion
 
@@ -142,18 +142,21 @@ class Tower(Thread):
 
     def seek(self):
         """Méthode chargée de rechercher les ennemis à attaquer"""
-        ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
+        if self.target==None:
+            ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
+            for ennemy in ennemies:
+                if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die": 
+                    print("ciblé")
+                    self.target = ennemy
+                    if self.dernier_tir!=None:
+                        self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.tir_p())
+                    else:
+                        self.canvas.after(int(10000/self.speed), self.tir_p())
+                    self.ciblage()
+                    return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
+                                #On le cible, on tir, et on arrête de chercher
 
-        for ennemy in ennemies:
-            if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die": 
-                print("ciblé")
-                self.target = ennemy
-                self.tir_p()
-                self.ciblage()
-                return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
-                            #On le cible, on tir, et on arrête de chercher
-
-        self.canvas.after(250, self.seek) #sinon on recherche
+            self.canvas.after(250, self.seek) #sinon on recherche
     
 
     
@@ -165,21 +168,24 @@ class Tower(Thread):
                 self.target = None      #on n'a plus de cible
                 self.canvas.after_cancel(self.firing)
                 self.canvas.after_cancel(self.ciblement)
+
                 print("on a tiré il y a ",(int(time.time())-int(self.dernier_tir))*1000, "milli secondes" )
                 print("ciblage dans :",int(10000/self.speed)- (int(time.time())-int(self.dernier_tir))*1000, " milli secondes")
-                self.canvas.after(int(10000/self.speed)-(int(time.time())-int(self.dernier_tir))*1000, self.seek) #on recherche
+
+                self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.seek) #on recherche
                 return
-        print("je m'assure dans une demi seconde")
-        self.ciblement=self.canvas.after(1500, self.ciblage)
+            print("je m'assure dans une demi seconde")
+            self.ciblement=self.canvas.after(1500, self.ciblage)
 
     def tir_p(self):
-        """fonction qui 'tire' le projectile"""       
-        print("je tire!")    
-        self.projectile(self) 
-        self.dernier_tir=time.time()
-        print("je retire dans", 10/self.speed, "secondes!")
-        self.firing=self.canvas.after(int(10000/self.speed), self.tir_p) 
-    
+        """fonction qui 'tire' le projectile"""   
+        if self.target!=None:    
+            print("je tire!")    
+            self.projectile(self) 
+            self.dernier_tir=time.time()
+            print("je retire dans", 10/self.speed, "secondes!")
+            self.firing=self.canvas.after(int(10000/self.speed), self.tir_p) 
+        
 # Classe projectile permattant de leur affecter des méthodes
 class Projectile(Thread):
     """classe abstraite des projectiles lancés par les tours"""
@@ -260,7 +266,7 @@ class Projectile(Thread):
                     else:
                         print("pas kaboom")
                         self.canvas.after(150, self.canvas.delete, self.corps)
-                    self.canvas.after(int(10000/self.tour.speed)-(int(time.time())-int(self.tour.dernier_tir))*1000,self.tour.seek())
+                    self.canvas.after(50,self.tour.seek())
                     return
 
             self.canvas.after(150, self.canvas.delete, self.corps)
