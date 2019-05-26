@@ -170,7 +170,7 @@ class Tower(Thread):
                 self.canvas.after(int(10000/self.speed)-(int(time.time())-int(self.dernier_tir))*1000, self.seek) #on recherche
                 return
         print("je m'assure dans une demi seconde")
-        self.ciblement=self.canvas.after(500, self.ciblage)
+        self.ciblement=self.canvas.after(1500, self.ciblage)
 
     def tir_p(self):
         """fonction qui 'tire' le projectile"""       

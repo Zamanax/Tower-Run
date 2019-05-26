@@ -184,11 +184,6 @@ class Lvl(tk.Frame):
         self.heros.reset()
         self.parent.switchFrame(self.nextLvl)
 
-        
-    # Fonction nulle contenant dans les autress niveaux les ennemis à charger
-    def launchWaves(self):
-        pass
-
     def launchWaves(self, dict):
         for i in range(len(dict)):
             dict[i](self, -50*i, self.spawnPoint.y)
@@ -285,7 +280,7 @@ class Lvl1(Lvl):
     gold = 2500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Dwarf,Skeleton,miniSkeleton,miniSkeleton]
+    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Skeleton,miniSkeleton,miniSkeleton]
     wave2 = [miniSkeleton, Skeleton, miniSkeleton]
 
     waveDict = [wave1, wave2]
@@ -305,7 +300,7 @@ class Lvl1(Lvl):
                       Emplacement(538, 302),
                       Emplacement(323, 302),
                       Emplacement(143, 319, state="Mine")]
-        return super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
 
 class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
