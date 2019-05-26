@@ -320,11 +320,13 @@ class Heros(Character):
             elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
                 self.state = "specialMoveLeft"
     
-    def reset(self):
+ def reset(self):
         if self.lvl==0:
             self.changeStats(self.lv0)
             self.state="idleLeft"
-        else:
+        elif self.lvl==3:
+            self.lvl=0
+            self.baseHp = self.hp
             self.changeStats(self.lv0)
             self.idleRight = self.idleRight0
             self.idleLeft = self.idleLeft0
@@ -335,8 +337,21 @@ class Heros(Character):
             self.attackLeft = self.attackLeft0
             self.attackRight = self.attackRight0
             self.death = self.death0
-            self.instantMoveAnim = self.instantMoveAnim0
             self.state="idleLeft"
+        else:
+            self.lvl=0
+            self.baseHp = self.hp
+            self.idleRight = self.idleRight0
+            self.idleLeft = self.idleLeft0
+            self.runRight = self.runRight0
+            self.runLeft = self.runLeft0
+            self.specialMoveRight = self.specialMoveRight0
+            self.specialMoveLeft = self.specialMoveLeft0
+            self.attackLeft = self.attackLeft0
+            self.attackRight = self.attackRight0
+            self.death = self.death0
+            self.state="idleLeft"
+
 
     # Fonction chargée de la transformation du heros
     def transform(self):
@@ -426,6 +441,8 @@ class Heros(Character):
         self.spritesheet = dict["spritesheet"]
         self.spriteSize = dict["spriteSize"]
         self.y_Anim = dict["y_Anim"]
+        self.num_sprintes=dict["num_sprintes"]
+        self.baseHp = self.hp
 
     # Incrémentation du sprite en fonction de l'état
     def incrementSprite(self):
