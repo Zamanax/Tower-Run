@@ -5,7 +5,10 @@ from model.fonctions_utiles import * # pylint: disable=unused-wildcard-import
 import time 
 
 
+<<<<<<< HEAD
 #---------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 17799170050022ad972431c0a06b2b9254853a0f
 class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
 
@@ -45,7 +48,10 @@ class Tower(Thread):
         self.canvas = parent.canvas     #canvas
         self.x = x
         self.y = y
+<<<<<<< HEAD
         
+=======
+>>>>>>> 17799170050022ad972431c0a06b2b9254853a0f
         self.damage=self.damage_evo[0]    #dégâts
         self.price=self.price_evo[1]
         self.ndamage=self.damage_evo[1]
@@ -140,6 +146,7 @@ class Tower(Thread):
     #Attribution des variables partagées pour chaque instance de la classe
     __slots__=("lv1","lv2","lv3","coordsLvl1", "coordsLvl2","coordsLvl3")
 
+<<<<<<< HEAD
     def seek(self):
         """Méthode chargée de rechercher les ennemis à attaquer"""
         ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
@@ -168,10 +175,23 @@ class Tower(Thread):
                 print("on a tiré il y a ",(int(time.time())-int(self.dernier_tir))*1000, "milli secondes" )
                 print("ciblage dans :",int(10000/self.speed)- (int(time.time())-int(self.dernier_tir))*1000, " milli secondes")
                 self.canvas.after(int(10000/self.speed)-(int(time.time())-int(self.dernier_tir))*1000, self.seek) #on recherche
+=======
+            if self.target.hp <= 0: #si ses pv tombent à zero
+                self.target.die(False)  #on appelle la méthode qui provoque la mort de l'ennemi
+                self.target = None      #on n'a plus de cible
+                self.canvas.after(int(10000/self.speed), self.seek) #on recherche
+                return
+
+            elif ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
+                print("cible hors de porté")
+                self.target = None      #on n'a plus de cible
+                self.canvas.after(int(10000/self.speed), self.seek) #on recherche
+>>>>>>> 17799170050022ad972431c0a06b2b9254853a0f
                 return
         print("je m'assure dans une demi seconde")
         self.ciblement=self.canvas.after(500, self.ciblage)
 
+<<<<<<< HEAD
     def tir_p(self):
         """fonction qui 'tire' le projectile"""       
         print("je tire!")    
@@ -179,6 +199,13 @@ class Tower(Thread):
         self.dernier_tir=time.time()
         print("je retire dans", 10/self.speed, "secondes!")
         self.firing=self.canvas.after(int(10000/self.speed), self.tir_p) 
+=======
+            else :
+                self.canvas.after(int(10000/self.speed), self.tir_p) 
+
+        else :
+            self.seek()
+>>>>>>> 17799170050022ad972431c0a06b2b9254853a0f
     
 # Classe projectile permattant de leur affecter des méthodes
 class Projectile(Thread):
@@ -291,7 +318,11 @@ class Mortier(Tower):
 
     damagetype = "explosion"        #type de dégâts
 
+<<<<<<< HEAD
     damage_evo=[30 , 37.5, 67.5]
+=======
+    damage_evo=[30 , 37,5, 67,5]
+>>>>>>> 17799170050022ad972431c0a06b2b9254853a0f
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+1, speed+2]
     price_evo=[250, 500, 1250]
@@ -407,7 +438,11 @@ class Archer(Tower):
     damagetype = "shot"
     d_up=5
     r_up=35
+<<<<<<< HEAD
     damage_evo=[15, 22.5, 40.5]
+=======
+    damage_evo=[15, 22,5, 40.5]
+>>>>>>> 17799170050022ad972431c0a06b2b9254853a0f
     range_evo=[range, range+r_up, range+r_up*2]
     speed_evo=[speed, speed+2, speed+4]
     price_evo=[175, 350, 875]
