@@ -180,10 +180,6 @@ class Lvl(tk.Frame):
         self.parent.switchFrame(self.__class__)
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 4f2ad7107e18e6ddc08dbaf30a04daab129a67d6
     def launchNextLvl(self):
         self.heros.reset()
         self.parent.switchFrame(self.nextLvl)
