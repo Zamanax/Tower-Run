@@ -212,10 +212,17 @@ class Lvl3(Lvl):
     
     spawnPoint = keySpot(0, 175)
 
-    wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
-    wave2 = [miniSkeleton, Skeleton, miniSkeleton]
+    wave1 = [miniSkeleton,Skeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton,Bat]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton,SlimeE,SlimeW,SlimeF,Skeleton,Skeleton]
+    wave3 = [SlimeE,SlimeW,SlimeF,SlimeE,SlimeW,SlimeF,Skeleton,miniSkeleton]
+    wave4 = [Gladiator,SlimeE,SlimeW,SlimeF,Skeleton,RedGladiator]
+    wave5 = [Fat_Totor, Gladiator,SlimeE,SlimeW,SlimeF]
+    wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
+    wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
+    wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
+    wave9 = [Fat_Totor,Gladiator,Fat_totor,Gladiator,Fat_Totor]
 
-    waveDict = [wave1, wave2]
+    waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
 
     authorized = [Rectangle(0, 465, 120, 220),
                   Rectangle(350, 790, 120, 570),
@@ -242,10 +249,17 @@ class Lvl2(Lvl):
     gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [Skeleton, Skeleton, Skeleton, Skeleton, Skeleton]
-    wave2 = [miniSkeleton, Skeleton, miniSkeleton]
+    wave1 = [miniSkeleton,Skeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton,Bat]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton,SlimeE,SlimeW,SlimeF,Skeleton,Skeleton]
+    wave3 = [SlimeE,SlimeW,SlimeF,SlimeE,SlimeW,SlimeF,Skeleton,miniSkeleton]
+    wave4 = [Gladiator,SlimeE,SlimeW,SlimeF,Skeleton,RedGladiator]
+    wave5 = [Fat_Totor, Gladiator,SlimeE,SlimeW,SlimeF]
+    wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
+    wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
+    wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
+    wave9 = [Fat_Totor,Gladiator,Fat_totor,Gladiator,Fat_Totor]
 
-    waveDict = [wave1, wave2]
+    waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
 
     nextLvl = Lvl3
 
@@ -277,13 +291,20 @@ class Lvl2(Lvl):
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
-    gold = 2500
+    gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton]
-    wave2 = [miniSkeleton, Skeleton, miniSkeleton]
+    wave1 = [miniSkeleton,Skeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton,Bat]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton,SlimeE,SlimeW,SlimeF,Skeleton,Skeleton]
+    wave3 = [SlimeE,SlimeW,SlimeF,SlimeE,SlimeW,SlimeF,Skeleton,miniSkeleton]
+    wave4 = [Gladiator,SlimeE,SlimeW,SlimeF,Skeleton,RedGladiator]
+    wave5 = [Fat_Totor, Gladiator,SlimeE,SlimeW,SlimeF]
+    wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
+    wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
+    wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
+    wave9 = [Fat_Totor,Gladiator,Fat_totor,Gladiator,Fat_Totor]
 
-    waveDict = [wave1, wave2]
+    waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
 
     nextLvl = Lvl2
 

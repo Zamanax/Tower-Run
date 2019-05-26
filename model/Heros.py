@@ -11,7 +11,7 @@ class Heros(Character):
     team = "ally"
     lv0 = {}
     compteur = 0
-    reg = 5
+    reg = 10
 
     lastAttackTime = 0.0
 

@@ -72,7 +72,7 @@ class Bat(Ennemy):
     name = 'Bat'
     attackSpeed = 2
     speed = 3
-    damage = 15
+    damage = 5
  
 
     spritesheet = 'view/src/personnage/ennemis/batp.png'
