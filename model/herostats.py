@@ -48,7 +48,7 @@ class Ichigo(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 400/self.quality, "runLeft": 600/self.quality,
-                       "attackRight": 800/self.quality, "attackLeft": 1000/self.quality, "die": 0/self.quality, "specialMoveRight": 1200/self.quality, "specialMoveLeft": 1400/self.quality, "transform": 1800/self.quality, "die" : 2000/self.quality}
+                       "attackRight": 800/self.quality, "attackLeft": 1000/self.quality, "specialMoveRight": 1200/self.quality, "specialMoveLeft": 1400/self.quality, "transform": 1800/self.quality, "die" : 2000/self.quality}
         }
 
         self.lv1 = {
@@ -66,7 +66,7 @@ class Ichigo(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 400/self.quality, "runLeft": 600/self.quality, "instantMove": 800/self.quality,
-                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "die": 0/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "transform": 2200/self.quality, "die" : 2400/self.quality}
+                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "transform": 2200/self.quality, "die" : 2400/self.quality}
         }
 
         self.lv2 = {
@@ -84,7 +84,7 @@ class Ichigo(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 800/self.quality, "runLeft": 1000/self.quality, "instantMove": 400/self.quality,
-                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die": 0/self.quality, "transform": 2200/self.quality, "die" : 2400/self.quality}
+                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "transform": 2200/self.quality, "die" : 2400/self.quality}
         }
 
         self.lv3 = {
@@ -101,7 +101,7 @@ class Ichigo(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 800/self.quality, "runLeft": 1000/self.quality, "instantMove": 400/self.quality,
-                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die": 0/self.quality, "die" : 2000/self.quality}
+                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die" : 2000/self.quality}
         }
 
 
@@ -122,7 +122,7 @@ class Goku(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 400/self.quality, "runLeft": 600/self.quality,
-                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "die": 200/self.quality, "transform": 2200/self.quality,
+                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "transform": 2200/self.quality,
                        "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die": 2400/self.quality}
         }
 
@@ -139,7 +139,7 @@ class Goku(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 400/self.quality, "runLeft": 600/self.quality,
-                       "instantMove": 800/self.quality, "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "die": 200/self.quality,
+                       "instantMove": 800/self.quality, "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality,
                        "transform": 2200/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die": 2400/self.quality}
         }
 
@@ -156,7 +156,7 @@ class Goku(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 400/self.quality, "runLeft": 600/self.quality, "instantMove": 800/self.quality,
-                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "die": 200/self.quality, "transform": 2200/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die": 2400/self.quality}
+                       "attackRight": 1200/self.quality, "attackLeft": 1400/self.quality, "transform": 2200/self.quality, "specialMoveRight": 1600/self.quality, "specialMoveLeft": 1800/self.quality, "die": 2400/self.quality}
         }
 
         self.lv3 = {
@@ -172,6 +172,6 @@ class Goku(Heros):
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
             "y_Anim": {"idleRight": 0/self.quality, "idleLeft": 200/self.quality, "runRight": 400/self.quality, "runLeft": 600/self.quality, "instantMove": 0/self.quality,
-                       "attackRight": 800/self.quality, "attackLeft": 1000/self.quality, "die": 200/self.quality, "specialMoveRight": 1200/self.quality, "specialMoveLeft": 1400/self.quality, "die" : 1600/self.quality}
+                       "attackRight": 800/self.quality, "attackLeft": 1000/self.quality, "specialMoveRight": 1200/self.quality, "specialMoveLeft": 1400/self.quality, "die" : 1600/self.quality}
         }
 
