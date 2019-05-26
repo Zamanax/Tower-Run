@@ -176,10 +176,12 @@ class Lvl(tk.Frame):
         self.restartBtn.place(x = 500, y = 400)
 
     def restartGame(self):
+        self.heros.reset()
         self.parent.switchFrame(self.__class__)
 
 
     def launchNextLvl(self):
+        self.heros.reset()
         self.parent.switchFrame(self.nextLvl)
 
         
@@ -280,7 +282,7 @@ class Lvl2(Lvl):
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
-    gold = 500
+    gold = 2500
     defaultPath = [keySpot(1200, 225)]
 
     wave1 = [miniSkeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,Dwarf,Skeleton,miniSkeleton,miniSkeleton]
