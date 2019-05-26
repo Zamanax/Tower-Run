@@ -27,10 +27,10 @@ class Ennemy (Character):
                 self.loseLife()
 
     def loseLife(self):
-        if self.parent.health.get() <= 0 and self.parent.lost is None:
-            self.parent.loseGame()
-        else :
+        if self.parent.lost is None:
             self.parent.health.set(self.parent.health.get() - 1)
+            if self.parent.health.get() <= 0 :
+                self.parent.loseGame()
         del self
 
 #---------------------------- Différents ennemis présents dans le jeu --------------
