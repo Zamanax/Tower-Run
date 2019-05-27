@@ -96,7 +96,7 @@ class Ichigo(Heros):
             # Spritesheet du Heros
             "damagingSprite": [ 1, 2, 3, 4, 5],
             "num_sprintes": {"idleRight": 4, "idleLeft": 4, "runRight": 2, "instantMove": 2,
-                             "runLeft": 2, "attackRight": 6, "attackLeft": 6, "die": 5, "specialMoveRight": 14, "specialMoveLeft": 14},
+                             "runLeft": 2, "attackRight": 6, "attackLeft": 6, "transform": 6, "die": 5, "specialMoveRight": 14, "specialMoveLeft": 14},
             "spritesheet": "view/src/personnage/heros/Ichigo/Ichigo3 (" + str(self.quality) + ").png",
             "spriteSize": 200/self.quality,
             "zoom": self.quality,
