@@ -224,7 +224,7 @@ class Lvl3(Lvl):
                     Emplacement(960,280),
                     Emplacement(840,385),
                     Emplacement(840,485)]
-        return super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
 class Lvl2(Lvl):
@@ -269,7 +269,7 @@ class Lvl2(Lvl):
                     Emplacement(955,610),
                     Emplacement(55,375),
                     Emplacement(230,375)]
-        return super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
 class Lvl1(Lvl):

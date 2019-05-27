@@ -377,7 +377,7 @@ class Mugetsu(Thread):
             del self
         elif self.longueur == self.longueurMax-1:
             self.canvas.after(350, self.tir)
-            if self.hero.state== "specialMoveRight"
+            if self.hero.state== "specialMoveRight":
                 self.hero.state="idleRight"
             else:
                 self.hero.state="idleLeft"
