@@ -109,8 +109,8 @@ class Interface(tk.Frame):
                                          bg="#eeeeee", activebackground="#eeeeee", highlightthickness=0, command=self.preView)
         self.mortierchb.place(x=160, y=246)
         self.forgeronchb = tk.Radiobutton(
-            self.interface, value=Tow.Forgeron, text="F", variable=self.v, command=self.preView)
-        self.forgeronchb.place(x=160, y=300)
+            self.interface, value=Tow.Forgeron, text="Forge", variable=self.v, command=self.preView)
+        self.forgeronchb.place(x=140, y=280)
         
         if self.hero.name == "Aventurier" : self.forgeronchb["state"] = "disabled"
 
@@ -140,23 +140,23 @@ class Interface(tk.Frame):
         self.life.place(x=150, y=617)
 
         self.mageWLabel = tk.Label(
-            self.interface, text="50", bg="#1ea7e1", fg="black", font=("Arial", 8))
+            self.interface, text="175", bg="#1ea7e1", fg="black", font=("Arial", 8))
         self.mageWLabel.place(x=75, y=26)
 
         self.mageELabel = tk.Label(
-            self.interface, text="50", bg="#73cd4b", fg="black", font=("Arial", 8))
+            self.interface, text="175", bg="#73cd4b", fg="black", font=("Arial", 8))
         self.mageELabel.place(x=75, y=82)
 
         self.mageFLabel = tk.Label(
-            self.interface, text="50", bg="#e86a17", fg="black", font=("Arial", 8))
+            self.interface, text="175", bg="#e86a17", fg="black", font=("Arial", 8))
         self.mageFLabel.place(x=75, y=137)
 
         self.archerLabel = tk.Label(
-            self.interface, text="50", bg="#ffcc00", fg="black", font=("Arial", 8))
+            self.interface, text="175", bg="#ffcc00", fg="black", font=("Arial", 8))
         self.archerLabel.place(x=75, y=192)
 
         self.mortierLabel = tk.Label(
-            self.interface, text="50", bg="#eeeeee", fg="black", font=("Arial", 8))
+            self.interface, text="250", bg="#eeeeee", fg="black", font=("Arial", 8))
         self.mortierLabel.place(x=75, y=250)
 
     def selectSpot(self, event):
