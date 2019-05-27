@@ -200,7 +200,7 @@ class Genkidamasupreme(Thread):
     boule2 = [200, 0, 400, 200]
     head = None
     img = "view/src/personnage/heros/Goku/genkidamasupreme.png"
-    v = 5
+    v = 3
     longueurMax = 20
 
     def __init__(self, hero):
@@ -235,7 +235,7 @@ class Genkidamasupreme(Thread):
             self.canvas.delete(self.head)
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40:
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != "die":
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
@@ -250,6 +250,13 @@ class Genkidamasupreme(Thread):
         self.head = self.canvas.create_image(self.x, self.y, image=self.corps)
         if not self.longueur == self.longueurMax:
             self.canvas.after(150, self.tir)
+        else:
+            if self.hero.state == "specialMoveRight":
+                self.hero.state = "idleRight"
+            else: 
+                self.hero.state = "idleLeft"
+            self.hero.incrementSprite()
+
 
 class GetsugaTenshou(Genkidamasupreme):
     gauche1 = [0, 0, 200, 200]
