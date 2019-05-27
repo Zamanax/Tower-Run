@@ -142,48 +142,34 @@ class Tower(Thread):
     
     def seek(self):
         """Méthode chargée de rechercher les ennemis à attaquer"""
-        # print("on me dit de chercher")
+        
         if self.target==None:
             ennemies = self.parent.ennemies  #liste des ennemis sur le niveau
             for ennemy in ennemies:
                 if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 <= self.range and ennemy.state != "die": 
-                    # print("vu")
+
                     self.target = ennemy
-                    # Thread(target=self.ciblage())
-                    self.ciblage()
-                    # print("je le cible là")
-                    # print("ciblé")
-                    # if self.dernier_tir!=None:
-                    #     # print("déjà tiré avant")
-                    #     self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.tir_p())
-                    # else:
-                        # print("premier tir de ma vie woulah")   
+                    
+                    self.ciblage()  
                     self.tir_p()
                     return      #si l'ennemi n'est pas mort et qu'il est dans la portée de tir
                                 #On le cible, on tir, et on arrête de chercher
-            # print("je re recherche")
             self.canvas.after(250, self.seek) #sinon on recherche
-    
-
     
     def ciblage(self): 
         if self.target!=None : #si un ennemi est ciblé
             
             if ((self.x -self.target.x)**2+(self.y -self.target.y)**2)**0.5>=self.range: #si l'ennemi sort de la portée de tir
-                # print("il est sorti")
                 self.target = None      #on n'a plus de cible
                 self.canvas.after_cancel(self.firing)
                 self.canvas.after_cancel(self.ciblement)
                 self.canvas.after(int(10000/self.speed)-(int(time.time()-self.dernier_tir))*1000, self.seek) #on recherche
                 return
-            # print("je m'assure dans une demi seconde")
         self.ciblement=self.canvas.after(50, self.ciblage)
 
     def tir_p(self):
-        """fonction qui 'tire' le projectile"""
-        # print("ah on me dit qu'il faut que je tire")   
+        """fonction qui 'tire' le projectile"""   
         if self.target!=None:  
-            # print("je tire")     
             self.projectile(self) 
             self.dernier_tir=time.time()
             self.firing=self.canvas.after(int(10000/self.speed), self.tir_p) 
@@ -226,13 +212,9 @@ class Projectile(Thread):
         pass
 
     def traj(self):
-        # print("calcule de trajectoire")
         n_coups=int((((self.x-self.tx)**2+(self.y-self.ty)**2)**0.5)/self.v)  #distance tour-ennemie divisée par le nombre de pixel de déplacement par coup
         self.inc_abs=-(self.x-self.tx)/n_coups                 
         self.inc_ord=-(self.y-self.ty)/n_coups
-        # print("calcul fini je tire")
-        # if self.target.hp-self.damage<=0:
-            # print("JE VAIS LE TUER")
         self.tir()   
                                                         #tir!
         
@@ -243,7 +225,6 @@ class Projectile(Thread):
             self.canvas.delete(self.corps)  #on supprime
 
         if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
-            # print(self.target.hp)
             to_hit=[]
             if self.zone != -1:
                 for ennemy in self.tour.parent.ennemies:        #toute la partie de l'explosion
@@ -253,37 +234,32 @@ class Projectile(Thread):
                 to_hit.append(self.target)
 
             self.canvas.delete(self.corps)              #on efface l'image
-            # self.canvas.create_oval(self.x+self.zone, self.y+self.zone, self.x-self.zone, self.y-self.zone)
             self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)     #on met l'image d'impact
-            # self.target.hp-=self.damage            
-            #on enlève les dégâts
+
+            if self.boomname=="view/src/tours/projectile/kaboom.png":
+                self.canvas.after(1000, self.canvas.delete, self.corps)
+            else:
+                self.canvas.after(150, self.canvas.delete, self.corps)
             
             for cible in to_hit:
                 if (cible.__class__.__name__ == "SlimeE" and self.__class__.__name__ == 'BouleDeFeu') or (cible.__class__.__name__ == "SlimeF" and self.__class__.__name__ == 'LameDEau') or (cible.__class__.__name__ == "SlimeW" and self.__class__.__name__ == 'Boulet'):
                     cible.hp-=2*self.tour.damage
                 else:                                       #Partie coup critique élémentaire
                     cible.hp-=self.tour.damage
+            
+            for cible in to_hit[1:len(to_hit)-1]:
+                if cible.hp<=0:
+                    cible.die(False)
 
             if self.target.hp<=0:
-                # print("je tue")
-                cible.die(False)
-                # print("j'ai plus de cible")
+                self.target.die(False)
                 self.tour.target=None 
-                # print("j'arrête de tirer")
                 self.canvas.after_cancel(self.tour.firing)
-                # print("j'arrete de cibler")
                 self.canvas.after_cancel(self.tour.ciblement)
-                if self.boomname=="view/src/tours/projectile/kaboom.png":
-                    # print("Kaboom") 
-                    self.canvas.after(650, self.canvas.delete, self.corps)
-                else:
-                    # print("pas kaboom")
-                    self.canvas.after(150, self.canvas.delete, self.corps)
-                # print("je vais lancer une recherche")
                 self.tour.seek()
                 return
 
-            self.canvas.after(15, self.canvas.delete, self.corps)
+            self.canvas.after(20, self.canvas.delete, self.corps)
             return
         
 
@@ -292,7 +268,7 @@ class Projectile(Thread):
     
 
         self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
-        self.canvas.after(15,self.tir)  #récurssion
+        self.canvas.after(22,self.tir)  #récurssion
 
 #----------------------------------------------------------------------------------------------------
                 
