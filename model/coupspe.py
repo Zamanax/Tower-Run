@@ -200,7 +200,7 @@ class Genkidamasupreme(Thread):
     boule2 = [200, 0, 400, 200]
     head = None
     img = "view/src/personnage/heros/Goku/genkidamasupreme.png"
-    v = 5
+    v = 3
     longueurMax = 20
 
     def __init__(self, hero):
@@ -377,5 +377,9 @@ class Mugetsu(Thread):
             del self
         elif self.longueur == self.longueurMax-1:
             self.canvas.after(350, self.tir)
+            if self.hero.state== "specialMoveRight"
+                self.hero.state="idleRight"
+            else:
+                self.hero.state="idleLeft"
         else:
             self.canvas.after(200, self.tir)
