@@ -9,11 +9,8 @@ class Tower(Thread):
     """Classe abstraite dont vont hériter les autres tours"""
 
     lvl = 1         # niveau de la tour 
-    # lv1 = None
-    # lv2 = None
-    # lv3 = None      # attributs pour les images
     last_storm=None
-    last_img=None
+    last_img=None   # attributs pour les images
     seeking=None
     indice=0
     target=None
@@ -228,6 +225,10 @@ class Projectile(Thread):
             self.canvas.delete(self.corps)  #on supprime
 
         if self.tx-10<=self.x<=self.tx+10 and self.ty-16<=self.y<=self.ty+16:       #si le projectile touche l'ennemi
+                         #on efface l'image
+            self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)     #on met l'image d'impact
+            self.boomboom=False
+            
             to_hit=[]
             if self.zone != -1:
                 for ennemy in self.tour.parent.ennemies:        #toute la partie de l'explosion
@@ -235,11 +236,6 @@ class Projectile(Thread):
                         to_hit.append(ennemy)
             else :
                 to_hit.append(self.target)
-
-            self.canvas.delete(self.corps)              #on efface l'image
-            self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)     #on met l'image d'impact
-            self.boomboom=False
-            self.canvas.after(1000, self.canvas.delete, self.corps)
             
             for cible in to_hit:
                 if (cible.__class__.__name__ == "SlimeE" and self.__class__.__name__ == 'BouleDeFeu') or (cible.__class__.__name__ == "SlimeF" and self.__class__.__name__ == 'LameDEau') or (cible.__class__.__name__ == "SlimeW" and self.__class__.__name__ == 'Boulet'):
@@ -272,7 +268,7 @@ class Projectile(Thread):
         self.y+=self.inc_ord
     
 
-        self.corps=self.canvas.create_image(self.x, self.y, image=self.boom)
+        self.corps=self.canvas.create_image(self.x, self.y, image=self.img)
         self.feufeufeu=self.canvas.after(20,self.tir)  #récurssion
 
 #----------------------------------------------------------------------------------------------------
@@ -441,7 +437,8 @@ class Forgeron(Tower):
     
     def seek(self):
         pass
-
+    def ciblage(self):
+        pass
     def tir_p(self):
         pass
     
@@ -451,13 +448,13 @@ class Forgeron(Tower):
 
     def upgrade1(self):
         self.lvl = 2
-        self.price=self.price_evo[1]
+        self.price=self.price_evo[2]
         self.show_evol()
         self.hero.transform()
     
     def upgrade2(self):
         self.lvl=3
-        self.price=self.price_evo[2]
+        self.price="Max"
         self.show_evol()
         self.hero.transform()
     
@@ -469,8 +466,8 @@ class Mine(Tower):
     coordsLvl2 = [165,8,289,120]
     coordsLvl3 = [334,5,486,125]
     image= 'view/src/tours/tours/Mine.png'
-    price_evo=[350,800, 1500]
-    production=30
+    price_evo=[0,800, 1500]
+    production=0
     def __init__(self, parent, x, y):
         #self.root=tk.Tk()
         #test_subimage(self.image, 3, 51, 82, 138, self.root)
@@ -486,6 +483,9 @@ class Mine(Tower):
         self.canvas.after(5000, self.produce)
     
     def seek(self):
+        pass
+    
+    def ciblage(self):
         pass
 
     def tir_p(self):
