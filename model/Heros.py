@@ -320,7 +320,7 @@ class Heros(Character):
             elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
                 self.state = "specialMoveLeft"
     
- def reset(self):
+    def reset(self):
         if self.lvl==0:
             self.changeStats(self.lv0)
             self.state="idleLeft"
