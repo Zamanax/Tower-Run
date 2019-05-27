@@ -220,7 +220,7 @@ class Lvl3(Lvl):
     wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
     wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
     wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
-    wave9 = [Fat_Totor,Gladiator,Fat_totor,Gladiator,Fat_Totor]
+    wave9 = [Fat_Totor,Gladiator , Fat_Totor, Gladiator,Fat_Totor]
 
     waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
 
@@ -257,7 +257,7 @@ class Lvl2(Lvl):
     wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
     wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
     wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
-    wave9 = [Fat_Totor,Gladiator,Fat_totor,Gladiator,Fat_Totor]
+    wave9 = [Fat_Totor,Gladiator,Fat_Totor,Gladiator,Fat_Totor]
 
     waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
 
