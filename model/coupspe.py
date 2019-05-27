@@ -346,8 +346,10 @@ class Mugetsu(Thread):
 
         if self.hero.state == "specialMoveRight":
             self.x = hero.x+50
+            self.newstate="idleRight"
         elif self.hero.state == "specialMoveLeft":
             self.x = hero.x-50
+            self.newstate="idleLeft"
             self.v = -self.v
 
         self.tir()
@@ -368,7 +370,7 @@ class Mugetsu(Thread):
         self.trainee.append(self.corps)
 
         if self.longueur == self.longueurMax:
-            self.hero.state = "idleRight"
+            self.hero.state = self.newstate
             self.hero.sprite = 0
             if self.hero.incrementing == None:
                 self.hero.incrementSprite()
@@ -377,9 +379,5 @@ class Mugetsu(Thread):
             del self
         elif self.longueur == self.longueurMax-1:
             self.canvas.after(350, self.tir)
-            if self.hero.state== "specialMoveRight":
-                self.hero.state="idleRight"
-            else:
-                self.hero.state="idleLeft"
         else:
             self.canvas.after(200, self.tir)
