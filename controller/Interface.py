@@ -27,24 +27,26 @@ class Interface(tk.Frame):
 
     def __init__(self, parent, *args, **kwargs):
         self.lochoice = tk.PhotoImage(file="view/src/assets/lochoice.png")
-        self.hammerSign = tk.PhotoImage(file="view/src/tours/tours/HammerSign.png")
-        self.moneyIcon = tk.PhotoImage(file="view/src/assets/Money - Copie.png")
+        self.hammerSign = tk.PhotoImage(
+            file="view/src/tours/tours/HammerSign.png")
+        self.moneyIcon = tk.PhotoImage(
+            file="view/src/assets/Money - Copie.png")
         self.parent = parent
         self.canvas = parent.canvas
-        self.hero=self.parent.heros
+        self.hero = self.parent.heros
 
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
         self.v = tk.StringVar()
 
         self.backImg = tk.PhotoImage(file="view/src/background/Interface.png")
-        
+
         self.createInterfaceCanvas()
         # self.createHerosCanvas()
         self.makeLabel()
         self.emplacementMake()
         self.makeButton()
-        
+
         self.interface.pack()
 
     def createInterfaceCanvas(self):
@@ -57,10 +59,12 @@ class Interface(tk.Frame):
     def createHerosCanvas(self):
         self.interfaceHero = tk.Canvas(
             self, width=200, height=650, highlightthickness=0, bg="#743A3A")
-        self.swapButton2 =tk.Button(self.interfaceHero, command=self.switchCanvas, text="Swap", width=2)
+        self.swapButton2 = tk.Button(
+            self.interfaceHero, command=self.switchCanvas, text="Swap", width=2)
         self.swapButton2.place(x=12, y=550)
 
-        self.specialButton = tk.Button(self.interfaceHero, command=self.hero.specialAttack, text="Special", width=3)
+        self.specialButton = tk.Button(
+            self.interfaceHero, command=self.hero.specialAttack, text="Special", width=3)
         self.specialButton.place(x=145, y=550)
 
         self.damage = tk.Label(
@@ -82,14 +86,18 @@ class Interface(tk.Frame):
     def showHeros(self):
         if self.hero_lastimg:
             self.interfaceHero.delete(self.hero_lastimg)
-        self.heroToShow = (self.heroToShow+1) % self.hero.num_sprintes["idleLeft"]
-        if self.heroToShow > len(self.hero.idleLeft) : self.heroToShow = 0
-        self.hero_lastimg = self.interfaceHero.create_image(100, 350, image=self.hero.idleLeft[self.heroToShow])
+        self.heroToShow = (
+            self.heroToShow+1) % self.hero.num_sprintes[State.IdleLeft]
+        if self.heroToShow > len(self.hero.idleLeft):
+            self.heroToShow = 0
+        self.hero_lastimg = self.interfaceHero.create_image(
+            100, 350, image=self.hero.idleLeft[self.heroToShow])
         self.interfaceHero.after(250, self.showHeros)
 
     def updateHp(self):
         if not self.interfaceShown:
-            self.hp["text"]="Points de Vie: " + str(self.hero.hp)+"/"+str(self.hero.baseHp)
+            self.hp["text"] = "Points de Vie: " + \
+                str(self.hero.hp)+"/"+str(self.hero.baseHp)
 
 # ___________________________On va faire les check buttons ici max/yann ______________
     def makeButton(self):
@@ -111,8 +119,9 @@ class Interface(tk.Frame):
         self.forgeronchb = tk.Radiobutton(
             self.interface, value=Tow.Forgeron, text="Forge", variable=self.v, command=self.preView)
         self.forgeronchb.place(x=140, y=280)
-        
-        if self.hero.name == "Aventurier" : self.forgeronchb["state"] = "disabled"
+
+        if self.hero.name == "Aventurier":
+            self.forgeronchb["state"] = "disabled"
 
         self.buttonList = [self.forgeronchb, self.waterchb,
                            self.earthchb, self.firechb, self.archerchb, self.mortierchb]
@@ -124,10 +133,12 @@ class Interface(tk.Frame):
 
         self.buildButton.place(x=12, y=585)
 
-        self.swapButton1 = tk.Button(self.interface, command=self.switchCanvas, text="Swap", width=2)
+        self.swapButton1 = tk.Button(
+            self.interface, command=self.switchCanvas, text="Swap", width=2)
         self.swapButton1.place(x=12, y=550)
 
-        self.waveBtn = tk.Button(self.interface, command=self.parent.nextWave, text="Wave", width=2)
+        self.waveBtn = tk.Button(
+            self.interface, command=self.parent.nextWave, text="Wave", width=2)
         self.waveBtn.place(x=88, y=617)
 
     def makeLabel(self):
@@ -174,22 +185,21 @@ class Interface(tk.Frame):
     def preView(self):
         if self.interfaceShown:
             state = ''.join([i for i in self.v.get() if not i.isdigit()])
-            
+
             for btn in self.buttonList:
                 btn["state"] = "normal"
-            
+
             if self.hero.name == "Aventurier":
                 self.forgeronchb["state"] = "disabled"
-            else :
-                for spot in self.parent.spots :
-                    if spot.tower: 
+            else:
+                for spot in self.parent.spots:
+                    if spot.tower:
                         if spot.tower.__str__() is "Forgeron":
                             self.forgeronchb["state"] = "disabled"
                             if state == "Forgeron":
                                 self.waterchb.select()
                             break
-            
-                
+
             if self.spotName:
                 self.spotName.destroy()
             if self.spotDamage:
@@ -281,15 +291,15 @@ class Interface(tk.Frame):
                             self.selected.tower.damagetype)
                         self.spotSpeed["text"] += str(self.selected.tower.speed) + \
                             " ⇢ " + str(self.selected.tower.nspeed)
-                            
+
                         self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-                                                            outline="blue")
+                                                                     outline="blue")
                     else:
                         self.spotDamage.destroy()
                         self.spotZone.destroy()
                         self.spotDamagetype.destroy()
                         self.spotSpeed.destroy()
-                        
+
                     if self.selected.tower.price is not "Max" and self.selected.tower.price > self.parent.gold.get():
                         self.buildButton["state"] = "disabled"
                         self.buildButton["text"] = "Pas Assez d'Or"
@@ -315,12 +325,11 @@ class Interface(tk.Frame):
                             str(self.dico[state].speed)
 
                         self.range_preview = self.canvas.create_oval(self.selected.x+self.half_range, self.selected.y+self.half_range, self.selected.x - self.half_range, self.selected.y - self.half_range,
-                                                            outline="blue")
+                                                                     outline="blue")
 
                     if self.dico[state].price > self.parent.gold.get():
                         self.buildButton["state"] = "disabled"
                         self.buildButton["text"] = "Pas Assez d'Or"
-
 
             else:
                 self.buildButton["state"] = "disabled"
@@ -352,13 +361,12 @@ class Interface(tk.Frame):
             self.createHerosCanvas()
             self.interfaceHero.pack()
             self.interfaceShown = False
-        else : 
+        else:
             self.interfaceHero.destroy()
             self.createInterfaceCanvas()
             self.interface.pack()
             self.interfaceShown = True
 
-    
     def emplacementMake(self):
         for spot in self.parent.spots:
             if spot.state == None:

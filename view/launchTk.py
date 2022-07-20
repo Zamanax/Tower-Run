@@ -10,10 +10,13 @@ import asyncio
 import os
 
 # Classe des emplacement stockants les données pour l'interface
+
+
 class keySpot():
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
 
 class Rectangle():
     def __init__(self, min_x, max_x, min_y, max_y):
@@ -21,6 +24,7 @@ class Rectangle():
         self.max_x = max_x
         self.min_y = min_y
         self.max_y = max_y
+
 
 class Emplacement(keySpot):
     bonus = {}
@@ -40,6 +44,8 @@ class Emplacement(keySpot):
             self.bonus = bonus
 
 # Classe des niveaux
+
+
 class Lvl(tk.Frame):
     # Définiton des variables de chaque niveau
     heros = None
@@ -52,8 +58,6 @@ class Lvl(tk.Frame):
     wave1 = []
     waveIndex = 0
 
-
-
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
 
@@ -61,8 +65,8 @@ class Lvl(tk.Frame):
         selectedHeros = kwargs.get('heros', None)
         # Défintion de l'arrière plan du niveau
         self.backImg = tk.PhotoImage(file=self.image)
-        self.gagne=tk.PhotoImage(file="view/src/background/Win.png")
-        self.perdu=tk.PhotoImage(file="view/src/background/Lose.png")
+        self.gagne = tk.PhotoImage(file="view/src/background/Win.png")
+        self.perdu = tk.PhotoImage(file="view/src/background/Lose.png")
 
         # Définition des dimensions de la fenêtre
         self.rootWidth = self.backImg.width()
@@ -95,9 +99,10 @@ class Lvl(tk.Frame):
             self.heros.y = 250
             self.heros.canvas = self.canvas
             self.heros.parent = self
-        else :
+        else:
             if selectedHeros == "Ichigo":
-                self.heros = Ichigo(self, 900, 250, quality=self.parent.quality)
+                self.heros = Ichigo(
+                    self, 900, 250, quality=self.parent.quality)
             elif selectedHeros == "Goku":
                 self.heros = Goku(self, 900, 250, quality=self.parent.quality)
             else:
@@ -114,7 +119,7 @@ class Lvl(tk.Frame):
         self.canvas.bind("<Button-3>", self.heros.mouseMove)
         self.canvas.bind("<Button-2>", self.heros.instantMove)
         self.canvas.bind_all("<space>", self.heros.specialAttack)
-        self.canvas.bind_all("<KeyPress-Right>",self.heros.reOrient)
+        self.canvas.bind_all("<KeyPress-Right>", self.heros.reOrient)
         self.canvas.bind_all("<KeyPress-Left>", self.heros.reOrient)
 
         # Pack des canvas pour affichage
@@ -142,26 +147,29 @@ class Lvl(tk.Frame):
     def winGame(self):
         nb = 0
         for ennemy in self.ennemies:
-            if ennemy.state == "die":
-                nb +=1
-        if nb == len(self.ennemies) and self.waveIndex == len(self.waveDict): # and self.parent.waveIndex == len(self.parent.waveDict) -1:
-            self.win = self.canvas.create_image(540,325, image=self.gagne)
+            if ennemy.state == State.Die:
+                nb += 1
+        # and self.parent.waveIndex == len(self.parent.waveDict) -1:
+        if nb == len(self.ennemies) and self.waveIndex == len(self.waveDict):
+            self.win = self.canvas.create_image(540, 325, image=self.gagne)
 
-            self.restartBtn = tk.Button(self.canvas, text="Restart", command=self.restartGame)
-            self.restartBtn.place(x = 400, y = 450)
+            self.restartBtn = tk.Button(
+                self.canvas, text="Restart", command=self.restartGame)
+            self.restartBtn.place(x=400, y=450)
 
-            self.nextLvlBtn = tk.Button(self.canvas, text="Next Level", command=self.launchNextLvl)
-            self.nextLvlBtn.place(x = 600, y = 450)
+            self.nextLvlBtn = tk.Button(
+                self.canvas, text="Next Level", command=self.launchNextLvl)
+            self.nextLvlBtn.place(x=600, y=450)
 
     def loseGame(self):
-        self.lost = self.canvas.create_image(540,325, image=self.perdu)
-        self.restartBtn = tk.Button(self.canvas, text="Restart", command=self.restartGame)
-        self.restartBtn.place(x = 500, y = 400)
+        self.lost = self.canvas.create_image(540, 325, image=self.perdu)
+        self.restartBtn = tk.Button(
+            self.canvas, text="Restart", command=self.restartGame)
+        self.restartBtn.place(x=500, y=400)
 
     def restartGame(self):
         self.heros.reset()
         self.parent.switchFrame(self.__class__)
-
 
     def launchNextLvl(self):
         self.heros.reset()
@@ -184,6 +192,8 @@ class Lvl(tk.Frame):
             del el
 
 # -----------------Chargement de la Frame LVL 3 ----------------------
+
+
 class Lvl3(Lvl):
     image = "view/src/background/Lvl3Background.png"
     gold = 500
@@ -192,61 +202,69 @@ class Lvl3(Lvl):
                    keySpot(730, 520),
                    keySpot(730, 175),
                    keySpot(1200, 175)]
-    
+
     spawnPoint = keySpot(0, 175)
 
-    wave1 = [miniSkeleton,Skeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton,Bat]
-    wave2 = [miniSkeleton, Skeleton, miniSkeleton,SlimeE,SlimeW,SlimeF,Skeleton,Skeleton]
-    wave3 = [SlimeE,SlimeW,SlimeF,SlimeE,SlimeW,SlimeF,Skeleton,miniSkeleton]
-    wave4 = [Gladiator,SlimeE,SlimeW,SlimeF,Skeleton,RedGladiator]
-    wave5 = [Fat_Totor, Gladiator,SlimeE,SlimeW,SlimeF]
-    wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
-    wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
-    wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
-    wave9 = [Fat_Totor,Gladiator , Fat_Totor, Gladiator,Fat_Totor]
+    wave1 = [miniSkeleton, Skeleton, miniSkeleton, miniSkeleton,
+             Bat, Skeleton, miniSkeleton, miniSkeleton, miniSkeleton, Bat]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton,
+             SlimeE, SlimeW, SlimeF, Skeleton, Skeleton]
+    wave3 = [SlimeE, SlimeW, SlimeF, SlimeE,
+             SlimeW, SlimeF, Skeleton, miniSkeleton]
+    wave4 = [Gladiator, SlimeE, SlimeW, SlimeF, Skeleton, RedGladiator]
+    wave5 = [Fat_Totor, Gladiator, SlimeE, SlimeW, SlimeF]
+    wave6 = [Bat, Bat, Totor, SlimeE, SlimeW, SlimeF, Totor]
+    wave7 = [Fat_Totor, RedGladiator, SlimeE, SlimeW, SlimeF, RedGladiator]
+    wave8 = [Fat_Totor, SlimeE, SlimeW, SlimeF, Fat_Totor]
+    wave9 = [Fat_Totor, Gladiator, Fat_Totor, Gladiator, Fat_Totor]
 
-    waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
+    waveDict = [wave1, wave2, wave3, wave4, wave5, wave6, wave7, wave8, wave9]
 
     authorized = [Rectangle(0, 465, 120, 220),
                   Rectangle(350, 790, 120, 570),
                   Rectangle(680, 1200, 120, 220)]
 
     def __init__(self, parent, *args, **kwargs):
-        self.spots=[Emplacement(50,280),
-                    Emplacement(180,280),
-                    Emplacement(300,280),
-                    Emplacement(315,385),
-                    Emplacement(510,180),
-                    Emplacement(635,180),
-                    Emplacement(510,390),
-                    Emplacement(635,390),
-                    Emplacement(840,280),
-                    Emplacement(960,280),
-                    Emplacement(840,385),
-                    Emplacement(840,485)]
+        self.spots = [Emplacement(50, 280),
+                      Emplacement(180, 280),
+                      Emplacement(300, 280),
+                      Emplacement(315, 385),
+                      Emplacement(510, 180),
+                      Emplacement(635, 180),
+                      Emplacement(510, 390),
+                      Emplacement(635, 390),
+                      Emplacement(840, 280),
+                      Emplacement(960, 280),
+                      Emplacement(840, 385),
+                      Emplacement(840, 485)]
         super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 2 ----------------------
+
+
 class Lvl2(Lvl):
     image = "view/src/background/Lvl2Background.png"
     gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [miniSkeleton,Skeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton,Bat]
-    wave2 = [miniSkeleton, Skeleton, miniSkeleton,SlimeE,SlimeW,SlimeF,Skeleton,Skeleton]
-    wave3 = [SlimeE,SlimeW,SlimeF,SlimeE,SlimeW,SlimeF,Skeleton,miniSkeleton]
-    wave4 = [Gladiator,SlimeE,SlimeW,SlimeF,Skeleton,RedGladiator]
-    wave5 = [Fat_Totor, Gladiator,SlimeE,SlimeW,SlimeF]
-    wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
-    wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
-    wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
-    wave9 = [Fat_Totor,Gladiator,Fat_Totor,Gladiator,Fat_Totor]
+    wave1 = [miniSkeleton, Skeleton, miniSkeleton, miniSkeleton,
+             Bat, Skeleton, miniSkeleton, miniSkeleton, miniSkeleton, Bat]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton,
+             SlimeE, SlimeW, SlimeF, Skeleton, Skeleton]
+    wave3 = [SlimeE, SlimeW, SlimeF, SlimeE,
+             SlimeW, SlimeF, Skeleton, miniSkeleton]
+    wave4 = [Gladiator, SlimeE, SlimeW, SlimeF, Skeleton, RedGladiator]
+    wave5 = [Fat_Totor, Gladiator, SlimeE, SlimeW, SlimeF]
+    wave6 = [Bat, Bat, Totor, SlimeE, SlimeW, SlimeF, Totor]
+    wave7 = [Fat_Totor, RedGladiator, SlimeE, SlimeW, SlimeF, RedGladiator]
+    wave8 = [Fat_Totor, SlimeE, SlimeW, SlimeF, Fat_Totor]
+    wave9 = [Fat_Totor, Gladiator, Fat_Totor, Gladiator, Fat_Totor]
 
-    waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
+    waveDict = [wave1, wave2, wave3, wave4, wave5, wave6, wave7, wave8, wave9]
 
     nextLvl = Lvl3
 
-    authorized = [Rectangle(0,385, 150, 550),
+    authorized = [Rectangle(0, 385, 150, 550),
                   Rectangle(385, 1200, 170, 250),
                   Rectangle(385, 455, 170, 550),
                   Rectangle(385, 1200, 470, 550)]
@@ -254,40 +272,45 @@ class Lvl2(Lvl):
     spawnPoint = keySpot(0, 200)
 
     def __init__(self, parent, *args, **kwargs):
-        self.spots =[Emplacement(60,150),
-                    Emplacement(200,150),
-                    Emplacement(285,150),
-                    Emplacement(570,335),
-                    Emplacement(660,335),
-                    Emplacement(750,335),
-                    Emplacement(860,335),
-                    Emplacement(975,335),
-                    Emplacement(525,610),
-                    Emplacement(635,610),
-                    Emplacement(750,610),
-                    Emplacement(850,610),
-                    Emplacement(955,610),
-                    Emplacement(55,375),
-                    Emplacement(230,375)]
+        self.spots = [Emplacement(60, 150),
+                      Emplacement(200, 150),
+                      Emplacement(285, 150),
+                      Emplacement(570, 335),
+                      Emplacement(660, 335),
+                      Emplacement(750, 335),
+                      Emplacement(860, 335),
+                      Emplacement(975, 335),
+                      Emplacement(525, 610),
+                      Emplacement(635, 610),
+                      Emplacement(750, 610),
+                      Emplacement(850, 610),
+                      Emplacement(955, 610),
+                      Emplacement(55, 375),
+                      Emplacement(230, 375)]
         super().__init__(parent, *args, **kwargs)
 
 # -----------------Chargement de la Frame LVL 1 ----------------------
+
+
 class Lvl1(Lvl):
     image = "view/src/background/Lvl1Background.png"
     gold = 500
     defaultPath = [keySpot(1200, 225)]
 
-    wave1 = [miniSkeleton,Skeleton,miniSkeleton,miniSkeleton,Bat,Skeleton,miniSkeleton,miniSkeleton,miniSkeleton,Bat]
-    wave2 = [miniSkeleton, Skeleton, miniSkeleton,SlimeE,SlimeW,SlimeF,Skeleton,Skeleton]
-    wave3 = [SlimeE,SlimeW,SlimeF,SlimeE,SlimeW,SlimeF,Skeleton,miniSkeleton]
-    wave4 = [Gladiator,SlimeE,SlimeW,SlimeF,Skeleton,RedGladiator]
-    wave5 = [Fat_Totor, Gladiator,SlimeE,SlimeW,SlimeF]
-    wave6 = [Bat,Bat,Totor,SlimeE,SlimeW,SlimeF,Totor]
-    wave7 = [Fat_Totor, RedGladiator,SlimeE,SlimeW,SlimeF,RedGladiator]
-    wave8 = [Fat_Totor,SlimeE,SlimeW,SlimeF,Fat_Totor]
-    wave9 = [Fat_Totor,Gladiator,Fat_Totor,Gladiator,Fat_Totor]
+    wave1 = [miniSkeleton, Skeleton, miniSkeleton, miniSkeleton,
+             Bat, Skeleton, miniSkeleton, miniSkeleton, miniSkeleton, Bat]
+    wave2 = [miniSkeleton, Skeleton, miniSkeleton,
+             SlimeE, SlimeW, SlimeF, Skeleton, Skeleton]
+    wave3 = [SlimeE, SlimeW, SlimeF, SlimeE,
+             SlimeW, SlimeF, Skeleton, miniSkeleton]
+    wave4 = [Gladiator, SlimeE, SlimeW, SlimeF, Skeleton, RedGladiator]
+    wave5 = [Fat_Totor, Gladiator, SlimeE, SlimeW, SlimeF]
+    wave6 = [Bat, Bat, Totor, SlimeE, SlimeW, SlimeF, Totor]
+    wave7 = [Fat_Totor, RedGladiator, SlimeE, SlimeW, SlimeF, RedGladiator]
+    wave8 = [Fat_Totor, SlimeE, SlimeW, SlimeF, Fat_Totor]
+    wave9 = [Fat_Totor, Gladiator, Fat_Totor, Gladiator, Fat_Totor]
 
-    waveDict = [wave1, wave2, wave3 , wave4, wave5, wave6, wave7, wave8,wave9]
+    waveDict = [wave1, wave2, wave3, wave4, wave5, wave6, wave7, wave8, wave9]
 
     nextLvl = Lvl2
 
@@ -306,14 +329,16 @@ class Lvl1(Lvl):
                       Emplacement(143, 319, state="Mine")]
         super().__init__(parent, *args, **kwargs)
 
+
 class MainSelectLevel(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         # Définiton des variables
-        self.backImg = tk.PhotoImage(file="view/src/background/MainSelectLevels.png")
+        self.backImg = tk.PhotoImage(
+            file="view/src/background/MainSelectLevels.png")
         self.rootWidth = self.backImg.width()
         self.rootHeight = self.backImg.height()
-        
+
         # Instance de la Frame
         tk.Frame.__init__(self, parent)
 
@@ -328,24 +353,24 @@ class MainSelectLevel(tk.Frame):
         self.canvas.bind("<Button-1>", self.startLevel)
 
         self.canvas.pack(side="right", fill='both', expand=True)
-        
+
     def makeButtons(self):
         self.Level1Btn = tk.Radiobutton(self.canvas, text="Level1", value="Lvl1", variable=self.levels,
-                                            bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.Level1Btn.place(x=256, y= 450)
+                                        bg="#1ea7e1", activebackground="#1ea7e1", selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.Level1Btn.place(x=256, y=450)
 
         self.Level2Btn = tk.Radiobutton(self.canvas, text="Level2", value="Lvl2", variable=self.levels,
-                                    bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.Level2Btn.place(x=600, y= 450)
+                                        bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.Level2Btn.place(x=600, y=450)
 
         self.Level3Btn = tk.Radiobutton(self.canvas, text="Level3", value="Lvl3", variable=self.levels,
                                         bg="#73cb4d", activebackground="#73cb4d", selectcolor="#5ab134", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.Level3Btn.place(x=925, y= 450)
+        self.Level3Btn.place(x=925, y=450)
 
         self.Level1Btn.select()
 
     def startLevel(self, event):
-        #if ((event.x-centreducercle.x)**2 + (event.y-centreducercle.y)**2)**(0.5):
+        # if ((event.x-centreducercle.x)**2 + (event.y-centreducercle.y)**2)**(0.5):
         if 390 < event.x < 890 and 500 < event.y < 900:
             self.parent.levels = self.levels.get()
             self.parent.switchFrame(MainMenu)
@@ -355,8 +380,10 @@ class MainSelectLevel(tk.Frame):
             self.Level2Btn.select()
         elif 888 < event.x < 1042 and 285 < event.y < 435:
             self.Level3Btn.select()
-        
+
 # Classe du menu principal
+
+
 class MainMenu(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
@@ -376,31 +403,34 @@ class MainMenu(tk.Frame):
         self.canvas.create_image(0, 0, image=self.backImg, anchor="nw")
 
         self.makeButtons()
-        
+
         self.canvas.bind("<Button-1>", self.startGame)
 
         self.canvas.pack(side="right", fill='both', expand=True)
 
     def makeButtons(self):
         self.adventurerBtn = tk.Radiobutton(self.canvas, text="Aventurier", value="Aventurier", variable=self.heros,
-                                            bg="#1ea7e1", activebackground="#1ea7e1",selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.adventurerBtn.place(x=256, y= 450)
+                                            bg="#1ea7e1", activebackground="#1ea7e1", selectcolor="#1886b4", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.adventurerBtn.place(x=256, y=450)
 
         self.gokuBtn = tk.Radiobutton(self.canvas, text="Goku", value="Goku", variable=self.heros,
                                       bg="#ffcc00", activebackground="#ffcc00", selectcolor="#cca300", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.gokuBtn.place(x=600, y= 450)
+        self.gokuBtn.place(x=600, y=450)
 
         self.ichigoBtn = tk.Radiobutton(self.canvas, text="Ichigo", value="Ichigo", variable=self.heros,
                                         bg="#73cb4d", activebackground="#73cb4d", selectcolor="#5ab134", borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
-        self.ichigoBtn.place(x=925, y= 450)
+        self.ichigoBtn.place(x=925, y=450)
 
         self.adventurerBtn.select()
 
-        self.cdiscountBtn = tk.Radiobutton(self.canvas, text="Discount", value=4, variable=self.quality, borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.cdiscountBtn = tk.Radiobutton(self.canvas, text="Discount", value=4, variable=self.quality,
+                                           borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.cdiscountBtn.place(x=256, y=250)
-        self.lowBtn = tk.Radiobutton(self.canvas, text="Low", value=2, variable=self.quality, borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.lowBtn = tk.Radiobutton(self.canvas, text="Low", value=2, variable=self.quality,
+                                     borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.lowBtn.place(x=600, y=250)
-        self.rtxBtn = tk.Radiobutton(self.canvas, text="RTX ON", value=1, variable=self.quality, borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
+        self.rtxBtn = tk.Radiobutton(self.canvas, text="RTX ON", value=1, variable=self.quality,
+                                     borderwidth=2, highlightthickness=0, indicatoron=0, padx=25, pady=5)
         self.rtxBtn.place(x=925, y=250)
 
         self.lowBtn.select()
@@ -425,8 +455,9 @@ class MainMenu(tk.Frame):
             self.ichigoBtn.select()
 
     def launchProgress(self):
-        
-        self.progressBar = ttk.Progressbar(self.canvas,orient="horizontal", length=400, mode="determinate")
+
+        self.progressBar = ttk.Progressbar(
+            self.canvas, orient="horizontal", length=400, mode="determinate")
         if self.heros.get() == "Goku":
             self.progressBar["maximum"] = 290
         if self.heros.get() == "Ichigo":
@@ -434,9 +465,12 @@ class MainMenu(tk.Frame):
         self.progressBar.place(x=440, y=615)
 
 # -----------------Chargement de la vue principale--------------------
+
+
 class MainApplication(tk.Frame):
     currentFrame = None
     heros = None
+
     def __init__(self, parent, *args, **kwargs):
         # Instance de la Frame
         tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -457,6 +491,8 @@ class MainApplication(tk.Frame):
         return nlevel
 
 # -----------------Fonction à executer pour lancer le jeu-------------
+
+
 def launchApp():
     root = tk.Tk()
 

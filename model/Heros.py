@@ -1,7 +1,7 @@
 import tkinter as tk
 import asyncio
 from functools import lru_cache
-from threading import Thread
+from model.State import State
 from model.fonctions_utiles import load
 from model.Character import Character
 import time
@@ -53,14 +53,14 @@ class Heros(Character):
         super().getSprite()
         # Si le heros a un niveau supérieur alors on charge des animations suplémentaires
         if self.lv1 != {}:
-            self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["transform"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["transform"]+self.lv0["spriteSize"]).zoom(self.zoom)
-                                  for i in range(self.lv0["num_sprintes"]["transform"])]
+            self.transformAnim = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"][State.Transform], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"][State.Transform]+self.lv0["spriteSize"]).zoom(self.zoom)
+                                  for i in range(self.lv0["num_sprintes"][State.Transform])]
             self.transformAnim.reverse()
-            self.specialMoveLeft = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["specialMoveLeft"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["specialMoveLeft"]+self.lv0["spriteSize"]).zoom(self.zoom)
-                                    for i in range(self.lv0["num_sprintes"]["specialMoveLeft"])]
+            self.specialMoveLeft = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"][State.SpecialMoveLeft], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"][State.SpecialMoveLeft]+self.lv0["spriteSize"]).zoom(self.zoom)
+                                    for i in range(self.lv0["num_sprintes"][State.SpecialMoveLeft])]
 
-            self.specialMoveRight = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"]["specialMoveRight"], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"]["specialMoveRight"]+self.lv0["spriteSize"]).zoom(self.zoom)
-                                     for i in range(self.lv0["num_sprintes"]["specialMoveRight"])]
+            self.specialMoveRight = [self.subimage(self.lv0["spriteSize"]*i, self.lv0["y_Anim"][State.SpecialMoveRight], self.lv0["spriteSize"]*(i+1), self.lv0["y_Anim"][State.SpecialMoveRight]+self.lv0["spriteSize"]).zoom(self.zoom)
+                                     for i in range(self.lv0["num_sprintes"][State.SpecialMoveRight])]
             self.specialMoveLeft.reverse()
 
             self.getLvlSprite(self.lv1)
@@ -91,79 +91,79 @@ class Heros(Character):
         elif dict == self.lv3:
             self.idleRight3, self.idleLeft3, self.runRight3, self.runLeft3, self.attackRight3, self.attackLeft3, self.specialMoveRight3, self.specialMoveLeft3, self.death3, self.instantMoveAnim3 = loop.run_until_complete(
                 asyncio.gather(*tasks))
-    
+
 # ------------------------Fonction chargée de découper les images dans les images--------
 
     async def getSpecialMoveLeft(self, dict, image):
-        specialMoveLeft = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["specialMoveLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["specialMoveLeft"]+dict["spriteSize"]).zoom(self.zoom)
-                           for i in range(dict["num_sprintes"]["specialMoveLeft"])]
+        specialMoveLeft = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.SpecialMoveLeft], dict["spriteSize"]*(i+1), dict["y_Anim"][State.SpecialMoveLeft]+dict["spriteSize"]).zoom(self.zoom)
+                           for i in range(dict["num_sprintes"][State.SpecialMoveLeft])]
         specialMoveLeft.reverse()
 
         return specialMoveLeft
 
     async def getSpecialMoveRight(self, dict, image):
-        specialMoveRight = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["specialMoveRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["specialMoveRight"]+dict["spriteSize"]).zoom(self.zoom)
-                            for i in range(dict["num_sprintes"]["specialMoveRight"])]
+        specialMoveRight = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.SpecialMoveRight], dict["spriteSize"]*(i+1), dict["y_Anim"][State.SpecialMoveRight]+dict["spriteSize"]).zoom(self.zoom)
+                            for i in range(dict["num_sprintes"][State.SpecialMoveRight])]
 
         return specialMoveRight
 
     async def getIdleRightAnim1(self, dict, image):
-        idleRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["idleRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["idleRight"]+dict["spriteSize"]).zoom(self.zoom)
-                      for i in range(dict["num_sprintes"]["idleRight"])]
+        idleRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.IdleRight], dict["spriteSize"]*(i+1), dict["y_Anim"][State.IdleRight]+dict["spriteSize"]).zoom(self.zoom)
+                      for i in range(dict["num_sprintes"][State.IdleRight])]
         return idleRight1
 
     async def getIdleLeftAnim1(self, dict, image):
-        idleLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["idleLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["idleLeft"]+dict["spriteSize"]).zoom(self.zoom)
-                     for i in range(dict["num_sprintes"]["idleLeft"])]
+        idleLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.IdleLeft], dict["spriteSize"]*(i+1), dict["y_Anim"][State.IdleLeft]+dict["spriteSize"]).zoom(self.zoom)
+                     for i in range(dict["num_sprintes"][State.IdleLeft])]
         idleLeft1.reverse()
 
         return idleLeft1
 
     async def getRunRightAnim1(self, dict, image):
 
-        runRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["runRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["runRight"]+dict["spriteSize"]).zoom(self.zoom)
-                     for i in range(dict["num_sprintes"]["runRight"])]
+        runRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.RunRight], dict["spriteSize"]*(i+1), dict["y_Anim"][State.RunRight]+dict["spriteSize"]).zoom(self.zoom)
+                     for i in range(dict["num_sprintes"][State.RunRight])]
         return runRight1
 
     async def getRunLeftAnim1(self, dict, image):
 
-        runLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["runLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["runLeft"]+dict["spriteSize"]).zoom(self.zoom)
-                    for i in range(dict["num_sprintes"]["runLeft"])]
+        runLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.RunLeft], dict["spriteSize"]*(i+1), dict["y_Anim"][State.RunLeft]+dict["spriteSize"]).zoom(self.zoom)
+                    for i in range(dict["num_sprintes"][State.RunLeft])]
         runLeft1.reverse()
 
         return runLeft1
 
     async def getAttackRightAnim1(self, dict, image):
 
-        attackRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["attackRight"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackRight"]+dict["spriteSize"]).zoom(self.zoom)
-                        for i in range(dict["num_sprintes"]["attackRight"])]
+        attackRight1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.AttackRight], dict["spriteSize"]*(i+1), dict["y_Anim"][State.AttackRight]+dict["spriteSize"]).zoom(self.zoom)
+                        for i in range(dict["num_sprintes"][State.AttackRight])]
 
         return attackRight1
 
     async def getAttackLeftAnim1(self, dict, image):
 
-        attackLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["attackLeft"], dict["spriteSize"]*(i+1), dict["y_Anim"]["attackLeft"]+dict["spriteSize"]).zoom(self.zoom)
-                       for i in range(dict["num_sprintes"]["attackLeft"])]
+        attackLeft1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.AttackLeft], dict["spriteSize"]*(i+1), dict["y_Anim"][State.AttackLeft]+dict["spriteSize"]).zoom(self.zoom)
+                       for i in range(dict["num_sprintes"][State.AttackLeft])]
         attackLeft1.reverse()
 
         return attackLeft1
 
     async def getDeathAnim1(self, dict, image):
-        death1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["die"], dict["spriteSize"]*(i+1), dict["y_Anim"]["die"]+dict["spriteSize"]).zoom(self.zoom)
-                  for i in range(dict["num_sprintes"]["die"])]
+        death1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.Die], dict["spriteSize"]*(i+1), dict["y_Anim"][State.Die]+dict["spriteSize"]).zoom(self.zoom)
+                  for i in range(dict["num_sprintes"][State.Die])]
 
         return death1
 
     async def getTransformAnim1(self, dict, image):
-        transform1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["transform"], dict["spriteSize"]*(i+1), dict["y_Anim"]["transform"]+dict["spriteSize"]).zoom(self.zoom)
-                      for i in range(dict["num_sprintes"]["transform"])]
+        transform1 = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.Transform], dict["spriteSize"]*(i+1), dict["y_Anim"][State.Transform]+dict["spriteSize"]).zoom(self.zoom)
+                      for i in range(dict["num_sprintes"][State.Transform])]
         transform1.reverse()
 
         return transform1
 
     async def getinstantMoveAnim1(self, dict, image):
-        instantMove = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"]["instantMove"], dict["spriteSize"]*(i+1), dict["y_Anim"]["instantMove"]+dict["spriteSize"]).zoom(self.zoom)
-                       for i in range(dict["num_sprintes"]["instantMove"])]
+        instantMove = [self.subimage1(image, dict["spriteSize"]*i, dict["y_Anim"][State.InstantMove], dict["spriteSize"]*(i+1), dict["y_Anim"][State.InstantMove]+dict["spriteSize"]).zoom(self.zoom)
+                       for i in range(dict["num_sprintes"][State.InstantMove])]
 
         return instantMove
 
@@ -188,11 +188,11 @@ class Heros(Character):
         if self.target:
             self.attack()
         else:
-            if (self.state == "idleRight" or self.state == "idleLeft") and time.time() - self.lastAttackTime >= 1:
+            if (self.state == State.IdleRight or self.state == State.IdleLeft) and time.time() - self.lastAttackTime >= 1:
                 # Sinon on cherche une cible potentielle dans les ennemis du niveau
                 for ennemy in self.parent.ennemies:
                     # On calcule la distance et l'état
-                    if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != "die":
+                    if (((ennemy.x-self.x)**2)+((ennemy.y-self.y)**2))**0.5 < self.range and ennemy.state != State.Die:
                         # Il devient la cible
                         self.target = ennemy
 
@@ -201,7 +201,7 @@ class Heros(Character):
                             self.canvas.after_cancel(self.seeking)
                         if self.move:
                             self.canvas.after_cancel(self.move)
-                        
+
                         # On attaque
                         self.sprite = 0
                         self.attack()
@@ -212,7 +212,7 @@ class Heros(Character):
     # Fonction chargée du déplacement à la souris du héros
     def mouseMove(self, event):
         # Si il se transforme on ne fait rien
-        if self.state == "transform" or self.state == "die":
+        if self.state == State.Transform or self.state == State.Die:
             return
         if self.crossCallback:
             self.canvas.delete(self.crossCallback)
@@ -221,10 +221,10 @@ class Heros(Character):
         if self.move:
             self.canvas.after_cancel(self.move)
             self.move = None
-            if self.state == "runRight":
-                self.state = "idleRight"
-            elif self.state == "runLeft":
-                self.state = "idleLeft"
+            if self.state == State.RunRight:
+                self.state = State.IdleRight
+            elif self.state == State.RunLeft:
+                self.state = State.IdleLeft
         else:
             self.sprite = 0
 
@@ -232,40 +232,40 @@ class Heros(Character):
         if self.attacking:
             self.canvas.after_cancel(self.attack)
             self.attacking = None
-            if self.target :
+            if self.target:
                 self.canvas.after_cancel(self.target.attack)
                 self.target.attacking = None
             self.lastAttackTime = time.time()
-            if self.state == "attackRight":
-                self.state = "idleRight"
-            elif self.state == "attackLeft":
-                self.state = "idleLeft"
+            if self.state == State.AttackRight:
+                self.state = State.IdleRight
+            elif self.state == State.AttackLeft:
+                self.state = State.IdleLeft
 
         x = None
         selectedRect = None
         # On effectue le mouvement en restant dans les bornes
-        for rect in self.parent.authorized :
+        for rect in self.parent.authorized:
             if event.y < rect.max_y and event.y > rect.min_y:
                 if event.x < rect.max_x and event.x > rect.min_x:
                     x = event.x
                     y = event.y
                     break
 
-        if x is None :
-            
-            for rect in self.parent.authorized :
-                    if self.y <= rect.max_y and self.y >= rect.min_y:
-                        if self.x <= rect.max_x and self.x >= rect.min_x:
-                            selectedRect = rect
-            
-            if selectedRect is None :
+        if x is None:
+
+            for rect in self.parent.authorized:
+                if self.y <= rect.max_y and self.y >= rect.min_y:
+                    if self.x <= rect.max_x and self.x >= rect.min_x:
+                        selectedRect = rect
+
+            if selectedRect is None:
                 selectedRect = self.parent.authorized[0]
 
             if event.x >= selectedRect.max_x:
                 x = selectedRect.max_x
             elif event.x <= selectedRect.min_x:
                 x = selectedRect.min_x
-            else : 
+            else:
                 x = event.x
 
             if event.y >= selectedRect.max_y:
@@ -274,91 +274,91 @@ class Heros(Character):
                 y = selectedRect.min_y
             else:
                 y = event.y
-            
 
-        self.crossCallback = self.canvas.create_image(x, y+25 , image=self.redCross)
+        self.crossCallback = self.canvas.create_image(
+            x, y+25, image=self.redCross)
         self.canvas.tag_lower(self.crossCallback)
         self.canvas.tag_raise(self.crossCallback, self.parent.background)
 
         self.moveTo(x, y)
 
     def reOrient(self, event):
-        if self.state is "idleLeft" or self.state is "idleRight":
+        if self.state is State.IdleLeft or self.state is State.IdleRight:
             if event.keysym == "Right":
-                self.state = "idleRight"
-            else :
-                self.state = "idleLeft"
+                self.state = State.IdleRight
+            else:
+                self.state = State.IdleLeft
 
     def instantMove(self, event):
-        if self.state=="transform":
+        if self.state == State.Transform:
             return
         if self.lvl != 0 and hasattr(self, "instantMoveAnim"):
-            # if self.state== "idleRight":
-            #     self.last_state="idleRight"
-            # elif self.state=="idleLeft":
-            #     self.last_state="idleLeft"
-            if self.sprite == self.num_sprintes["instantMove"] - 1 and self.state == "instantMove":
+            # if self.state== State.IdleRight:
+            #     self.last_state=State.IdleRight
+            # elif self.state==State.IdleLeft:
+            #     self.last_state=State.IdleLeft
+            if self.sprite == self.num_sprintes[State.InstantMove] - 1 and self.state == State.InstantMove:
                 self.x = event.x
                 self.y = event.y
-                self.state = "idleLeft"
+                self.state = State.IdleLeft
                 return
-            elif self.state == "instantMove":
+            elif self.state == State.InstantMove:
                 self.show()
             else:
-                self.state = "instantMove"
+                self.state = State.InstantMove
             self.canvas.after(200, self.instantMove, event)
 
     # On effectue l'attaque spéciale lorsque l'on presse la touche
     def specialAttack(self, *args):
         if hasattr(self, "coupSpe"):
 
-            if self.state == "die":
+            if self.state == State.Die:
                 return
 
-            if self.state == "idleRight" or self.state == "attackRight" or self.state == "runRight":
-                self.state = "specialMoveRight"
-            elif self.state == "idleLeft" or self.state == "attackLeft" or self.state == "runLeft":
-                self.state = "specialMoveLeft"
-    
-    def reset(self):
-        if self.lvl==0:
-            self.changeStats(self.lv0)
-            self.state="idleLeft"
-        elif self.lvl==3:
-            self.lvl=0
-            self.baseHp = self.hp
-            self.changeStats(self.lv0)
-            self.idleRight = self.idleRight0
-            self.idleLeft = self.idleLeft0
-            self.runRight = self.runRight0
-            self.runLeft = self.runLeft0
-            self.specialMoveRight = self.specialMoveRight0
-            self.specialMoveLeft = self.specialMoveLeft0
-            self.attackLeft = self.attackLeft0
-            self.attackRight = self.attackRight0
-            self.death = self.death0
-            self.state="idleLeft"
-        else:
-            self.lvl=0
-            self.baseHp = self.hp
-            self.idleRight = self.idleRight0
-            self.idleLeft = self.idleLeft0
-            self.runRight = self.runRight0
-            self.runLeft = self.runLeft0
-            self.specialMoveRight = self.specialMoveRight0
-            self.specialMoveLeft = self.specialMoveLeft0
-            self.attackLeft = self.attackLeft0
-            self.attackRight = self.attackRight0
-            self.death = self.death0
-            self.state="idleLeft"
+            if self.state == State.IdleRight or self.state == State.AttackRight or self.state == State.RunRight:
+                self.state = State.SpecialMoveRight
+            elif self.state == State.IdleLeft or self.state == State.AttackLeft or self.state == State.RunLeft:
+                self.state = State.SpecialMoveLeft
 
+    def reset(self):
+        if self.lvl == 0:
+            self.changeStats(self.lv0)
+            self.state = State.IdleLeft
+        elif self.lvl == 3:
+            self.lvl = 0
+            self.baseHp = self.hp
+            self.changeStats(self.lv0)
+            self.idleRight = self.idleRight0
+            self.idleLeft = self.idleLeft0
+            self.runRight = self.runRight0
+            self.runLeft = self.runLeft0
+            self.specialMoveRight = self.specialMoveRight0
+            self.specialMoveLeft = self.specialMoveLeft0
+            self.attackLeft = self.attackLeft0
+            self.attackRight = self.attackRight0
+            self.death = self.death0
+            self.state = State.IdleLeft
+        else:
+            self.lvl = 0
+            self.baseHp = self.hp
+            self.idleRight = self.idleRight0
+            self.idleLeft = self.idleLeft0
+            self.runRight = self.runRight0
+            self.runLeft = self.runLeft0
+            self.specialMoveRight = self.specialMoveRight0
+            self.specialMoveLeft = self.specialMoveLeft0
+            self.attackLeft = self.attackLeft0
+            self.attackRight = self.attackRight0
+            self.death = self.death0
+            self.state = State.IdleLeft
 
     # Fonction chargée de la transformation du heros
+
     def transform(self):
         # self.last_state2=self.state
         # On réinitialise l'image d'animation
         self.sprite = 0
-        self.state = "transform"
+        self.state = State.Transform
 
         # On annule le mouvement
         if self.move:
@@ -381,7 +381,6 @@ class Heros(Character):
             self.attackRight0 = self.attackRight
             self.death0 = self.death
             self.instantMoveAnim0 = self.instantMoveAnim
-
 
             self.idleRight = self.idleRight1
             self.idleLeft = self.idleLeft1
@@ -428,9 +427,9 @@ class Heros(Character):
 
         # On change la vie de base
         self.baseHp = self.hp
-        
 
     # Fonction chargé du changement de statistiques en fonction du dictionnaire donné
+
     def changeStats(self, dict):
         self.hp = dict["hp"]
         self.damage = dict["damage"]
@@ -441,7 +440,7 @@ class Heros(Character):
         self.spritesheet = dict["spritesheet"]
         self.spriteSize = dict["spriteSize"]
         self.y_Anim = dict["y_Anim"]
-        self.num_sprintes=dict["num_sprintes"]
+        self.num_sprintes = dict["num_sprintes"]
         self.baseHp = self.hp
 
     # Incrémentation du sprite en fonction de l'état
@@ -449,28 +448,28 @@ class Heros(Character):
         increment = True
 
         # Régénration du Héros
-        if (self.sprite == self.num_sprintes["idleRight"] - 1 or self.sprite == self.num_sprintes["idleLeft"]-1) and (self.state == "idleRight"or self.state == "idleLeft") and self.hp + self.reg <= self.baseHp:
+        if (self.sprite == self.num_sprintes[State.IdleRight] - 1 or self.sprite == self.num_sprintes[State.IdleLeft]-1) and (self.state == State.IdleRight or self.state == State.IdleLeft) and self.hp + self.reg <= self.baseHp:
             self.hp += self.reg
 
-        if self.state == "specialMoveRight" or self.state == "specialMoveLeft":
-            if self.sprite == self.num_sprintes["specialMoveRight"] - 1:
+        if self.state == State.SpecialMoveRight or self.state == State.SpecialMoveLeft:
+            if self.sprite == self.num_sprintes[State.SpecialMoveRight] - 1:
                 if self.name == "Goku":
                     self.coupSpe(self)
                     increment = False
-                # self.state = "idleRight"
-            elif self.sprite == self.num_sprintes["specialMoveLeft"] - 1:
+                # self.state = State.IdleRight
+            elif self.sprite == self.num_sprintes[State.SpecialMoveLeft] - 1:
                 if self.name == "Goku":
                     self.coupSpe(self)
                     increment = False
-                # self.state = "idleLeft"
+                # self.state = State.IdleLeft
 
-            elif self.sprite == self.num_sprintes["specialMoveRight"] - 4 and self.name == "Ichigo":
+            elif self.sprite == self.num_sprintes[State.SpecialMoveRight] - 4 and self.name == "Ichigo":
                 self.coupSpe(self)
                 increment = False
 
         # Si on a fini de se transformer
-        elif self.state == "transform":
-            if self.sprite == self.num_sprintes["transform"] - 1:
+        elif self.state == State.Transform:
+            if self.sprite == self.num_sprintes[State.Transform] - 1:
                 if self.lvl == 1:
                     self.transformAnim = self.transformAnim1
                     self.num_sprintes = self.lv1["num_sprintes"]
@@ -481,29 +480,29 @@ class Heros(Character):
 
                 elif self.lvl == 3:
                     self.num_sprintes = self.lv3["num_sprintes"]
-                self.state = "idleLeft"
+                self.state = State.IdleLeft
                 self.sprite = 0
 
         if increment:
             super().incrementSprite()
-        else :
+        else:
             self.incrementing = None
 
  # Fonction spéciale chargée de tuer le héros
     def die(self, rez):
-        if rez :
-            self.state = "idleRight"
+        if rez:
+            self.state = State.IdleRight
             # self.hp = self.baseHp
             self.idleAnim()
             self.incrementSprite()
             self.seek()
 
         # Si le personnage est déjà en train de mourrir alorso continue
-        elif self.state == "die":
+        elif self.state == State.Die:
             self.show()
 
             # Si l'animation de mort est déjà finie alors on supprime
-            if self.sprite == self.num_sprintes["die"]-1:
+            if self.sprite == self.num_sprintes[State.Die]-1:
                 if self.afterIdle:
                     self.canvas.after_cancel(self.afterIdle)
                 self.afterIdle = None
@@ -511,13 +510,13 @@ class Heros(Character):
                 rez = True
                 # Avec 5s de temps d'attente
                 self.dying = self.canvas.after(5000, self.die, rez)
-                return 
+                return
             self.dying = self.canvas.after(150, self.die, rez)
-            
+
         # Si c'est le début de la mort alors on ajoute l'argent de sa bourse
-        else :
+        else:
             self.parent.interface.preView()
-            
+
             # On coupe toutes les autres tâches
             if self.move:
                 self.canvas.after_cancel(self.move)
@@ -530,6 +529,5 @@ class Heros(Character):
                 self.attacking = None
 
             # On mets son état en "mort"
-            self.state = "die"
+            self.state = State.Die
             self.dying = self.canvas.after(150, self.die, rez)
-        

@@ -1,5 +1,6 @@
 import tkinter as tk
 from threading import Thread
+from model.State import State
 from model.fonctions_utiles import load
 from model.Character import Character
 
@@ -14,6 +15,7 @@ class Kamehameha(Thread):
     longueurMax = 15
     trainee = []
     isHeadingRight = False
+
     def __init__(self, hero):
         Thread.__init__(self)
         self.start()
@@ -29,12 +31,12 @@ class Kamehameha(Thread):
         self.g = load(self.gauche, self.img)
         self.m = load(self.milieu, self.img)
 
-        if self.hero.state == "specialMoveRight":
+        if self.hero.state == State.SpecialMoveRight:
             self.x = hero.x+100
             self.tete = self.d
             self.isHeadingRight = True
 
-        elif self.hero.state == "specialMoveLeft":
+        elif self.hero.state == State.SpecialMoveLeft:
             self.x = hero.x-100
             self.tete = self.g
 
@@ -52,7 +54,7 @@ class Kamehameha(Thread):
                 self.x, self.y, image=self.m))
 
             for ennemy in ennemies:
-                if self.x-35 <= ennemy.x <= self.x+35 and self.y-40 <= ennemy.y <= self.y+40 and ennemy.state != "die":
+                if self.x-35 <= ennemy.x <= self.x+35 and self.y-40 <= ennemy.y <= self.y+40 and ennemy.state != State.Die:
                     ennemy.hp -= self.damage
                     if ennemy.hp <= 0:
                         ennemy.die(False)
@@ -62,16 +64,16 @@ class Kamehameha(Thread):
             else:
                 self.x -= self.v
 
-
-            self.head = self.canvas.create_image(self.x, self.y, image=self.tete)
+            self.head = self.canvas.create_image(
+                self.x, self.y, image=self.tete)
 
             self.canvas.after(150, self.tir)
 
         else:
             if self.isHeadingRight:
-                self.hero.state = "idleRight"
+                self.hero.state = State.IdleRight
             else:
-                self.hero.state = "idleLeft"
+                self.hero.state = State.IdleLeft
             self.hero.incrementSprite()
             for elt in self.trainee:
                 self.canvas.delete(elt)
@@ -102,11 +104,11 @@ class Kamehameha2(Kamehameha):
         self.g = load(self.gauche, self.img)
         self.m = load(self.milieu, self.img)
 
-        if self.hero.state == "specialMoveRight":
+        if self.hero.state == State.SpecialMoveRight:
             self.x = hero.x+100
             self.tete = self.d
 
-        elif self.hero.state == "specialMoveLeft":
+        elif self.hero.state == State.SpecialMoveLeft:
             self.x = hero.x-100
             self.tete = self.g
 
@@ -143,12 +145,12 @@ class Kamehameha3(Thread):
         self.g2 = load(self.gauche2, self.img)
         self.m = load(self.milieu, self.img)
 
-        if self.hero.state == "specialMoveRight":
+        if self.hero.state == State.SpecialMoveRight:
             self.x = hero.x+100
             self.tete1 = self.d1
             self.tete2 = self.d2
 
-        elif self.hero.state == "specialMoveLeft":
+        elif self.hero.state == State.SpecialMoveLeft:
             self.x = hero.x-132
             self.tete1 = self.g1
             self.tete2 = self.g2
@@ -168,13 +170,13 @@ class Kamehameha3(Thread):
                 self.x, self.y, image=self.m))
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != "die":
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != State.Die:
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
-        if self.hero.state == "specialMoveLeft":
+        if self.hero.state == State.SpecialMoveLeft:
             self.x -= self.v
-        elif self.hero.state == "specialMoveRight":
+        elif self.hero.state == State.SpecialMoveRight:
             self.x += self.v
 
         if self.pointe == self.tete1:
@@ -186,10 +188,10 @@ class Kamehameha3(Thread):
         if not self.longueur == self.longueurMax:
             self.canvas.after(150, self.tir)
         else:
-            if self.hero.state == "specialMoveLeft":
-                self.hero.state = "idleLeft"
+            if self.hero.state == State.SpecialMoveLeft:
+                self.hero.state = State.IdleLeft
             else:
-                self.hero.state = "idleRight"
+                self.hero.state = State.IdleRight
             self.hero.incrementSprite()
             for elt in trainee:
                 self.canvas.delete(elt)
@@ -218,10 +220,10 @@ class Genkidamasupreme(Thread):
         self.c2 = load(self.boule2, self.img)
         self.corps = self.c1
 
-        if self.hero.state == "specialMoveRight":
+        if self.hero.state == State.SpecialMoveRight:
             self.x = hero.x+50
 
-        elif self.hero.state == "specialMoveLeft":
+        elif self.hero.state == State.SpecialMoveLeft:
             self.x = hero.x-50
             self.v = -self.v
 
@@ -235,7 +237,7 @@ class Genkidamasupreme(Thread):
             self.canvas.delete(self.head)
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != "die":
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-40 <= self.y <= ennemy.y+40 and ennemy.state != State.Die:
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
@@ -251,10 +253,10 @@ class Genkidamasupreme(Thread):
         if not self.longueur == self.longueurMax:
             self.canvas.after(150, self.tir)
         else:
-            if self.hero.state == "specialMoveRight":
-                self.hero.state = "idleRight"
-            else: 
-                self.hero.state = "idleLeft"
+            if self.hero.state == State.SpecialMoveRight:
+                self.hero.state = State.IdleRight
+            else:
+                self.hero.state = State.IdleLeft
             self.hero.incrementSprite()
 
 
@@ -284,12 +286,12 @@ class GetsugaTenshou(Genkidamasupreme):
         self.d1 = load(self.droite1, self.img)
         self.d2 = load(self.droite2, self.img)
 
-        if self.hero.state == "specialMoveRight":
+        if self.hero.state == State.SpecialMoveRight:
             self.x = hero.x+50
             self.c1 = self.d1
             self.c2 = self.d2
 
-        elif self.hero.state == "specialMoveLeft":
+        elif self.hero.state == State.SpecialMoveLeft:
             self.x = hero.x-50
             self.v = -self.v
             self.c1 = self.g1
@@ -344,12 +346,12 @@ class Mugetsu(Thread):
 
         self.m = load(self.mugetsu, self.img)
 
-        if self.hero.state == "specialMoveRight":
+        if self.hero.state == State.SpecialMoveRight:
             self.x = hero.x+50
-            self.newstate="idleRight"
-        elif self.hero.state == "specialMoveLeft":
+            self.newstate = State.IdleRight
+        elif self.hero.state == State.SpecialMoveLeft:
             self.x = hero.x-50
-            self.newstate="idleLeft"
+            self.newstate = State.IdleLeft
             self.v = -self.v
 
         self.tir()
@@ -359,7 +361,7 @@ class Mugetsu(Thread):
         self.longueur += 1
 
         for ennemy in ennemies:
-            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-60 <= self.y <= ennemy.y+60 and ennemy.state != "die":
+            if ennemy.x-35 <= self.x <= ennemy.x+35 and ennemy.y-60 <= self.y <= ennemy.y+60 and ennemy.state != State.Die:
                 ennemy.hp -= self.damage
                 if ennemy.hp <= 0:
                     ennemy.die(False)
